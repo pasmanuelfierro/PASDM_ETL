@@ -12,11 +12,11 @@ import java.util.List;
 @RequiredArgsConstructor
 public class BatchService {
 
-    private final GeologyRepository repository;
+    private final GeologyRepository repositoryGeology;
 
     @Transactional
     public void saveBatch(List<Geology> batch) {
-        repository.saveAll(batch);
-        repository.flush();
+        repositoryGeology.saveAll(batch);
+        repositoryGeology.flush();
     }
 }

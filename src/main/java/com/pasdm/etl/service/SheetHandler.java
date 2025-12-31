@@ -19,15 +19,15 @@ public class SheetHandler implements XSSFSheetXMLHandler.SheetContentsHandler {
 
     private static final int BATCH_SIZE = 1000;
 
-    private final GeologyMapper mapper;
+    private final GeologyMapper mapperGeology;
     private final BatchService batchService;
 
     private final List<Geology> bufferGeology = new ArrayList<>(BATCH_SIZE);
     private final Map<Integer, String> currentRow = new HashMap<>();
 
-    public SheetHandler(GeologyMapper mapper,
+    public SheetHandler(GeologyMapper mapperGeology,
                         BatchService batchService) {
-        this.mapper = mapper;
+        this.mapperGeology = mapperGeology;
         this.batchService = batchService;
     }
 
@@ -51,7 +51,7 @@ public class SheetHandler implements XSSFSheetXMLHandler.SheetContentsHandler {
         if (rowNum == 1) return; // encabezado 2
 
         try {
-            Geology entity = mapper.mapEntity(currentRow);
+            Geology entity = mapperGeology.mapEntity(currentRow);
             bufferGeology.add(entity);
         } catch (Exception e) {
             log.error("Fila {} inválida: {}", rowNum, currentRow);
