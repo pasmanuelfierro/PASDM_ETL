@@ -22,6 +22,7 @@ public class GeologyMapper {
     private static final List<DateTimeFormatter> FORMATTERS = List.of(
             DateTimeFormatter.ofPattern("yyyy-MM-dd"),
             DateTimeFormatter.ofPattern("dd/MM/yyyy"),
+            DateTimeFormatter.ofPattern("M/d/yy"),
             DateTimeFormatter.ofPattern("dd-MM-yyyy"),
             DateTimeFormatter.ofPattern("dd-MMM-yy", new Locale("es", "MX")),
             DateTimeFormatter.ofPattern("dd-MMM-yyyy", new Locale("es", "MX"))
@@ -55,13 +56,13 @@ public class GeologyMapper {
             e.setPerforacionInfillMts(decimalValidador(row.get(13)));
             e.setPerforacionBrownfieldMts(decimalValidador(row.get(14)));
 
-            e.setLcMaquinaDiamecOreControl(intValidador(row.get(15)));
-            e.setLcMaquinaExplorerPlusOreControl(intValidador(row.get(16)));
-            e.setLcMaquinaD130BrownfieldInfill(intValidador(row.get(17)));
-            e.setLcMaquina1500BrownfieldInfill(intValidador(row.get(18)));
+            e.setLcMaquinaDiamecOreControl(decimalValidador(row.get(15)));
+            e.setLcMaquinaExplorerPlusOreControl(decimalValidador(row.get(16)));
+            e.setLcMaquinaD130BrownfieldInfill(decimalValidador(row.get(17)));
+            e.setLcMaquina1500BrownfieldInfill(decimalValidador(row.get(18)));
 
-            e.setContratistaBrownfieldSubterranea(intValidador(row.get(19)));
-            e.setContratistaBrownfieldSuperficie(intValidador(row.get(20)));
+            e.setContratistaBrownfieldSubterranea(decimalValidador(row.get(19)));
+            e.setContratistaBrownfieldSuperficie(decimalValidador(row.get(20)));
 
         /* =======================
            SEGUNDO BLOQUE
@@ -96,7 +97,7 @@ public class GeologyMapper {
             e.setLeyAgGpt2(decimalValidador(row.get(41)));
             e.setLeyAuGpt3(decimalValidador(row.get(42)));
             e.setLeyPbPct4(decimalValidador(row.get(43)));
-            e.setLeyZnPct5(intValidador(row.get(44)));
+            e.setLeyZnPct5(decimalValidador(row.get(44)));
 
             e.setMineralExtraidoCorteVerticalTm(intValidador(row.get(45)));
             e.setLeyAgGpt3(intValidador(row.get(46)));
@@ -128,12 +129,11 @@ public class GeologyMapper {
 
         String normalized = value
                 .trim()
-                .replace(",", ".")
+                .replace(",", " ")
                 .replaceAll("[^0-9.-]", "");
 
         try {
-            return new BigDecimal(normalized)
-                    .setScale(SCALE.ordinal(), RoundingMode.HALF_UP);
+            return new BigDecimal(normalized).setScale(SCALE.ordinal(), RoundingMode.HALF_UP);
         } catch (Exception e) {
             throw new IllegalArgumentException("Decimal inválido: " + value);
         }

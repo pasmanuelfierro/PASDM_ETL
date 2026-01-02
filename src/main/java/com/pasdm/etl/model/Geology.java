@@ -23,7 +23,7 @@ public class Geology {
        BLOQUE MINERAL SULFURO PARTE 1
        ======================= */
 
-    @Column(name = "fecha_1")
+    @Column(name = "fecha_1", nullable = false)
     private LocalDate fecha1;
 
     @Column(name = "sobredilucion_rebajes_pct")
@@ -68,23 +68,23 @@ public class Geology {
     @Column(name = "perforacion_brownfield_mts", precision = 20, scale = 10)
     private BigDecimal perforacionBrownfieldMts;
 
-    @Column(name = "lc_diamec_ore_control")
-    private Integer lcMaquinaDiamecOreControl;
+    @Column(name = "lc_diamec_ore_control", precision = 20, scale = 10)
+    private BigDecimal lcMaquinaDiamecOreControl;
 
-    @Column(name = "lc_explorer_plus_ore_control")
-    private Integer lcMaquinaExplorerPlusOreControl;
+    @Column(name = "lc_explorer_plus_ore_control", precision = 20, scale = 10)
+    private BigDecimal lcMaquinaExplorerPlusOreControl;
 
-    @Column(name = "lc_d130_brownfield_infill")
-    private Integer lcMaquinaD130BrownfieldInfill;
+    @Column(name = "lc_d130_brownfield_infill", precision = 20, scale = 10)
+    private BigDecimal lcMaquinaD130BrownfieldInfill;
 
-    @Column(name = "lc_1500_brownfield_infill")
-    private Integer lcMaquina1500BrownfieldInfill;
+    @Column(name = "lc_1500_brownfield_infill", precision = 20, scale = 10)
+    private BigDecimal lcMaquina1500BrownfieldInfill;
 
-    @Column(name = "contratista_brownfield_subterranea")
-    private Integer contratistaBrownfieldSubterranea;
+    @Column(name = "contratista_brownfield_subterranea", precision = 20, scale = 10)
+    private BigDecimal contratistaBrownfieldSubterranea;
 
-    @Column(name = "contratista_brownfield_superficie")
-    private Integer contratistaBrownfieldSuperficie;
+    @Column(name = "contratista_brownfield_superficie", precision = 20, scale = 10)
+    private BigDecimal contratistaBrownfieldSuperficie;
 
     /* =======================
        BLOQUE MINERAL SULFURO PARTE 2
@@ -160,8 +160,8 @@ public class Geology {
     @Column(name = "ley_pb_pct_4", precision = 20, scale = 10)
     private BigDecimal leyPbPct4;
 
-    @Column(name = "ley_zn_pct_5")
-    private Integer leyZnPct5;
+    @Column(name = "ley_zn_pct_5", precision = 20, scale = 10)
+    private BigDecimal leyZnPct5;
 
     @Column(name = "mineral_extraido_corte_vertical_tm")
     private Integer mineralExtraidoCorteVerticalTm;
