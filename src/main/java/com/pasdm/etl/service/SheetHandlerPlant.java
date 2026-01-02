@@ -1,7 +1,10 @@
 package com.pasdm.etl.service;
 
 import com.pasdm.etl.mapper.GeologyMapper;
+import com.pasdm.etl.mapper.PlantMapper;
 import com.pasdm.etl.model.Geology;
+import com.pasdm.etl.model.Plant;
+
 import lombok.extern.slf4j.Slf4j;
 import org.apache.poi.ss.util.CellReference;
 import org.apache.poi.xssf.eventusermodel.XSSFSheetXMLHandler;
@@ -15,19 +18,19 @@ import java.util.Map;
 
 @Slf4j
 @Component
-public class SheetHandler implements XSSFSheetXMLHandler.SheetContentsHandler {
+public class SheetHandlerPlant implements XSSFSheetXMLHandler.SheetContentsHandler {
 
     private static final int BATCH_SIZE = 1000;
 
-    private final GeologyMapper mapperGeology;
+    private final PlantMapper mapperPlant;
     private final BatchService batchService;
 
-    private final List<Geology> bufferGeology = new ArrayList<>(BATCH_SIZE);
+    private final List<Plant> bufferPlant = new ArrayList<>(BATCH_SIZE);
     private final Map<Integer, String> currentRow = new HashMap<>();
 
-    public SheetHandler(GeologyMapper mapperGeology,
+    public SheetHandlerPlant(PlantMapper mapperPlant,
                         BatchService batchService) {
-        this.mapperGeology = mapperGeology;
+        this.mapperPlant = mapperPlant;
         this.batchService = batchService;
     }
 
@@ -51,15 +54,15 @@ public class SheetHandler implements XSSFSheetXMLHandler.SheetContentsHandler {
         if (rowNum == 1) return; // encabezado 2
 
         try {
-            Geology entity = mapperGeology.mapEntity(currentRow);
-            bufferGeology.add(entity);
+            Plant entity = mapperPlant.mapEntity(currentRow);
+            bufferPlant.add(entity);
         } catch (Exception e) {
             log.error("Fila {} inválida: {}", rowNum, currentRow);
         }
 
-        if (bufferGeology.size() >= BATCH_SIZE) {
-            batchService.saveBatchGeology(bufferGeology);
-            bufferGeology.clear();
+        if (bufferPlant.size() >= BATCH_SIZE) {
+            batchService.saveBatchPlant(bufferPlant);
+            bufferPlant.clear();
         }
     }
 
@@ -69,9 +72,9 @@ public class SheetHandler implements XSSFSheetXMLHandler.SheetContentsHandler {
     }
 
     public void flushRemaining() {
-        if (!bufferGeology.isEmpty()) {
-            batchService.saveBatchGeology(bufferGeology);
-            bufferGeology.clear();
+        if (!bufferPlant.isEmpty()) {
+            batchService.saveBatchPlant(bufferPlant);
+            bufferPlant.clear();
         }
     }
 }

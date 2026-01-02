@@ -23,7 +23,8 @@ import java.io.InputStream;
 @RequiredArgsConstructor
 public class ExcelStreamingService {
 
-    private final SheetHandler sheetHandler;
+    private final SheetHandler sheetHandlerGeology;
+    private final SheetHandlerPlant sheetHandlerPlant;
     @Value("${excel.path}")
     private String excelPath;
 
@@ -45,7 +46,7 @@ public class ExcelStreamingService {
             ContentHandler handler = new XSSFSheetXMLHandler(
                     styles,
                     sharedStrings,
-                    sheetHandler,
+                    sheetHandlerGeology,
                     formatter,
                     false
             );
@@ -56,7 +57,7 @@ public class ExcelStreamingService {
                 parser.parse(new InputSource(sheet));
             }
 
-            sheetHandler.flushRemaining();
+            sheetHandlerGeology.flushRemaining();
 
         } catch (Exception e) {
             log.error("Error procesando Excel", e);
