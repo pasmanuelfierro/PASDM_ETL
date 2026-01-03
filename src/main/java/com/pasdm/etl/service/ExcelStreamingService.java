@@ -25,6 +25,7 @@ public class ExcelStreamingService {
 
     private final SheetHandler sheetHandlerGeology;
     private final SheetHandlerPlant sheetHandlerPlant;
+    private final SheetHandlerRRHH sheetHandlerRRHH;
     @Value("${excel.path}")
     private String excelPath;
 
