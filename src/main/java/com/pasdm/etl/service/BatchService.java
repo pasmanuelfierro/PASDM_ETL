@@ -1,8 +1,10 @@
 package com.pasdm.etl.service;
 
 import com.pasdm.etl.model.Geology;
+import com.pasdm.etl.model.MTTO;
 import com.pasdm.etl.model.Plant;
 import com.pasdm.etl.repository.GeologyRepository;
+import com.pasdm.etl.repository.MTTORepository;
 import com.pasdm.etl.repository.PlantRepository;
 import com.pasdm.etl.repository.RRHHRepository;
 
@@ -19,6 +21,7 @@ public class BatchService {
     private final GeologyRepository repositoryGeology;
     private final PlantRepository repositoryPlant;
     private final RRHHRepository repositoryRRHH;
+    private final MTTORepository repositoryMTTO;
 
     @Transactional
     public void saveBatchGeology(List<Geology> batch) {
@@ -36,5 +39,10 @@ public class BatchService {
     public void saveBatchRRHH(List<com.pasdm.etl.model.RRHH> batch) {
         repositoryRRHH.saveAll(batch);
         repositoryRRHH.flush();
+    }
+
+    public void saveBatchMTTO(List<MTTO> batch) {
+        repositoryMTTO.saveAll(batch);
+        repositoryMTTO.flush();
     }
 }
