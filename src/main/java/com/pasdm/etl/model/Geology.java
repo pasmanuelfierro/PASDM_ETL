@@ -9,7 +9,9 @@ import java.math.BigDecimal;
 import java.time.LocalDate;
 
 @Entity
-@Table(schema = "etl", name = "geology")
+@Table(schema = "etl", name = "geology", uniqueConstraints = {
+        @UniqueConstraint(name = "uk_geology_fecha_1", columnNames = "fecha_1")
+})
 @Getter
 @Setter
 @NoArgsConstructor
@@ -26,38 +28,38 @@ public class Geology {
     @Column(name = "fecha_1", nullable = false)
     private LocalDate fecha1;
 
-    @Column(name = "sobredilucion_rebajes_pct")
-    private Integer sobredilucionRebajesPct;
+    @Column(name = "sobredilucion_rebajes_pct", precision = 20, scale = 10)
+    private BigDecimal sobredilucionRebajesPct;
 
-    @Column(name = "sobredilucion_bl_pct")
-    private Integer sobredilucionBlPct;
+    @Column(name = "sobredilucion_bl_pct", precision = 20, scale = 10)
+    private BigDecimal sobredilucionBlPct;
 
-    @Column(name = "sobredilucion_breasting_pct")
-    private Integer sobredilucionBreastingPct;
+    @Column(name = "sobredilucion_breasting_pct", precision = 20, scale = 10)
+    private BigDecimal sobredilucionBreastingPct;
 
-    @Column(name = "sobredilucion_corte_vertical_pct")
-    private Integer sobredilucionCorteVerticalPct;
+    @Column(name = "sobredilucion_corte_vertical_pct", precision = 20, scale = 10)
+    private BigDecimal sobredilucionCorteVerticalPct;
 
-    @Column(name = "sobredilucion_silles_pct")
-    private Integer sobredilucionSillesPct;
+    @Column(name = "sobredilucion_silles_pct", precision = 20, scale = 10)
+    private BigDecimal sobredilucionSillesPct;
 
-    @Column(name = "numero_silles_mineral")
-    private Integer numeroSillesMineral;
+    @Column(name = "numero_silles_mineral", precision = 20, scale = 10)
+    private BigDecimal numeroSillesMineral;
 
-    @Column(name = "numero_silles_tepetate")
-    private Integer numeroSillesTepetate;
+    @Column(name = "numero_silles_tepetate", precision = 20, scale = 10)
+    private BigDecimal numeroSillesTepetate;
 
-    @Column(name = "numero_rebajes_bl")
-    private Integer numeroRebajesBl;
+    @Column(name = "numero_rebajes_bl", precision = 20, scale = 10)
+    private BigDecimal numeroRebajesBl;
 
-    @Column(name = "numero_rebajes_brt")
-    private Integer numeroRebajesBrt;
+    @Column(name = "numero_rebajes_brt", precision = 20, scale = 10)
+    private BigDecimal numeroRebajesBrt;
 
-    @Column(name = "avance_silles_mineral")
-    private Integer avanceSillesMineral;
+    @Column(name = "avance_silles_mineral", precision = 20, scale = 10)
+    private BigDecimal avanceSillesMineral;
 
-    @Column(name = "avance_silles_tepetate")
-    private Integer avanceSillesTepetate;
+    @Column(name = "avance_silles_tepetate", precision = 20, scale = 10)
+    private BigDecimal avanceSillesTepetate;
 
     @Column(name = "perforacion_ore_control_mts", precision = 20, scale = 10)
     private BigDecimal perforacionOreControlMts;
@@ -93,8 +95,8 @@ public class Geology {
     @Column(name = "fecha_2")
     private LocalDate fecha2;
 
-    @Column(name = "mineral_sulfuros")
-    private Integer mineralSulfuros;
+    @Column(name = "mineral_sulfuros", precision = 20, scale = 10)
+    private BigDecimal mineralSulfuros;
 
     @Column(name = "ley_ag", precision = 20, scale = 10)
     private BigDecimal leyAg;
@@ -108,23 +110,23 @@ public class Geology {
     @Column(name = "ley_zn", precision = 20, scale = 10)
     private BigDecimal leyZn;
 
-    @Column(name = "mineral_oxidos")
-    private Integer mineralOxidos;
+    @Column(name = "mineral_oxidos", precision = 20, scale = 10)
+    private BigDecimal mineralOxidos;
 
-    @Column(name = "ley_ag_2")
-    private Integer leyAg2;
+    @Column(name = "ley_ag_2", precision = 20, scale = 10)
+    private BigDecimal leyAg2;
 
     @Column(name = "ley_au_3", precision = 20, scale = 10)
     private BigDecimal leyAu3;
 
-    @Column(name = "ley_pb_4")
-    private Integer leyPb4;
+    @Column(name = "ley_pb_4", precision = 20, scale = 10)
+    private BigDecimal leyPb4;
 
-    @Column(name = "ley_zn_5")
-    private Integer leyZn5;
+    @Column(name = "ley_zn_5", precision = 20, scale = 10)
+    private BigDecimal leyZn5;
 
-    @Column(name = "ley_zn_6")
-    private Integer leyZn6;
+    @Column(name = "ley_zn_6", precision = 20, scale = 10)
+    private BigDecimal leyZn6;
 
     /* =======================
        BLOQUE MINERAL SULFURO PARTE 3
@@ -163,20 +165,20 @@ public class Geology {
     @Column(name = "ley_zn_pct_5", precision = 20, scale = 10)
     private BigDecimal leyZnPct5;
 
-    @Column(name = "mineral_extraido_corte_vertical_tm")
-    private Integer mineralExtraidoCorteVerticalTm;
+    @Column(name = "mineral_extraido_corte_vertical_tm", precision = 20, scale = 10)
+    private BigDecimal mineralExtraidoCorteVerticalTm;
 
-    @Column(name = "ley_ag_gpt_3")
-    private Integer leyAgGpt3;
+    @Column(name = "ley_ag_gpt_3", precision = 20, scale = 10)
+    private BigDecimal leyAgGpt3;
 
-    @Column(name = "ley_au_gpt_4")
-    private Integer leyAuGpt4;
+    @Column(name = "ley_au_gpt_4", precision = 20, scale = 10)
+    private BigDecimal leyAuGpt4;
 
-    @Column(name = "ley_pb_pct_5")
-    private Integer leyPbPct5;
+    @Column(name = "ley_pb_pct_5", precision = 20, scale = 10)
+    private BigDecimal leyPbPct5;
 
-    @Column(name = "ley_zn_pct_6")
-    private Integer leyZnPct6;
+    @Column(name = "ley_zn_pct_6", precision = 20, scale = 10)
+    private BigDecimal leyZnPct6;
 
     @Column(name = "mineral_silles_tm", precision = 20, scale = 10)
     private BigDecimal mineralSillesTm;

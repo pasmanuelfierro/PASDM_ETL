@@ -15,7 +15,7 @@ import java.util.Map;
 
 @Slf4j
 @Component
-public class SheetHandlerMTTO implements XSSFSheetXMLHandler.SheetContentsHandler{
+public class SheetHandlerMTTO implements XSSFSheetXMLHandler.SheetContentsHandler {
 
     private static final int BATCH_SIZE = 1000;
 

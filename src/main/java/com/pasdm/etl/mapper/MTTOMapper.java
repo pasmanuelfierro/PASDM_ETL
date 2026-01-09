@@ -146,7 +146,7 @@ public class MTTOMapper {
             mtto.setVerificacionOperativo2(intValidador(row.get(77)));
 
             return mtto;
-        } catch (Exception e){
+        } catch (Exception e) {
             log.error("Error procesando Excel", e);
         }
         return null;

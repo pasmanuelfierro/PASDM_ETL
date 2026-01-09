@@ -1,5 +1,6 @@
 package com.pasdm.etl.service;
 
+import com.pasdm.etl.enums.SheetType;
 import com.pasdm.etl.mapper.RRHHMapper;
 import com.pasdm.etl.model.RRHH;
 
@@ -16,7 +17,7 @@ import java.util.Map;
 
 @Slf4j
 @Component
-public class SheetHandlerRRHH implements XSSFSheetXMLHandler.SheetContentsHandler {
+public class SheetHandlerRRHH implements ExcelSheetHandler {
 
     private static final int BATCH_SIZE = 1000;
 
@@ -69,10 +70,16 @@ public class SheetHandlerRRHH implements XSSFSheetXMLHandler.SheetContentsHandle
         // no-op
     }
 
+    @Override
     public void flushRemaining() {
         if (!bufferRRHH.isEmpty()) {
             batchService.saveBatchRRHH(bufferRRHH);
             bufferRRHH.clear();
         }
+    }
+
+    @Override
+    public SheetType getType() {
+        return SheetType.RRHH;
     }
 }

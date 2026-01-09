@@ -8,7 +8,9 @@ import lombok.Setter;
 import java.time.LocalDate;
 
 @Entity
-@Table(schema = "etl", name = "RRHH")
+@Table(schema = "etl", name = "RRHH", uniqueConstraints = {
+        @UniqueConstraint(name = "uk_rrhh_fecha", columnNames = "fecha")
+})
 @Getter
 @Setter
 @NoArgsConstructor

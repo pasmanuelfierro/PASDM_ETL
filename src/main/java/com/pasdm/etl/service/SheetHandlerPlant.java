@@ -1,13 +1,10 @@
 package com.pasdm.etl.service;
 
-import com.pasdm.etl.mapper.GeologyMapper;
+import com.pasdm.etl.enums.SheetType;
 import com.pasdm.etl.mapper.PlantMapper;
-import com.pasdm.etl.model.Geology;
 import com.pasdm.etl.model.Plant;
-
 import lombok.extern.slf4j.Slf4j;
 import org.apache.poi.ss.util.CellReference;
-import org.apache.poi.xssf.eventusermodel.XSSFSheetXMLHandler;
 import org.apache.poi.xssf.usermodel.XSSFComment;
 import org.springframework.stereotype.Component;
 
@@ -18,7 +15,7 @@ import java.util.Map;
 
 @Slf4j
 @Component
-public class SheetHandlerPlant implements XSSFSheetXMLHandler.SheetContentsHandler {
+public class SheetHandlerPlant implements ExcelSheetHandler {
 
     private static final int BATCH_SIZE = 1000;
 
@@ -29,7 +26,7 @@ public class SheetHandlerPlant implements XSSFSheetXMLHandler.SheetContentsHandl
     private final Map<Integer, String> currentRow = new HashMap<>();
 
     public SheetHandlerPlant(PlantMapper mapperPlant,
-                        BatchService batchService) {
+                             BatchService batchService) {
         this.mapperPlant = mapperPlant;
         this.batchService = batchService;
     }
@@ -37,13 +34,19 @@ public class SheetHandlerPlant implements XSSFSheetXMLHandler.SheetContentsHandl
     @Override
     public void startRow(int rowNum) {
         currentRow.clear();
-     }
+    }
 
     @Override
     public void cell(String cellReference, String formattedValue, XSSFComment comment) {
+
         int colIndex = CellReference.convertColStringToIndex(
                 cellReference.replaceAll("\\d", "")
         );
+
+        if (colIndex == 0) {
+            return;
+        }
+
         currentRow.put(colIndex, formattedValue);
     }
 
@@ -55,7 +58,9 @@ public class SheetHandlerPlant implements XSSFSheetXMLHandler.SheetContentsHandl
 
         try {
             Plant entity = mapperPlant.mapEntity(currentRow);
-            bufferPlant.add(entity);
+            if (entity != null) {
+                bufferPlant.add(entity);
+            }
         } catch (Exception e) {
             log.error("Fila {} inválida: {}", rowNum, currentRow);
         }
@@ -71,10 +76,16 @@ public class SheetHandlerPlant implements XSSFSheetXMLHandler.SheetContentsHandl
         // no-op
     }
 
+    @Override
     public void flushRemaining() {
         if (!bufferPlant.isEmpty()) {
             batchService.saveBatchPlant(bufferPlant);
             bufferPlant.clear();
         }
+    }
+
+    @Override
+    public SheetType getType() {
+        return SheetType.PLANT;
     }
 }

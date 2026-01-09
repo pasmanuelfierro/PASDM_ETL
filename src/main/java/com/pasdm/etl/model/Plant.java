@@ -9,7 +9,9 @@ import java.math.BigDecimal;
 import java.time.LocalDate;
 
 @Entity
-@Table(schema = "etl", name = "plant")
+@Table(schema = "etl", name = "plant", uniqueConstraints = {
+        @UniqueConstraint(name = "uk_plant_fecha_1", columnNames = "fecha_1")
+})
 @Getter
 @Setter
 @NoArgsConstructor
@@ -26,8 +28,8 @@ public class Plant {
        BLOQUE MINERAL OXIDOS PARTE 1
        ======================= */
 
-    @Column(name = "toneladas_mil_oxidos")
-    private Integer toneladasMilOxidos;
+    @Column(name = "toneladas_mil_oxidos", precision = 20, scale = 10)
+    private BigDecimal toneladasMilOxidos;
 
     @Column(name = "ley_au_oxidos", precision = 20, scale = 10)
     private BigDecimal leyAuOxidos;
@@ -45,8 +47,8 @@ public class Plant {
        BLOQUE MINERAL SULFUROS PARTE 1
        ======================= */
 
-    @Column(name = "toneladas_mil_sulfuros")
-    private Integer toneladasMilSulfuros;
+    @Column(name = "toneladas_mil_sulfuros", precision = 20, scale = 10)
+    private BigDecimal toneladasMilSulfuros;
 
     @Column(name = "ley_au_sulfuros", precision = 20, scale = 10)
     private BigDecimal leyAuSulfuros;
@@ -76,14 +78,14 @@ public class Plant {
        BLOQUE STOCK
        ======================= */
 
-    @Column(name = "stock_sulfuros_tm")
-    private Integer stockSulfurosTm;
+    @Column(name = "stock_sulfuros_tm", precision = 20, scale = 10)
+    private BigDecimal stockSulfurosTm;
 
-    @Column(name = "stock_oxidos_tm")
-    private Integer stockOxidosTm;
+    @Column(name = "stock_oxidos_tm", precision = 20, scale = 10)
+    private BigDecimal stockOxidosTm;
 
-    @Column(name = "toneladas_mil_total")
-    private Integer toneladasMilTotal;
+    @Column(name = "toneladas_mil_total", precision = 20, scale = 10)
+    private BigDecimal toneladasMilTotal;
 
     /* =======================
        BLOQUE OXIDOS
@@ -150,8 +152,8 @@ public class Plant {
        BLOQUE PROCESO
        ======================= */
 
-    @Column(name = "cianuro_kg")
-    private Integer cianuroKg;
+    @Column(name = "cianuro_kg", precision = 20, scale = 10)
+    private BigDecimal cianuroKg;
 
     @Column(name = "antiincrustante_kg", precision = 20, scale = 10)
     private BigDecimal antiincrustanteKg;
@@ -179,20 +181,20 @@ public class Plant {
        BLOQUE DISPONIBILIDAD PLANTA
        ======================= */
 
-    @Column(name = "disponibilidad_planta_oxidos_hrs")
-    private Integer disponibilidadPlantaOxidosHrs;
+    @Column(name = "disponibilidad_planta_oxidos_hrs", precision = 20, scale = 10)
+    private BigDecimal disponibilidadPlantaOxidosHrs;
 
-    @Column(name = "disponibilidad_planta_sulfuros_hrs")
-    private Integer disponibilidadPlantaSulfurosHrs;
+    @Column(name = "disponibilidad_planta_sulfuros_hrs", precision = 20, scale = 10)
+    private BigDecimal disponibilidadPlantaSulfurosHrs;
 
     /* =======================
        BLOQUE USO PLANTA
        ======================= */
     
-    @Column(name = "uso_planta_oxidos_hrs")
-    private Integer usoPlantaOxidosHrs;
+    @Column(name = "uso_planta_oxidos_hrs", precision = 20, scale = 10)
+    private BigDecimal usoPlantaOxidosHrs;
 
-    @Column(name = "uso_planta_sulfuros_hrs")
-    private Integer usoPlantaSulfurosHrs;
+    @Column(name = "uso_planta_sulfuros_hrs", precision = 20, scale = 10)
+    private BigDecimal usoPlantaSulfurosHrs;
 
 }

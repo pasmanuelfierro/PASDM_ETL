@@ -1,10 +1,10 @@
 package com.pasdm.etl.service;
 
+import com.pasdm.etl.enums.SheetType;
 import com.pasdm.etl.mapper.GeologyMapper;
 import com.pasdm.etl.model.Geology;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.poi.ss.util.CellReference;
-import org.apache.poi.xssf.eventusermodel.XSSFSheetXMLHandler;
 import org.apache.poi.xssf.usermodel.XSSFComment;
 import org.springframework.stereotype.Component;
 
@@ -15,7 +15,7 @@ import java.util.Map;
 
 @Slf4j
 @Component
-public class SheetHandler implements XSSFSheetXMLHandler.SheetContentsHandler {
+public class SheetHandlerGeology implements ExcelSheetHandler {
 
     private static final int BATCH_SIZE = 1000;
 
@@ -25,8 +25,8 @@ public class SheetHandler implements XSSFSheetXMLHandler.SheetContentsHandler {
     private final List<Geology> bufferGeology = new ArrayList<>(BATCH_SIZE);
     private final Map<Integer, String> currentRow = new HashMap<>();
 
-    public SheetHandler(GeologyMapper mapperGeology,
-                        BatchService batchService) {
+    public SheetHandlerGeology(GeologyMapper mapperGeology,
+                               BatchService batchService) {
         this.mapperGeology = mapperGeology;
         this.batchService = batchService;
     }
@@ -34,13 +34,19 @@ public class SheetHandler implements XSSFSheetXMLHandler.SheetContentsHandler {
     @Override
     public void startRow(int rowNum) {
         currentRow.clear();
-     }
+    }
 
     @Override
     public void cell(String cellReference, String formattedValue, XSSFComment comment) {
+
+
         int colIndex = CellReference.convertColStringToIndex(
                 cellReference.replaceAll("\\d", "")
         );
+
+        if (colIndex == 0) {
+            return;
+        }
         currentRow.put(colIndex, formattedValue);
     }
 
@@ -52,7 +58,11 @@ public class SheetHandler implements XSSFSheetXMLHandler.SheetContentsHandler {
 
         try {
             Geology entity = mapperGeology.mapEntity(currentRow);
-            bufferGeology.add(entity);
+
+            if (entity != null) {
+                bufferGeology.add(entity);
+            }
+
         } catch (Exception e) {
             log.error("Fila {} inválida: {}", rowNum, currentRow);
         }
@@ -68,10 +78,16 @@ public class SheetHandler implements XSSFSheetXMLHandler.SheetContentsHandler {
         // no-op
     }
 
+    @Override
     public void flushRemaining() {
         if (!bufferGeology.isEmpty()) {
             batchService.saveBatchGeology(bufferGeology);
             bufferGeology.clear();
         }
+    }
+
+    @Override
+    public SheetType getType() {
+        return SheetType.GEOLOGY;
     }
 }
