@@ -18,11 +18,13 @@ public class RRHHMapper {
 
             RRHH e = new RRHH();
             if (ExcelValueParser.dateValidador(row.get(1)) != null) {
+
                 if (ExcelValueParser.dateValidador(row.get(1)).isBefore(localDate) || ExcelValueParser.dateValidador(row.get(1)).isEqual(localDate)) {
+
                     e.setFecha(ExcelValueParser.dateValidador(row.get(1)));
-            /* =======================
-               ASISTENCIA
-               ======================= */
+                    /* =======================
+                       ASISTENCIA
+                       ======================= */
                     e.setAsistenciaPersonal(ExcelValueParser.intValidador(row.get(2)));
                     e.setVacaciones(ExcelValueParser.intValidador(row.get(3)));
                     e.setDescanso(ExcelValueParser.intValidador(row.get(4)));
@@ -32,16 +34,16 @@ public class RRHHMapper {
                     e.setPermisoSinGoce(ExcelValueParser.intValidador(row.get(8)));
                     e.setAsistenciaContratistas(ExcelValueParser.intValidador(row.get(9)));
 
-            /* =======================
-               CAPACITACION
-               ======================= */
+                    /* =======================
+                       CAPACITACION
+                       ======================= */
                     e.setOperacionMina(ExcelValueParser.intValidador(row.get(11)));
                     e.setOtrasAreas(ExcelValueParser.intValidador(row.get(12)));
                     e.setInduccion(ExcelValueParser.intValidador(row.get(13)));
 
-            /* =======================
-               VERIFICACIONES CRM
-               ======================= */
+                    /* =======================
+                       VERIFICACIONES CRM
+                       ======================= */
                     e.setFechaVerificacion(ExcelValueParser.dateValidador(row.get(15)));
                     e.setVerificacionSupervisor(ExcelValueParser.intValidador(row.get(16)));
                     e.setVerificacionOperativo(ExcelValueParser.intValidador(row.get(17)));
