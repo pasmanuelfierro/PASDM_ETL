@@ -1,8 +1,8 @@
 package com.pasdm.etl.service;
 
 import com.pasdm.etl.enums.SheetType;
-import com.pasdm.etl.mapper.PlantMapper;
-import com.pasdm.etl.model.Plant;
+import com.pasdm.etl.mapper.DevelopmentMapper;
+import com.pasdm.etl.model.Development;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.poi.ss.util.CellReference;
 import org.apache.poi.xssf.usermodel.XSSFComment;
@@ -15,20 +15,20 @@ import java.util.Map;
 
 @Slf4j
 @Component
-public class SheetHandlerPlant implements ExcelSheetHandler {
+public class SheetHandlerDevelopment implements ExcelSheetHandler {
 
     private static final int BATCH_SIZE = 1000;
 
-    private final PlantMapper mapperPlant;
+    private final DevelopmentMapper mapperDevelopment;
     private final BatchService batchService;
 
-    private final List<Plant> bufferPlant = new ArrayList<>(BATCH_SIZE);
+    private final List<Development> bufferDevelopment = new ArrayList<>(BATCH_SIZE);
     private final Map<Integer, String> currentRow = new HashMap<>();
     private int totalProcessed = 0;
 
-    public SheetHandlerPlant(PlantMapper mapperPlant,
-                             BatchService batchService) {
-        this.mapperPlant = mapperPlant;
+    public SheetHandlerDevelopment(DevelopmentMapper mapperDevelopment,
+                                   BatchService batchService) {
+        this.mapperDevelopment = mapperDevelopment;
         this.batchService = batchService;
     }
 
@@ -40,13 +40,18 @@ public class SheetHandlerPlant implements ExcelSheetHandler {
     @Override
     public void cell(String cellReference, String formattedValue, XSSFComment comment) {
 
+        if (cellReference == null) {
+            return;
+        }
+
+        // Ignorar columnas A y B
+        if (cellReference.startsWith("A") || cellReference.startsWith("B")) {
+            return;
+        }
+
         int colIndex = CellReference.convertColStringToIndex(
                 cellReference.replaceAll("\\d", "")
         );
-
-        if (colIndex == 0) {
-            return;
-        }
 
         currentRow.put(colIndex, formattedValue);
     }
@@ -55,20 +60,20 @@ public class SheetHandlerPlant implements ExcelSheetHandler {
     public void endRow(int rowNum) {
 
         if (rowNum == 0) return; // encabezado 1
-        if (rowNum == 1) return; // encabezado 2
 
         try {
-            Plant entity = mapperPlant.mapEntity(currentRow);
+            Development entity = mapperDevelopment.mapEntity(currentRow);
             if (entity != null) {
-                bufferPlant.add(entity);
+                bufferDevelopment.add(entity);
+                totalProcessed++;
             }
         } catch (Exception e) {
-            log.error("Fila {} inválida: {}", rowNum, currentRow);
+            log.error("Fila {} inválida: {}", rowNum, currentRow, e);
         }
 
-        if (bufferPlant.size() >= BATCH_SIZE) {
-            batchService.saveBatchPlant(bufferPlant);
-            bufferPlant.clear();
+        if (bufferDevelopment.size() >= BATCH_SIZE) {
+            batchService.upsertBatchDevelopment(bufferDevelopment);
+            bufferDevelopment.clear();
         }
     }
 
@@ -79,9 +84,9 @@ public class SheetHandlerPlant implements ExcelSheetHandler {
 
     @Override
     public void flushRemaining() {
-        if (!bufferPlant.isEmpty()) {
-            batchService.saveBatchPlant(bufferPlant);
-            bufferPlant.clear();
+        if (!bufferDevelopment.isEmpty()) {
+            batchService.upsertBatchDevelopment(bufferDevelopment);
+            bufferDevelopment.clear();
         }
     }
 
@@ -97,6 +102,6 @@ public class SheetHandlerPlant implements ExcelSheetHandler {
 
     @Override
     public SheetType getType() {
-        return SheetType.PLANT;
+        return SheetType.DEVELOPMENT;
     }
 }

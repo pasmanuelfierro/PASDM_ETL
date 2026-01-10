@@ -1,19 +1,15 @@
 package com.pasdm.etl.service;
 
-import com.pasdm.etl.model.Geology;
-import com.pasdm.etl.model.MTTO;
-import com.pasdm.etl.model.Plant;
-import com.pasdm.etl.repository.GeologyRepository;
-import com.pasdm.etl.repository.MTTORepository;
-import com.pasdm.etl.repository.PlantRepository;
-import com.pasdm.etl.repository.RRHHRepository;
-
+import com.pasdm.etl.model.*;
+import com.pasdm.etl.repository.*;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 
+@Slf4j
 @Service
 @RequiredArgsConstructor
 public class BatchService {
@@ -22,6 +18,8 @@ public class BatchService {
     private final PlantRepository repositoryPlant;
     private final RRHHRepository repositoryRRHH;
     private final MTTORepository repositoryMTTO;
+    private final ProductionRepository productionReposiroty;
+    private final DevelopmentRepository developmentRepository;
 
     @Transactional
     public void saveBatchGeology(List<Geology> batch) {
@@ -36,13 +34,38 @@ public class BatchService {
     }
 
     @Transactional
-    public void saveBatchRRHH(List<com.pasdm.etl.model.RRHH> batch) {
+    public void saveBatchRRHH(List<RRHH> batch) {
         repositoryRRHH.saveAll(batch);
         repositoryRRHH.flush();
     }
 
+    @Transactional
     public void saveBatchMTTO(List<MTTO> batch) {
         repositoryMTTO.saveAll(batch);
         repositoryMTTO.flush();
+    }
+
+    @Transactional
+    public void saveBatchProduction(List<Production> batch) {
+        log.info("Guardando batch de Production {}", batch.size());
+        for (Production p : batch) {
+            productionReposiroty.upsert(p);
+        }
+        productionReposiroty.flush();
+    }
+
+    @Transactional
+    public void saveBatchDevelopment(List<Development> batch) {
+        log.info("Guardando batch de {}", batch.size());
+        developmentRepository.saveAll(batch);
+        developmentRepository.flush();
+    }
+
+    @Transactional
+    public void upsertBatchDevelopment(List<Development> batch) {
+        log.info("Guardando batch de Development {}", batch.size());
+        for (Development d : batch) {
+            developmentRepository.upsert(d);
+        }
     }
 }

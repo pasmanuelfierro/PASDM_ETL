@@ -2,6 +2,7 @@ package com.pasdm.etl.service;
 
 import com.pasdm.etl.enums.SheetType;
 import com.pasdm.etl.factory.SheetHandlerFactory;
+import com.pasdm.etl.infraestructure.nas.NasSmbClient;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.poi.openxml4j.opc.OPCPackage;
@@ -16,9 +17,7 @@ import org.xml.sax.ContentHandler;
 import org.xml.sax.InputSource;
 import org.xml.sax.XMLReader;
 
-import java.io.File;
 import java.io.InputStream;
-import java.nio.file.Path;
 
 @Slf4j
 @Service
@@ -30,49 +29,64 @@ public class ExcelStreamingService {
     private final SheetHandlerRRHH sheetHandlerRRHH;
     private final SheetHandlerMTTO sheetHandlerMTTO;
     private final SheetHandlerFactory sheetHandlerFactory;
+    private final NasSmbClient nasSmbClient;
 
     public void readLargeExcel(String excelPath) {
         log.info("Comenzando procesando Excel {}", excelPath);
 
-        File file = new File(excelPath);
-        ExcelSheetHandler sheetHandler = sheetHandlerFactory.get(resolve(file.getAbsoluteFile().toPath()));
+        // File file = new File(excelPath);
+        SheetType type = SheetType.fromPath(excelPath);
 
-        try (OPCPackage pkg = OPCPackage.open(file)) {
+        try (InputStream is = nasSmbClient.openFile(excelPath);
+             OPCPackage pkg = OPCPackage.open(is)) {
 
             XSSFReader reader = new XSSFReader(pkg);
             SharedStrings sharedStrings = reader.getSharedStringsTable();
             StylesTable styles = reader.getStylesTable();
 
             DataFormatter formatter = new DataFormatter(true);
+            XSSFReader.SheetIterator sheets = (XSSFReader.SheetIterator) reader.getSheetsData();
+            while (sheets.hasNext()) {
 
-            XMLReader parser = XMLHelper.newXMLReader();
+                try (InputStream sheetStream = sheets.next()) {
 
-            //PROCESADOR DE CELDAS
-            ContentHandler handler = new XSSFSheetXMLHandler(
-                    styles,
-                    sharedStrings,
-                    sheetHandler,
-                    formatter,
-                    false
-            );
+                    if (true) {
 
-            parser.setContentHandler(handler);
+                        String sheetName = sheets.getSheetName().trim();
 
-            try (InputStream sheet = reader.getSheetsData().next()) {
-                parser.parse(new InputSource(sheet));
+                        if (!sheetName.equalsIgnoreCase(type.getSheetName())) {
+                            continue;
+                        }
+
+                        XMLReader parser = XMLHelper.newXMLReader();
+                        ExcelSheetHandler sheetHandler = sheetHandlerFactory.get(resolve(excelPath));
+                        //PROCESADOR DE CELDAS
+                        ContentHandler handler = new XSSFSheetXMLHandler(
+                                styles,
+                                sharedStrings,
+                                sheetHandler,
+                                formatter,
+                                false
+                        );
+
+                        parser.setContentHandler(handler);
+                        parser.parse(new InputSource(sheetStream));
+                        sheetHandler.flushRemaining();
+                        log.info("Se procesaron {} filas", sheetHandler.getCount());
+                        sheetHandler.resetCount();
+                    }
+                    log.info("Termino procesando Excel {}", excelPath);
+                }
             }
-
-            sheetHandler.flushRemaining();
-            log.info("Termino procesando Excel {}", excelPath);
 
         } catch (Exception e) {
             log.error("Error procesando Excel", e);
         }
     }
 
-    public SheetType resolve(Path path) {
+    public SheetType resolve(String path) {
 
-        String filename = path.getFileName().toString().toLowerCase();
+        String filename = path.toLowerCase();
 
         if (filename.contains("geology")) {
             return SheetType.GEOLOGY;
@@ -83,8 +97,14 @@ public class ExcelStreamingService {
         if (filename.contains("rrhh")) {
             return SheetType.RRHH;
         }
-        if (filename.contains("mtto") || filename.contains("mantenimiento")) {
+        if (filename.contains("mtto")) {
             return SheetType.MTTO;
+        }
+        if (filename.contains("produccion")) {
+            return SheetType.PRODUCTION;
+        }
+        if (filename.contains("desarrollo")) {
+            return SheetType.DEVELOPMENT;
         }
 
         throw new IllegalArgumentException(

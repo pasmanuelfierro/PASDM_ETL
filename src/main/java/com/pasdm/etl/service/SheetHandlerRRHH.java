@@ -3,10 +3,8 @@ package com.pasdm.etl.service;
 import com.pasdm.etl.enums.SheetType;
 import com.pasdm.etl.mapper.RRHHMapper;
 import com.pasdm.etl.model.RRHH;
-
 import lombok.extern.slf4j.Slf4j;
 import org.apache.poi.ss.util.CellReference;
-import org.apache.poi.xssf.eventusermodel.XSSFSheetXMLHandler;
 import org.apache.poi.xssf.usermodel.XSSFComment;
 import org.springframework.stereotype.Component;
 
@@ -26,9 +24,10 @@ public class SheetHandlerRRHH implements ExcelSheetHandler {
 
     private final List<RRHH> bufferRRHH = new ArrayList<>(BATCH_SIZE);
     private final Map<Integer, String> currentRow = new HashMap<>();
+    private int totalProcessed = 0;
 
     public SheetHandlerRRHH(RRHHMapper mapperRRHH,
-                        BatchService batchService) {
+                            BatchService batchService) {
         this.mapperRRHH = mapperRRHH;
         this.batchService = batchService;
     }
@@ -36,7 +35,7 @@ public class SheetHandlerRRHH implements ExcelSheetHandler {
     @Override
     public void startRow(int rowNum) {
         currentRow.clear();
-     }
+    }
 
     @Override
     public void cell(String cellReference, String formattedValue, XSSFComment comment) {
@@ -54,7 +53,9 @@ public class SheetHandlerRRHH implements ExcelSheetHandler {
 
         try {
             RRHH entity = mapperRRHH.mapEntity(currentRow);
-            bufferRRHH.add(entity);
+            if (entity != null) {
+                bufferRRHH.add(entity);
+            }
         } catch (Exception e) {
             log.error("Fila {} inválida: {}", rowNum, currentRow);
         }
@@ -76,6 +77,16 @@ public class SheetHandlerRRHH implements ExcelSheetHandler {
             batchService.saveBatchRRHH(bufferRRHH);
             bufferRRHH.clear();
         }
+    }
+
+    @Override
+    public int getCount() {
+        return totalProcessed;
+    }
+
+    @Override
+    public void resetCount() {
+        totalProcessed = 0;
     }
 
     @Override

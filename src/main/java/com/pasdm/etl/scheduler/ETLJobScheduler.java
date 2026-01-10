@@ -20,7 +20,7 @@ public class ETLJobScheduler {
     @Value("${excel.plant.path}")
     private String excelPlantPath;
 
-    @Scheduled(cron = "0 0 7 * * ?")
+   // @Scheduled(cron = "0 0 7 * * ?")
     public void processExcel() {
         log.info("Inicio proceso Excel grande");
         excelStreamingService.readLargeExcel(excelRRHHPath);

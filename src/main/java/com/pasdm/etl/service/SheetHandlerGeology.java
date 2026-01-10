@@ -24,6 +24,7 @@ public class SheetHandlerGeology implements ExcelSheetHandler {
 
     private final List<Geology> bufferGeology = new ArrayList<>(BATCH_SIZE);
     private final Map<Integer, String> currentRow = new HashMap<>();
+    private int totalProcessed = 0;
 
     public SheetHandlerGeology(GeologyMapper mapperGeology,
                                BatchService batchService) {
@@ -84,6 +85,16 @@ public class SheetHandlerGeology implements ExcelSheetHandler {
             batchService.saveBatchGeology(bufferGeology);
             bufferGeology.clear();
         }
+    }
+
+    @Override
+    public int getCount() {
+        return totalProcessed;
+    }
+
+    @Override
+    public void resetCount() {
+        totalProcessed = 0;
     }
 
     @Override
