@@ -32,40 +32,49 @@ public class EtlController {
     @Value("${excel.test.path}")
     private String excelTestPath;
 
+    @Value("${excel.security.path}")
+    private String excelSecurityPath;
+
     @PostMapping("/run-plant")
     public ResponseEntity<String> runPlantEtl() {
-        excelStreamingService.readLargeExcel(excelPlantPath);
+        excelStreamingService.readExcel(excelPlantPath);
         return ResponseEntity.ok("ETL Plant ejecutado");
     }
 
     @PostMapping("/run-geology")
     public ResponseEntity<String> runGeologyEtl() {
-        excelStreamingService.readLargeExcel(excelGeologyPath);
+        excelStreamingService.readExcel(excelGeologyPath);
         return ResponseEntity.ok("ETL Geology ejecutado");
     }
 
     @PostMapping("/run-rrhh")
     public ResponseEntity<String> runRRHHEtl() {
-        excelStreamingService.readLargeExcel(excelRRHHPath);
+        excelStreamingService.readExcel(excelRRHHPath);
         return ResponseEntity.ok("ETL RRHH ejecutado");
     }
 
     @PostMapping("/run-prod")
     public ResponseEntity<String> runProdEtl() {
-        excelStreamingService.readLargeExcel(excelProdPath);
+        excelStreamingService.readExcel(excelProdPath);
         return ResponseEntity.ok("ETL PROD ejecutado");
     }
 
     @PostMapping("/run-dev")
     public ResponseEntity<String> runDevEtl() {
-        excelStreamingService.readLargeExcel(excelDevPath);
+        excelStreamingService.readExcel(excelDevPath);
         return ResponseEntity.ok("ETL DEV ejecutado");
     }
 
     @PostMapping("/run-test")
     public ResponseEntity<String> runTestEtl() {
-        excelStreamingService.readLargeExcel(excelTestPath);
+        excelStreamingService.readExcel(excelTestPath);
         return ResponseEntity.ok("ETL excelTestPath ejecutado");
+    }
+
+    @PostMapping("/run-security")
+    public ResponseEntity<String> runSecurityEtl() {
+        excelStreamingService.readExcel(excelSecurityPath);
+        return ResponseEntity.ok("ETL excelSecurityPath ejecutado");
     }
 
 }

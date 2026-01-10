@@ -1,7 +1,5 @@
 package com.pasdm.etl.enums;
 
-import java.nio.file.Path;
-
 public enum SheetType {
 
     GEOLOGY("BD_GEOLOGIA"),
@@ -10,6 +8,7 @@ public enum SheetType {
     MTTO("DB MTTO"),
     PRODUCTION("database"),
     TEST("Hoja1"),
+    SECURITY("DB"),
     DEVELOPMENT("BD Desarrollo");
 
     private final String sheetName;
@@ -28,6 +27,7 @@ public enum SheetType {
         if (p.contains("produccion")) return PRODUCTION;
         if (p.contains("reporte")) return TEST;
         if (p.contains("desarrollo")) return DEVELOPMENT;
+        if (p.contains("estadisticos")) return SECURITY;
 
 
         throw new IllegalArgumentException(

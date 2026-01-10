@@ -31,7 +31,7 @@ public class ExcelStreamingService {
     private final SheetHandlerFactory sheetHandlerFactory;
     private final NasSmbClient nasSmbClient;
 
-    public void readLargeExcel(String excelPath) {
+    public void readExcel(String excelPath) {
         log.info("Comenzando procesando Excel {}", excelPath);
 
         // File file = new File(excelPath);

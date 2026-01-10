@@ -20,6 +20,7 @@ public class BatchService {
     private final MTTORepository repositoryMTTO;
     private final ProductionRepository productionReposiroty;
     private final DevelopmentRepository developmentRepository;
+    private final SecurityRepository securityRepository;
 
     @Transactional
     public void saveBatchGeology(List<Geology> batch) {
@@ -66,6 +67,14 @@ public class BatchService {
         log.info("Guardando batch de Development {}", batch.size());
         for (Development d : batch) {
             developmentRepository.upsert(d);
+        }
+    }
+
+    @Transactional
+    public void upsertBatchSecurity(List<Security> batch) {
+        log.info("Guardando batch de Security {}", batch.size());
+        for (Security s : batch) {
+            securityRepository.upsert(s);
         }
     }
 }
