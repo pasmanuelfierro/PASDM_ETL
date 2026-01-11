@@ -50,7 +50,6 @@ public class SheetHandlerSecurity implements ExcelSheetHandler {
     public void endRow(int rowNum) {
 
         if (rowNum == 0) return; // encabezado 1
-        if (rowNum == 1) return; // encabezado 2
 
         try {
             Security entity = mapper.mapEntity(currentRow);

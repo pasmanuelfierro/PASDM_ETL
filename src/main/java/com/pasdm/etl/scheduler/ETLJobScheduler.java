@@ -34,15 +34,15 @@ public class ETLJobScheduler {
     @Value("${excel.security.path}")
     private String excelSecurityPath;
 
-    @Scheduled(cron = "0 55 07 * * ?")
+    @Scheduled(cron = "0 55 06 * * ?")
     public void processExcel() {
         log.info("Inicio proceso Excel");
-        excelStreamingService.readExcel(excelRRHHPath);
-        excelStreamingService.readExcel(excelGeologyPath);
-        excelStreamingService.readExcel(excelPlantPath);
+        // excelStreamingService.readExcel(excelRRHHPath);
+        // excelStreamingService.readExcel(excelGeologyPath);
+        // excelStreamingService.readExcel(excelPlantPath);
         excelStreamingService.readExcel(excelDevPath);
         excelStreamingService.readExcel(excelProdPath);
-        excelStreamingService.readExcel(excelSecurityPath);
+        //  excelStreamingService.readExcel(excelSecurityPath);
         log.info("Fin proceso Excel");
     }
 }

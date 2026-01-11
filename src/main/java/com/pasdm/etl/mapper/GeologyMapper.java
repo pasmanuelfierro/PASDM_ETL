@@ -19,9 +19,9 @@ public class GeologyMapper {
             LocalDate localDate = LocalDate.now();
             Geology e = new Geology();
 
-        /* =======================
-           PRIMER BLOQUE
-           ======================= */
+            /* =======================
+               PRIMER BLOQUE
+               ======================= */
 
             if (ExcelValueParser.dateValidador(row.get(1)) != null) {
 
