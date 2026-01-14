@@ -1,6 +1,6 @@
 package com.pasdm.etl.mapper;
 
-import com.pasdm.etl.model.Plant;
+import com.pasdm.etl.model.PlantV1;
 import com.pasdm.etl.util.ExcelValueParser;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Component;
@@ -10,12 +10,12 @@ import java.util.Map;
 
 @Slf4j
 @Component
-public class PlantMapper {
+public class PlantV1Mapper {
 
-    public Plant mapEntity(Map<Integer, String> row) {
+    public PlantV1 mapEntity(Map<Integer, String> row) {
         try {
             LocalDate localDate = LocalDate.now();
-            Plant e = new Plant();
+            PlantV1 e = new PlantV1();
             if (ExcelValueParser.dateValidador(row.get(1)) != null) {
 
                 if (ExcelValueParser.dateValidador(row.get(1)).isBefore(localDate) || ExcelValueParser.dateValidador(row.get(1)).isEqual(localDate)) {

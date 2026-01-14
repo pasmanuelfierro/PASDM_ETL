@@ -3,7 +3,8 @@ package com.pasdm.etl.enums;
 public enum SheetType {
 
     GEOLOGY("BD_GEOLOGIA"),
-    PLANT("BD_PLANTA"),
+    PLANT("Actual"),
+    PLANT_BUDGET("Budget"),
     RRHH("BD_RR.HH"),
     MTTO("DB MTTO"),
     PRODUCTION("database"),
@@ -21,14 +22,13 @@ public enum SheetType {
         String p = path.toLowerCase();
 
         if (p.contains("geology")) return GEOLOGY;
-        if (p.contains("plant")) return PLANT;
+        if (p.contains("balance demo  2026")) return PLANT;
         if (p.contains("rrhh")) return RRHH;
         if (p.contains("mtto")) return MTTO;
         if (p.contains("produccion")) return PRODUCTION;
         if (p.contains("reporte")) return TEST;
         if (p.contains("desarrollo")) return DEVELOPMENT;
         if (p.contains("estadisticos")) return SECURITY;
-
 
         throw new IllegalArgumentException(
                 "No se pudo determinar SheetType desde el path: " + path

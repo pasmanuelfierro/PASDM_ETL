@@ -1,12 +1,11 @@
 package com.pasdm.etl.service;
 
 import com.pasdm.etl.enums.SheetType;
-import com.pasdm.etl.mapper.PlantMapper;
-import com.pasdm.etl.model.Plant;
+import com.pasdm.etl.mapper.PlantV1Mapper;
+import com.pasdm.etl.model.PlantV1;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.poi.ss.util.CellReference;
 import org.apache.poi.xssf.usermodel.XSSFComment;
-import org.springframework.stereotype.Component;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -14,20 +13,20 @@ import java.util.List;
 import java.util.Map;
 
 @Slf4j
-@Component
-public class SheetHandlerPlant implements ExcelSheetHandler {
+
+public class SheetHandlerPlantV1 implements ExcelSheetHandler {
 
     private static final int BATCH_SIZE = 1000;
 
-    private final PlantMapper mapperPlant;
+    private final PlantV1Mapper mapperPlant;
     private final BatchService batchService;
 
-    private final List<Plant> bufferPlant = new ArrayList<>(BATCH_SIZE);
+    private final List<PlantV1> bufferPlant = new ArrayList<>(BATCH_SIZE);
     private final Map<Integer, String> currentRow = new HashMap<>();
     private int totalProcessed = 0;
 
-    public SheetHandlerPlant(PlantMapper mapperPlant,
-                             BatchService batchService) {
+    public SheetHandlerPlantV1(PlantV1Mapper mapperPlant,
+                               BatchService batchService) {
         this.mapperPlant = mapperPlant;
         this.batchService = batchService;
     }
@@ -58,7 +57,7 @@ public class SheetHandlerPlant implements ExcelSheetHandler {
         if (rowNum == 1) return; // encabezado 2
 
         try {
-            Plant entity = mapperPlant.mapEntity(currentRow);
+            PlantV1 entity = mapperPlant.mapEntity(currentRow);
             if (entity != null) {
                 bufferPlant.add(entity);
             }
@@ -67,7 +66,7 @@ public class SheetHandlerPlant implements ExcelSheetHandler {
         }
 
         if (bufferPlant.size() >= BATCH_SIZE) {
-            batchService.saveBatchPlant(bufferPlant);
+          //  batchService.saveBatchPlant(bufferPlant);
             bufferPlant.clear();
         }
     }
@@ -80,7 +79,7 @@ public class SheetHandlerPlant implements ExcelSheetHandler {
     @Override
     public void flushRemaining() {
         if (!bufferPlant.isEmpty()) {
-            batchService.saveBatchPlant(bufferPlant);
+          //  batchService.saveBatchPlantV(bufferPlant);
             bufferPlant.clear();
         }
     }

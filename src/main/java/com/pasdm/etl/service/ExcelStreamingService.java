@@ -17,28 +17,28 @@ import org.xml.sax.ContentHandler;
 import org.xml.sax.InputSource;
 import org.xml.sax.XMLReader;
 
+import java.io.File;
 import java.io.InputStream;
+import java.util.ArrayList;
+import java.util.List;
 
 @Slf4j
 @Service
 @RequiredArgsConstructor
 public class ExcelStreamingService {
 
-    private final SheetHandlerGeology sheetHandlerGeology;
-    private final SheetHandlerPlant sheetHandlerPlant;
-    private final SheetHandlerRRHH sheetHandlerRRHH;
-    private final SheetHandlerMTTO sheetHandlerMTTO;
     private final SheetHandlerFactory sheetHandlerFactory;
     private final NasSmbClient nasSmbClient;
 
     public void readExcel(String excelPath) {
         log.info("Comenzando procesando Excel {}", excelPath);
 
-        // File file = new File(excelPath);
+        File file = new File(excelPath);
         SheetType type = SheetType.fromPath(excelPath);
 
         try (InputStream is = nasSmbClient.openFile(excelPath);
              OPCPackage pkg = OPCPackage.open(is)) {
+            /*  try (OPCPackage pkg = OPCPackage.open(file)) {*/
 
             XSSFReader reader = new XSSFReader(pkg);
             SharedStrings sharedStrings = reader.getSharedStringsTable();
@@ -51,29 +51,63 @@ public class ExcelStreamingService {
                 try (InputStream sheetStream = sheets.next()) {
 
                     if (true) {
-
                         String sheetName = sheets.getSheetName().trim();
 
-                        if (!sheetName.equalsIgnoreCase(type.getSheetName())) {
-                            continue;
+                        if (type == SheetType.PLANT) {
+                            List<String> plantSheets = new ArrayList();
+                            plantSheets.add("Budget");
+                            plantSheets.add("Actual");
+
+                            for (String sheet : plantSheets) {
+                                XMLReader parser = XMLHelper.newXMLReader();
+                                ExcelSheetHandler sheetHandler;
+                                if ("Budget".equals(sheet)) {
+                                    sheetHandler = sheetHandlerFactory.get(SheetType.PLANT_BUDGET);
+                                } else if ("Actual".equals(sheet)) {
+                                    sheetHandler = sheetHandlerFactory.get(resolve(excelPath));
+                                } else {
+                                    throw new IllegalArgumentException("Hoja no soportada: " + sheet);
+                                }
+
+                                //PROCESADOR DE CELDAS
+                                ContentHandler handler = new XSSFSheetXMLHandler(
+                                        styles,
+                                        sharedStrings,
+                                        sheetHandler,
+                                        formatter,
+                                        false
+                                );
+
+                                parser.setContentHandler(handler);
+                                parser.parse(new InputSource(sheetStream));
+                                sheetHandler.flushRemaining();
+                                log.info("Se procesaron {} filas", sheetHandler.getCount());
+                                sheetHandler.resetCount();
+                            }
+
+                        } else {
+                            if (!sheetName.equalsIgnoreCase(type.getSheetName())) {
+                                continue;
+                            }
+
+                            XMLReader parser = XMLHelper.newXMLReader();
+                            ExcelSheetHandler sheetHandler = sheetHandlerFactory.get(resolve(excelPath));
+                            //PROCESADOR DE CELDAS
+                            ContentHandler handler = new XSSFSheetXMLHandler(
+                                    styles,
+                                    sharedStrings,
+                                    sheetHandler,
+                                    formatter,
+                                    false
+                            );
+
+                            parser.setContentHandler(handler);
+                            parser.parse(new InputSource(sheetStream));
+                            sheetHandler.flushRemaining();
+                            log.info("Se procesaron {} filas", sheetHandler.getCount());
+                            sheetHandler.resetCount();
                         }
 
-                        XMLReader parser = XMLHelper.newXMLReader();
-                        ExcelSheetHandler sheetHandler = sheetHandlerFactory.get(resolve(excelPath));
-                        //PROCESADOR DE CELDAS
-                        ContentHandler handler = new XSSFSheetXMLHandler(
-                                styles,
-                                sharedStrings,
-                                sheetHandler,
-                                formatter,
-                                false
-                        );
-
-                        parser.setContentHandler(handler);
-                        parser.parse(new InputSource(sheetStream));
-                        sheetHandler.flushRemaining();
-                        log.info("Se procesaron {} filas", sheetHandler.getCount());
-                        sheetHandler.resetCount();
                     }
                     log.info("Termino procesando Excel {}", excelPath);
                 }
@@ -91,7 +125,7 @@ public class ExcelStreamingService {
         if (filename.contains("geology")) {
             return SheetType.GEOLOGY;
         }
-        if (filename.contains("plant")) {
+        if (filename.contains("balance demo  2026")) {
             return SheetType.PLANT;
         }
         if (filename.contains("rrhh")) {

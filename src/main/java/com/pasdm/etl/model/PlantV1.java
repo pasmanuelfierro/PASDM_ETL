@@ -15,7 +15,7 @@ import java.time.LocalDate;
 @Getter
 @Setter
 @NoArgsConstructor
-public class Plant {
+public class PlantV1 {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)

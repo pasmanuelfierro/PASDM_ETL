@@ -3,6 +3,7 @@ package com.pasdm.etl.factory;
 import com.pasdm.etl.enums.SheetType;
 import com.pasdm.etl.service.ExcelSheetHandler;
 import com.pasdm.etl.service.SheetHandlerGeology;
+import com.pasdm.etl.service.SheetHandlerPlantBudget;
 import org.springframework.stereotype.Component;
 
 import java.util.List;
@@ -21,6 +22,7 @@ public class SheetHandlerFactory {
                         ExcelSheetHandler::getType,
                         Function.identity()
                 ));
+        this.handlers.put(SheetType.PLANT_BUDGET, new SheetHandlerPlantBudget(null, null));
     }
 
     public ExcelSheetHandler get(SheetType type) {
