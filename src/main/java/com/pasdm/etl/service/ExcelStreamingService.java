@@ -141,6 +141,10 @@ public class ExcelStreamingService {
             return SheetType.DEVELOPMENT;
         }
 
+        if (filename.contains("laboratory")){
+            return SheetType.LABORATORY;
+        }
+
         throw new IllegalArgumentException(
                 "No se pudo determinar el SheetType para el archivo: " + filename
         );

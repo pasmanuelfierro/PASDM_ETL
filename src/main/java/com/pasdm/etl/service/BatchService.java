@@ -23,6 +23,7 @@ public class BatchService {
     private final SecurityRepository securityRepository;
     private final PlantActualRepository plantActualRepository;
     private final NamedParameterJdbcTemplate jdbc;
+    private final LaboratoryRepository laboratoryRepository;
 
 /*    @Transactional
     public void saveBatchPlantV1(List<Plant> batch) {
@@ -87,5 +88,14 @@ public class BatchService {
             plantActualRepository.upsert(planta);
         }
     }
+
+    @Transactional
+    public void upsertBatchLaboratory(List<Laboratory> batch) {
+        log.info("Guardando batch de laboratory {}", batch.size());
+        for (Laboratory l : batch) {
+//            laboratoryRepository.upsert(l);
+        }
+    }
+
 
 }

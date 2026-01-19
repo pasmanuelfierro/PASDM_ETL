@@ -26,6 +26,9 @@ public class EtlController {
     @Value("${excel.dev.path}")
     private String excelDevPath;
 
+    @Value("${excel.laboratory.path}")
+    private String excelLaboratoryPath;
+
     @Value("${excel.prod.path}")
     private String excelProdPath;
 
@@ -53,6 +56,13 @@ public class EtlController {
         return ResponseEntity.ok("ETL RRHH ejecutado");
     }
 
+
+    @PostMapping("/run-laboratory")
+    public ResponseEntity<String> runLaboratoryEtl() {
+        excelStreamingService.readExcel(excelLaboratoryPath);
+        return ResponseEntity.ok("ETL Laboratory ejecutado");
+    }
+
     @PostMapping("/run-prod")
     public ResponseEntity<String> runProdEtl() {
         excelStreamingService.readExcel(excelProdPath);
@@ -76,6 +86,7 @@ public class EtlController {
         excelStreamingService.readExcel(excelSecurityPath);
         return ResponseEntity.ok("ETL excelSecurityPath ejecutado");
     }
+
 
 
 }

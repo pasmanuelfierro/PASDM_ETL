@@ -26,8 +26,8 @@ public class Laboratory {
     /* =========================
        FECHA
        ========================= */
-    @Column(name = "fecha", nullable = false)
-    private LocalDate fecha;
+    @Column(name = "fecha_1", nullable = false)
+    private LocalDate fecha_1;
 
     /* =========================
        RECIBIDAS SULFUROS
