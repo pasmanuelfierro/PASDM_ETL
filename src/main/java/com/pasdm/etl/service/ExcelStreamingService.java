@@ -136,7 +136,7 @@ public class ExcelStreamingService {
         }
 
         if (filename.contains("laboratory")){
-            return SheetType.LABORATORY;
+            return "DB";
         }
 
         throw new IllegalArgumentException(

@@ -24,11 +24,8 @@ public enum SheetType {
     }
 
     public static SheetType fromPath(String path) {
-//        String p = path.toLowerCase();
-        String fileName = Paths.get(path)
-                .getFileName()
-                .toString()
-                .toLowerCase();
+
+        String fileName = path.substring(path.lastIndexOf('/') + 1).toLowerCase();
 
         if (fileName.contains("geology")) return GEOLOGY;
         if (fileName.contains("balance demo  2026")) return PLANT;
