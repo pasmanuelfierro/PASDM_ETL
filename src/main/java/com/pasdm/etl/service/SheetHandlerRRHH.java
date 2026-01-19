@@ -93,4 +93,9 @@ public class SheetHandlerRRHH implements ExcelSheetHandler {
     public SheetType getType() {
         return SheetType.RRHH;
     }
+
+    @Override
+    public String sheetName() {
+        return "BD_RR.HH";
+    }
 }

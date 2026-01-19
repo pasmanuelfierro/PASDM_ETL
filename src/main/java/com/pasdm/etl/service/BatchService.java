@@ -18,10 +18,11 @@ public class BatchService {
     private final GeologyRepository repositoryGeology;
     private final RRHHRepository repositoryRRHH;
     private final MTTORepository repositoryMTTO;
-    private final ProductionRepository productionReposiroty;
+    private final ProductionRepository productionRepository;
     private final DevelopmentRepository developmentRepository;
     private final SecurityRepository securityRepository;
     private final PlantActualRepository plantActualRepository;
+    private final PlantBudgetRepository plantBudgetRepository;
     private final NamedParameterJdbcTemplate jdbc;
     private final LaboratoryRepository laboratoryRepository;
 
@@ -53,9 +54,9 @@ public class BatchService {
     public void saveBatchProduction(List<Production> batch) {
         log.info("Guardando batch de Production {}", batch.size());
         for (Production p : batch) {
-            productionReposiroty.upsert(p);
+            productionRepository.upsert(p);
         }
-        productionReposiroty.flush();
+        productionRepository.flush();
     }
 
     @Transactional
@@ -90,12 +91,19 @@ public class BatchService {
     }
 
     @Transactional
-    public void upsertBatchLaboratory(List<Laboratory> batch) {
-        log.info("Guardando batch de laboratory {}", batch.size());
-        for (Laboratory l : batch) {
-//            laboratoryRepository.upsert(l);
+    public void upsertBatchPlantBudget(List<PlantBudget> batch) {
+        log.info("Guardando batch de plant  {}", batch.size());
+        for (PlantBudget plantaBudget : batch) {
+            plantBudgetRepository.upsert(plantaBudget);
         }
     }
 
+    @Transactional
+    public void upsertBatchLaboratory(List<Laboratory> batch) {
+        log.info("Guardando batch de plant  {}", batch.size());
+        for (Laboratory lab : batch) {
+            //  laboratoryRepository.upsert(lab);
+        }
+    }
 
 }

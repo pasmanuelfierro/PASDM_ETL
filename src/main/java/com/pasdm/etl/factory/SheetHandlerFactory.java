@@ -14,18 +14,17 @@ import java.util.stream.Collectors;
 @Component
 public class SheetHandlerFactory {
 
-    private final Map<SheetType, ExcelSheetHandler> handlers;
+    private final Map<String, ExcelSheetHandler> handlers;
 
     public SheetHandlerFactory(List<ExcelSheetHandler> list) {
         this.handlers = list.stream()
                 .collect(Collectors.toMap(
-                        ExcelSheetHandler::getType,
+                        ExcelSheetHandler::sheetName,
                         Function.identity()
                 ));
-        this.handlers.put(SheetType.PLANT_BUDGET, new SheetHandlerPlantBudget(null, null));
-    }
+     }
 
-    public ExcelSheetHandler get(SheetType type) {
-        return handlers.get(type);
+    public ExcelSheetHandler get(String sheetName) {
+        return handlers.get(sheetName);
     }
 }

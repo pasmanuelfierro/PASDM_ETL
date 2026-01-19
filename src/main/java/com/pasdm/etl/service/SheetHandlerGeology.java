@@ -101,4 +101,9 @@ public class SheetHandlerGeology implements ExcelSheetHandler {
     public SheetType getType() {
         return SheetType.GEOLOGY;
     }
+
+    @Override
+    public String sheetName() {
+        return "BD_GEOLOGIA";
+    }
 }

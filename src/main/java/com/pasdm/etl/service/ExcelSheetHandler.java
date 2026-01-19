@@ -5,6 +5,7 @@ import org.apache.poi.xssf.eventusermodel.XSSFSheetXMLHandler;
 
 public interface ExcelSheetHandler extends XSSFSheetXMLHandler.SheetContentsHandler {
     SheetType getType();
+    String sheetName();
 
     int getCount();
 

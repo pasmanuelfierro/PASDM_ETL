@@ -19,8 +19,6 @@ import org.xml.sax.XMLReader;
 
 import java.io.File;
 import java.io.InputStream;
-import java.util.ArrayList;
-import java.util.List;
 
 @Slf4j
 @Service
@@ -36,9 +34,9 @@ public class ExcelStreamingService {
         File file = new File(excelPath);
         SheetType type = SheetType.fromPath(excelPath);
 
-/*        try (InputStream is = nasSmbClient.openFile(excelPath);
-             OPCPackage pkg = OPCPackage.open(is)) {*/
-        try (OPCPackage pkg = OPCPackage.open(file)) {
+        try (InputStream is = nasSmbClient.openFile(excelPath);
+             OPCPackage pkg = OPCPackage.open(is)) {
+            /*   try (OPCPackage pkg = OPCPackage.open(file)) {*/
 
             XSSFReader reader = new XSSFReader(pkg);
             SharedStrings sharedStrings = reader.getSharedStringsTable();
@@ -53,37 +51,34 @@ public class ExcelStreamingService {
                     String sheetName = sheets.getSheetName().trim();
 
                     if (type == SheetType.PLANT) {
-                        List<String> plantSheets = new ArrayList();
-                        plantSheets.add("Budget");
-                        plantSheets.add("Actual");
 
-                        for (String sheet : plantSheets) {
-                            XMLReader parser = XMLHelper.newXMLReader();
-                            ExcelSheetHandler sheetHandler;
-                            if ("Budget".equals(sheet)) {
-                                sheetHandler = sheetHandlerFactory.get(SheetType.PLANT_BUDGET);
-                            } else if ("Actual".equals(sheet)) {
-                                sheetHandler = sheetHandlerFactory.get(resolve(excelPath));
-                            } else {
-                                throw new IllegalArgumentException("Hoja no soportada: " + sheet);
-                            }
-
-                            //PROCESADOR DE CELDAS
-                            ContentHandler handler = new XSSFSheetXMLHandler(
-                                    styles,
-                                    sharedStrings,
-                                    sheetHandler,
-                                    formatter,
-                                    false
-                            );
-
-                            parser.setContentHandler(handler);
-                            parser.parse(new InputSource(sheetStream));
-                            sheetHandler.flushRemaining();
-                            log.info("Se procesaron {} filas", sheetHandler.getCount());
-                            sheetHandler.resetCount();
-                            log.info("Termino procesando Excel {}", excelPath);
+                        XMLReader parser = XMLHelper.newXMLReader();
+                        ExcelSheetHandler sheetHandler;
+                        if ("Budget".equals(sheetName)) {
+                            sheetHandler = sheetHandlerFactory.get(sheetName);
+                        } else if ("Actual".equals(sheetName)) {
+                            sheetHandler = sheetHandlerFactory.get(sheetName);
+                        } else {
+                            log.error("Hoja no soportada: {}", sheetName);
+                            continue;
                         }
+
+                        //PROCESADOR DE CELDAS
+                        ContentHandler handler = new XSSFSheetXMLHandler(
+                                styles,
+                                sharedStrings,
+                                sheetHandler,
+                                formatter,
+                                false
+                        );
+
+                        parser.setContentHandler(handler);
+                        parser.parse(new InputSource(sheetStream));
+                        sheetHandler.flushRemaining();
+                        log.info("Se procesaron {} filas", sheetHandler.getCount());
+                        sheetHandler.resetCount();
+                        log.info("Termino procesando Excel {}", excelPath);
+
 
                     } else {
                         if (!sheetName.equalsIgnoreCase(type.getSheetName())) {
@@ -118,27 +113,26 @@ public class ExcelStreamingService {
         }
     }
 
-    public SheetType resolve(String path) {
+    public String resolve(String path) {
 
         String filename = path.toLowerCase();
 
         if (filename.contains("geology")) {
-            return SheetType.GEOLOGY;
+            return "BD_GEOLOGIA";
         }
-        if (filename.contains("balance demo  2026")) {
-            return SheetType.PLANT;
-        }
+
         if (filename.contains("rrhh")) {
-            return SheetType.RRHH;
+            return "BD_RR.HH";
         }
-        if (filename.contains("mtto")) {
-            return SheetType.MTTO;
-        }
+
         if (filename.contains("produccion")) {
-            return SheetType.PRODUCTION;
+            return "database";
         }
         if (filename.contains("desarrollo")) {
-            return SheetType.DEVELOPMENT;
+            return "BD Desarrollo";
+        }
+        if (filename.contains("estadisticos - sso - mlc.xlsx")) {
+            return "DB";
         }
 
         if (filename.contains("laboratory")){

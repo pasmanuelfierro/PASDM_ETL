@@ -1,8 +1,8 @@
 package com.pasdm.etl.service;
 
 import com.pasdm.etl.enums.SheetType;
-import com.pasdm.etl.mapper.PlantActualMapper;
-import com.pasdm.etl.model.PlantActual;
+import com.pasdm.etl.mapper.PlantBudgetMapper;
+import com.pasdm.etl.model.PlantBudget;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.poi.ss.util.CellReference;
 import org.apache.poi.xssf.usermodel.XSSFComment;
@@ -19,14 +19,14 @@ public class SheetHandlerPlantBudget implements ExcelSheetHandler {
 
     private static final int BATCH_SIZE = 1000;
 
-    private final PlantActualMapper mapperPlant;
+    private final PlantBudgetMapper mapperPlant;
     private final BatchService batchService;
 
-    private final List<PlantActual> bufferPlantActual = new ArrayList<>(BATCH_SIZE);
+    private final List<PlantBudget> bufferPlantBudget = new ArrayList<>(BATCH_SIZE);
     private final Map<Integer, String> currentRow = new HashMap<>();
     private int totalProcessed = 0;
 
-    public SheetHandlerPlantBudget(PlantActualMapper mapperPlant,
+    public SheetHandlerPlantBudget(PlantBudgetMapper mapperPlant,
                                    BatchService batchService) {
         this.mapperPlant = mapperPlant;
         this.batchService = batchService;
@@ -51,19 +51,21 @@ public class SheetHandlerPlantBudget implements ExcelSheetHandler {
     public void endRow(int rowNum) {
 
         if (rowNum == 0) return; // encabezado 1
+        if (rowNum == 1) return; // encabezado 2
 
         try {
-            PlantActual entity = mapperPlant.mapEntity(currentRow);
+            PlantBudget entity = mapperPlant.mapEntity(currentRow);
             if (entity != null) {
-                bufferPlantActual.add(entity);
+                bufferPlantBudget.add(entity);
             }
         } catch (Exception e) {
+            e.printStackTrace();
             log.error("Fila {} inválida: {}", rowNum, currentRow);
         }
 
-        if (bufferPlantActual.size() >= BATCH_SIZE) {
-            batchService.upsertBatchPlantActual(bufferPlantActual);
-            bufferPlantActual.clear();
+        if (bufferPlantBudget.size() >= BATCH_SIZE) {
+            batchService.upsertBatchPlantBudget(bufferPlantBudget);
+            bufferPlantBudget.clear();
         }
     }
 
@@ -74,9 +76,9 @@ public class SheetHandlerPlantBudget implements ExcelSheetHandler {
 
     @Override
     public void flushRemaining() {
-        if (!bufferPlantActual.isEmpty()) {
-            batchService.upsertBatchPlantActual(bufferPlantActual);
-            bufferPlantActual.clear();
+        if (!bufferPlantBudget.isEmpty()) {
+            batchService.upsertBatchPlantBudget(bufferPlantBudget);
+            bufferPlantBudget.clear();
         }
     }
 
@@ -93,6 +95,11 @@ public class SheetHandlerPlantBudget implements ExcelSheetHandler {
     @Override
     public SheetType getType() {
         return SheetType.PLANT_BUDGET;
+    }
+
+    @Override
+    public String sheetName() {
+        return "Budget";
     }
 
 }

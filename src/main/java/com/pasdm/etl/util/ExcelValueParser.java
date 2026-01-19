@@ -34,6 +34,7 @@ public class ExcelValueParser {
 
     private static final List<DateTimeFormatter> FORMATTERS = List.of(
             DateTimeFormatter.ofPattern("M/d/yy"),
+            DateTimeFormatter.ofPattern("dd/mm/yyyy"),
             DateTimeFormatter.ofPattern("dd-MMM", new Locale("es", "MX")),    // 01-ene
             DateTimeFormatter.ofPattern("d-MMM", new Locale("es", "MX")),     // 01-ene
             DD_MMM_EN,
