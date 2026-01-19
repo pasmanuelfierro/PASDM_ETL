@@ -72,6 +72,7 @@ public class BatchService {
         for (Development d : batch) {
             developmentRepository.upsert(d);
         }
+        developmentRepository.flush();
     }
 
     @Transactional
@@ -80,6 +81,7 @@ public class BatchService {
         for (Security s : batch) {
             securityRepository.upsert(s);
         }
+        securityRepository.flush();
     }
 
     @Transactional
@@ -88,6 +90,7 @@ public class BatchService {
         for (PlantActual planta : batch) {
             plantActualRepository.upsert(planta);
         }
+        plantActualRepository.flush();
     }
 
     @Transactional
@@ -96,6 +99,7 @@ public class BatchService {
         for (PlantBudget plantaBudget : batch) {
             plantBudgetRepository.upsert(plantaBudget);
         }
+        plantBudgetRepository.flush();
     }
 
     @Transactional
