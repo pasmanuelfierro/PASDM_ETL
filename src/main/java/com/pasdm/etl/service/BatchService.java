@@ -25,6 +25,7 @@ public class BatchService {
     private final PlantBudgetRepository plantBudgetRepository;
     private final NamedParameterJdbcTemplate jdbc;
     private final LaboratoryRepository laboratoryRepository;
+    private final GeologyDrillingRepository geologyDrillingRepository;
 
 /*    @Transactional
     public void saveBatchPlantV1(List<Plant> batch) {
@@ -107,6 +108,14 @@ public class BatchService {
         log.info("Guardando batch de plant  {}", batch.size());
         for (Laboratory lab : batch) {
             //  laboratoryRepository.upsert(lab);
+        }
+    }
+
+    @Transactional
+    public void upsertBatchGeologyDrilling(List<GeologyDrilling> batch) {
+        log.info("Guardando batch de GeologyDrilling {}", batch.size());
+        for (GeologyDrilling geologyDrilling : batch) {
+            geologyDrillingRepository.upsert(geologyDrilling);
         }
     }
 

@@ -1,5 +1,6 @@
 package com.pasdm.etl.enums;
 
+import com.pasdm.etl.model.GeologyDrilling;
 import com.pasdm.etl.model.Laboratory;
 
 import java.nio.file.Paths;
@@ -15,7 +16,8 @@ public enum SheetType {
     TEST("Hoja1"),
     SECURITY("DB"),
     DEVELOPMENT("BD Desarrollo"),
-    LABORATORY("BD_LABORATORY");
+    LABORATORY("BD_LABORATORY"),
+    GEOLOGY_DRILLING("BD_GEOLOGY_DRILLING");
 
     private final String sheetName;
 
@@ -36,6 +38,7 @@ public enum SheetType {
         if (fileName.contains("desarrollo")) return DEVELOPMENT;
         if (fileName.contains("estadisticos")) return SECURITY;
         if (fileName.contains("laboratory")) return LABORATORY;
+        if (fileName.contains("geology_drilling")) return GEOLOGY_DRILLING;
 
         throw new IllegalArgumentException(
                 "No se pudo determinar SheetType desde el path: " + path

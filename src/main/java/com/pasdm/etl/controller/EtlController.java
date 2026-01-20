@@ -29,6 +29,9 @@ public class EtlController {
     @Value("${excel.laboratory.path}")
     private String excelLaboratoryPath;
 
+    @Value("${excel.geologyDrilling.path}")
+    private String excelGeologyDrillingPath;
+
     @Value("${excel.prod.path}")
     private String excelProdPath;
 
@@ -61,6 +64,12 @@ public class EtlController {
     public ResponseEntity<String> runLaboratoryEtl() {
         excelStreamingService.readExcel(excelLaboratoryPath);
         return ResponseEntity.ok("ETL Laboratory ejecutado");
+    }
+
+    @PostMapping("/run-GeologyDrilling")
+    public ResponseEntity<String> runGeologyDrillingEtl() {
+        excelStreamingService.readExcel(excelGeologyDrillingPath);
+        return ResponseEntity.ok("ETL Geology Drilling ejecutado");
     }
 
     @PostMapping("/run-prod")

@@ -25,6 +25,9 @@ public class ETLJobScheduler {
     @Value("${excel.laboratory.path}")
     private String excelLaboratoryPath;
 
+    @Value("${excel.geologyDrilling.path}")
+    private String excelGeologyDrillingPath;
+
     @Value("${excel.dev.path}")
     private String excelDevPath;
 
@@ -47,6 +50,7 @@ public class ETLJobScheduler {
         excelStreamingService.readExcel(excelProdPath);
         excelStreamingService.readExcel(excelPlantPath);
         excelStreamingService.readExcel(excelLaboratoryPath);
+        excelStreamingService.readExcel(excelGeologyDrillingPath);
         //  excelStreamingService.readExcel(excelSecurityPath);
         log.info("Fin proceso Excel");
     }

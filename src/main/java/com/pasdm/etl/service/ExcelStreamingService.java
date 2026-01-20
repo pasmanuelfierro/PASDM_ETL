@@ -139,6 +139,10 @@ public class ExcelStreamingService {
             return "DB";
         }
 
+        if (filename.contains("geologyDrilling")){
+            return "DB";
+        }
+
         throw new IllegalArgumentException(
                 "No se pudo determinar el SheetType para el archivo: " + filename
         );
