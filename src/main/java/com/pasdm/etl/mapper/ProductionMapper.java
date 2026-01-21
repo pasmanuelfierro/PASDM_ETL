@@ -75,7 +75,7 @@ public class ProductionMapper {
                 e.setSumPb(ExcelValueParser.decimalValidador(row.get(COL_SUM_PB)));
                 e.setSumZn(ExcelValueParser.decimalValidador(row.get(COL_SUM_ZN)));
                 e.setSumVpt(ExcelValueParser.decimalValidador(row.get(COL_SUM_VPT)));
-                e.setRowHash(HashUtil.calculateRowHash(e.getFecha().toString(), e.getEstatus(), e.getEstructura(), e.getLabor()));
+                e.setRowHash(HashUtil.calculateRowHash(e.getFecha().toString(), e.getEstatus(), e.getEstructura(), e.getLabor(),e.getTipo(),""));
 
                 return e;
             }

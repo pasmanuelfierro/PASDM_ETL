@@ -54,7 +54,7 @@ public class DevelopmentMapper {
                 e.setEstructura(row.get(COL_ESTRUCTURA));
                 e.setLugar(row.get(COL_LUGAR));
                 e.setMetros(ExcelValueParser.decimalValidador(row.get(COL_METROS)));
-                e.setRowHash(HashUtil.calculateRowHash(e.getFecha().toString(), e.getStatus(), e.getEstructura(), e.getLugar()));
+                e.setRowHash(HashUtil.calculateRowHash(e.getFecha().toString(), e.getStatus(), e.getEstructura(), e.getLugar(), e.getObra(),""));
 
                 return e;
             }

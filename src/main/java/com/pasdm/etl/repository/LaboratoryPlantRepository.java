@@ -25,8 +25,7 @@ public interface LaboratoryPlantRepository extends JpaRepository<LaboratoryPlant
         finos_pb,
         finos_zn,
         row_hash,
-        created_at,
-        updated_at
+        created_at
     )
     VALUES (
         :#{#labPlan.numDia},
@@ -40,8 +39,7 @@ public interface LaboratoryPlantRepository extends JpaRepository<LaboratoryPlant
         :#{#labPlan.finosPb},
         :#{#labPlan.finosZn},
         :#{#labPlan.rowHash},
-        :#{#labPlan.createdAt},
-        :#{#labPlan.updatedAt}
+        now()
     )
     ON CONFLICT (num_dia, turno)
     DO UPDATE SET
@@ -54,7 +52,7 @@ public interface LaboratoryPlantRepository extends JpaRepository<LaboratoryPlant
         finos_pb      = EXCLUDED.finos_pb,
         finos_zn      = EXCLUDED.finos_zn,
         row_hash      = EXCLUDED.row_hash,
-        updated_at    = EXCLUDED.updated_at
+        updated_at    = now()
 """, nativeQuery = true)
     void upsert(@Param("labPlan") LaboratoryPlant labPlan);
 

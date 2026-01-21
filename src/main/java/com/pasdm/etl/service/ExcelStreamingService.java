@@ -6,6 +6,7 @@ import com.pasdm.etl.infraestructure.nas.NasSmbClient;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.poi.openxml4j.opc.OPCPackage;
+import org.apache.poi.openxml4j.util.ZipSecureFile;
 import org.apache.poi.ss.usermodel.DataFormatter;
 import org.apache.poi.util.XMLHelper;
 import org.apache.poi.xssf.eventusermodel.XSSFReader;
@@ -19,6 +20,7 @@ import org.xml.sax.XMLReader;
 
 import java.io.File;
 import java.io.InputStream;
+import java.util.Objects;
 
 @Slf4j
 @Service
@@ -34,9 +36,10 @@ public class ExcelStreamingService {
         File file = new File(excelPath);
         SheetType type = SheetType.fromPath(excelPath);
 
-        try (InputStream is = nasSmbClient.openFile(excelPath);
-             OPCPackage pkg = OPCPackage.open(is)) {
-            /*   try (OPCPackage pkg = OPCPackage.open(file)) {*/
+       /* try (InputStream is = nasSmbClient.openFile(excelPath);
+             OPCPackage pkg = OPCPackage.open(is)) {*/
+        try (OPCPackage pkg = OPCPackage.open(file)) {
+            ZipSecureFile.setMinInflateRatio(0);
 
             XSSFReader reader = new XSSFReader(pkg);
             SharedStrings sharedStrings = reader.getSharedStringsTable();
@@ -81,7 +84,11 @@ public class ExcelStreamingService {
 
 
                     } else {
-                        if (!sheetName.equalsIgnoreCase(type.getSheetName())) {
+                        String SHEET_NAME = type.getSheetName();
+                        if (Objects.equals(type.getSheetName(), "BASE DE DATOSS")) {
+                            SHEET_NAME = "BASE DE DATOS";
+                        }
+                        if (!sheetName.equalsIgnoreCase(SHEET_NAME)) {
                             continue;
                         }
 
@@ -128,23 +135,37 @@ public class ExcelStreamingService {
         if (filename.contains("produccion")) {
             return "database";
         }
+
         if (filename.contains("desarrollo")) {
             return "BD Desarrollo";
         }
+
         if (filename.contains("estadisticos - sso - mlc.xlsx")) {
+            return "BD";
+        }
+
+        if (filename.contains("laboratory")) {
             return "DB";
         }
 
-        if (filename.contains("laboratory")){
+        if (filename.contains("ley")) {
+            return "BASE DE DATOS";
+        }
+
+        if (filename.contains("geologydrilling")) {
             return "DB";
         }
 
-        if (filename.contains("geologydrilling")){
+        if (filename.contains("avance barrenación")) {
+            return "DIAMANTE CORREGIDO";
+        }
+
+        if (filename.contains("laboratoryplant")) {
             return "DB";
         }
 
-        if (filename.contains("laboratoryplant")){
-            return "DB";
+        if (filename.contains("reporte_geologia")) {
+            return "BASE DE DATOSS";
         }
 
         throw new IllegalArgumentException(

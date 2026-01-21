@@ -14,45 +14,49 @@ public interface GeologyDrillingRepository extends JpaRepository<GeologyDrilling
     @Transactional
     @Query(value = """
     INSERT INTO etl.geology_drilling (
-        fecha1,
+        fecha,
         bno,
         empresa,
         maquina,
-        fondo_dia_anterior,
+        fondo_dia_anterior_m,
         fondo_actual_m,
         avance_dia_m,
         status,
         estacion,
         jv_holes,
         target,
-        target2
+        target2,
+        row_hash
     )
     VALUES (
-        :#{#gd.fecha1},
+        :#{#gd.fecha},
         :#{#gd.bno},
         :#{#gd.empresa},
         :#{#gd.maquina},
-        :#{#gd.fondoDiaAnterior},
+        :#{#gd.fondoDiaAnteriorM},
         :#{#gd.fondoActualM},
         :#{#gd.avanceDiaM},
         :#{#gd.status},
         :#{#gd.estacion},
         :#{#gd.jvHoles},
         :#{#gd.target},
-        :#{#gd.target2}
+        :#{#gd.target2},
+        :#{#gd.rowHash}
+
     )
-    ON CONFLICT (fecha1, bno)
+    ON CONFLICT (row_hash)
     DO UPDATE SET
         empresa = EXCLUDED.empresa,
         maquina = EXCLUDED.maquina,
-        fondo_dia_anterior = EXCLUDED.fondo_dia_anterior,
+        fondo_dia_anterior_m = EXCLUDED.fondo_dia_anterior_m,
         fondo_actual_m = EXCLUDED.fondo_actual_m,
         avance_dia_m = EXCLUDED.avance_dia_m,
         status = EXCLUDED.status,
         estacion = EXCLUDED.estacion,
         jv_holes = EXCLUDED.jv_holes,
         target = EXCLUDED.target,
-        target2 = EXCLUDED.target2
+        target2 = EXCLUDED.target2,
+        updated_at = now()
 """, nativeQuery = true)
     void upsert(@Param("gd") GeologyDrilling gd);
 }

@@ -3,10 +3,12 @@ package com.pasdm.etl.mapper;
 import com.pasdm.etl.model.PlantBudget;
 import com.pasdm.etl.util.ExcelValueParser;
 import com.pasdm.etl.util.HashUtil;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Component;
 
 import java.util.Map;
 
+@Slf4j
 @Component
 public class PlantBudgetMapper {
 
@@ -103,14 +105,14 @@ public class PlantBudgetMapper {
                 e.setLeyConcPb(ExcelValueParser.decimalValidador(row.get(COL_LEY_CONC_PB)));
                 e.setLeyConcZn(ExcelValueParser.decimalValidador(row.get(COL_LEY_CONC_ZN)));
 
-                e.setRowHash(HashUtil.calculateRowHash(e.getFecha().toString(), e.getOreTotalT().toString(), e.getTonnesMilled().toString(), e.getProdKgAg().toString()));
+                e.setRowHash(HashUtil.calculateRowHash(e.getFecha().toString(), e.getOreTotalT().toString(), e.getTonnesMilled().toString(), e.getProdKgAg().toString(),e.getTonnesMilled().toString(),""));
 
                 return e;
             } else {
                 return null;
             }
         } catch (Exception e) {
-            e.printStackTrace();
+          log.error("Error procesando Excel PlantBudget", e);
             return null;
         }
 

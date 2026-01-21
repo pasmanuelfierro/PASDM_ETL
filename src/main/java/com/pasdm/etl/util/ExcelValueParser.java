@@ -32,11 +32,19 @@ public class ExcelValueParser {
                     .parseDefaulting(ChronoField.YEAR, LocalDate.now().getYear())
                     .toFormatter(Locale.ENGLISH);
 
+    private static final DateTimeFormatter FECHA_ES =
+            new DateTimeFormatterBuilder()
+                    .parseCaseInsensitive()
+                    .appendPattern("d-MMM-yy")
+                    .toFormatter(new Locale("es", "MX"));
+
     private static final List<DateTimeFormatter> FORMATTERS = List.of(
             DateTimeFormatter.ofPattern("M/d/yy"),
+            DateTimeFormatter.ofPattern("M/d/yyyy"),
             DateTimeFormatter.ofPattern("dd/mm/yyyy"),
             DateTimeFormatter.ofPattern("dd-MMM", new Locale("es", "MX")),    // 01-ene
-            DateTimeFormatter.ofPattern("d-MMM", new Locale("es", "MX")),     // 01-ene
+            DateTimeFormatter.ofPattern("d-MMM", new Locale("es", "MX")),
+            FECHA_ES,
             DD_MMM_EN,
             D_MMM_EN      // 01-ene
     );
@@ -56,10 +64,24 @@ public class ExcelValueParser {
                 .replace(",", " ")
                 .replaceAll("[^0-9.-]", "");
 
+
+        if (normalized.isBlank()) {
+            return new BigDecimal("0.0");
+        }
+
+        if (normalized.contains("..")) {
+            return new BigDecimal(normalized.replace("..", ".")).setScale(SCALE.ordinal(), RoundingMode.HALF_UP);
+        }
+        if (normalized.equals(".")) {
+            return new BigDecimal("0.0");
+        }
         try {
             return new BigDecimal(normalized).setScale(SCALE.ordinal(), RoundingMode.HALF_UP);
         } catch (Exception e) {
-            throw new IllegalArgumentException("Decimal inválido: " + value);
+            log.error("ERROR EN DECIMAL " + value, e);
+
+            return new BigDecimal("0.0");
+            // throw new IllegalArgumentException("Decimal inválido: " + value);
         }
     }
 
@@ -83,7 +105,7 @@ public class ExcelValueParser {
             }
         }
 
-        throw new IllegalArgumentException("Fecha inválida: " + value);
+        throw new IllegalArgumentException("Fecha inválida: " + value + " " + v);
     }
 
     public static String stringValidador(String value) {
@@ -134,7 +156,7 @@ public class ExcelValueParser {
         for (DateTimeFormatter formatter : FORMATTERS) {
             try {
                 TemporalAccessor ta = formatter.parse(v);
-               // log.info("Parse OK [{}] usando {}", value, formatter);
+                // log.info("Parse OK [{}] usando {}", value, formatter);
 
                 // Si no trae año, asumimos año actual
                 if (!ta.isSupported(ChronoField.YEAR)) {
@@ -147,7 +169,7 @@ public class ExcelValueParser {
                 return LocalDate.from(ta);
 
             } catch (Exception ignored) {
-               // log.error("Parse FAIL [{}] con {}", value, formatter);
+                // log.error("Parse FAIL [{}] con {}", value, formatter);
             }
         }
 

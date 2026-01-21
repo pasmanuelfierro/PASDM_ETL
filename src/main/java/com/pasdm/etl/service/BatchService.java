@@ -8,7 +8,6 @@ import org.springframework.jdbc.core.namedparam.NamedParameterJdbcTemplate;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.time.OffsetDateTime;
 import java.util.List;
 
 @Slf4j
@@ -28,6 +27,9 @@ public class BatchService {
     private final LaboratoryRepository laboratoryRepository;
     private final GeologyDrillingRepository geologyDrillingRepository;
     private final LaboratoryPlantRepository laboratoryPlantRepository;
+    private final GeologyGradeRepository geologyGradeRepository;
+    private final GeologyReportRepository geologyReportRepository;
+ 
 
 /*    @Transactional
     public void saveBatchPlantV1(List<Plant> batch) {
@@ -122,17 +124,27 @@ public class BatchService {
     }
 
     @Transactional
+    public void upsertBatchGeologyGrade(List<GeologyGrade> batch) {
+        log.info("Guardando batch de geology grade  {}", batch.size());
+        for (GeologyGrade geologyGrade : batch) {
+            geologyGradeRepository.upsert(geologyGrade);
+        }
+    }
+
+    @Transactional
     public void upsertBatchLaboratoryPlant(List<LaboratoryPlant> batch) {
         log.info("Guardando batch de LaboratoryPlant {}", batch.size());
-        OffsetDateTime now = OffsetDateTime.now();
 
         for (LaboratoryPlant labPlan : batch) {
-            labPlan.setUpdatedAt(now.toLocalDateTime());
-            if (labPlan.getCreatedAt() == null) {
-                labPlan.setCreatedAt(now.toLocalDateTime());
-            }
             laboratoryPlantRepository.upsert(labPlan);
         }
     }
 
+    @Transactional
+    public void upsertBatchGeologyReport(List<GeologyReport> batch) {
+        log.info("Guardando batch de geology report  {}", batch.size());
+        for (GeologyReport geologyReport : batch) {
+            geologyReportRepository.upsert(geologyReport);
+        }
+    }
 }

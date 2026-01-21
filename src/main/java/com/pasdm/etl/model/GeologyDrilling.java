@@ -10,50 +10,51 @@ import java.time.LocalDate;
 import java.time.LocalDateTime;
 
 @Entity
+@Table(schema = "etl", name = "geology_drilling",
+        uniqueConstraints = @UniqueConstraint(name = "uk_geology_drilling_row_hash", columnNames = "row_hash"))
 @Getter
 @Setter
 @NoArgsConstructor
-@Table(schema = "etl", name = "geology_drilling")
 public class GeologyDrilling {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @Column(name = "fecha_1", nullable = false)
-    private LocalDate fecha1;
+    @Column(name = "fecha", nullable = false)
+    private LocalDate fecha;
 
-    @Column(name = "Bno")
-    private Integer bno;
+    @Column(name = "bno")
+    private String bno;
 
-    @Column(name = "Empresa")
-    private Integer empresa;
+    @Column(name = "empresa")
+    private String empresa;
 
-    @Column(name = "Maquina")
+    @Column(name = "maquina")
     private String maquina;
 
-    @Column(name = "FondoDia_Anterior", precision = 20, scale = 10)
-    private BigDecimal fondoDiaAnterior;
+    @Column(name = "fondo_dia_anterior_m", precision = 20, scale = 10)
+    private BigDecimal fondoDiaAnteriorM;
 
-    @Column(name = "FondoActual_M", precision = 20, scale = 10)
-    private  BigDecimal fondoActualM;
+    @Column(name = "fondo_actual_m", precision = 20, scale = 10)
+    private BigDecimal fondoActualM;
 
-    @Column(name = "AvanceDia_M", precision = 20, scale = 10)
-    private  BigDecimal avanceDiaM;
+    @Column(name = "avance_dia_m", precision = 20, scale = 10)
+    private BigDecimal avanceDiaM;
 
-    @Column(name = "Status")
-    private Integer status;
+    @Column(name = "status")
+    private String status;
 
-    @Column(name = "Estacion")
-    private Integer estacion;
+    @Column(name = "estacion")
+    private String estacion;
 
-    @Column(name = "JV_Holes")
+    @Column(name = "jv_holes")
     private String jvHoles;
 
-    @Column(name = "Target")
+    @Column(name = "target")
     private String target;
 
-    @Column(name = "Target2")
+    @Column(name = "target2")
     private String target2;
 
     @Column(name = "row_hash", length = 64, nullable = false, unique = true)

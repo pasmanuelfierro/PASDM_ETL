@@ -57,6 +57,7 @@ public class SheetHandlerPlantBudget implements ExcelSheetHandler {
             PlantBudget entity = mapperPlant.mapEntity(currentRow);
             if (entity != null) {
                 bufferPlantBudget.add(entity);
+                totalProcessed++;
             }
         } catch (Exception e) {
             e.printStackTrace();

@@ -1,11 +1,5 @@
 package com.pasdm.etl.enums;
 
-import com.pasdm.etl.model.GeologyDrilling;
-import com.pasdm.etl.model.Laboratory;
-import com.pasdm.etl.model.LaboratoryPlant;
-
-import java.nio.file.Paths;
-
 public enum SheetType {
 
     GEOLOGY("BD_GEOLOGIA"),
@@ -15,13 +9,16 @@ public enum SheetType {
     MTTO("DB MTTO"),
     PRODUCTION("database"),
     TEST("Hoja1"),
-    SECURITY("DB"),
+    SECURITY("BD"),
     DEVELOPMENT("BD Desarrollo"),
     LABORATORY("BD_LABORATORY"),
-    GEOLOGY_DRILLING("BD_GEOLOGY_DRILLING"),
-    LABORATORY_PLANT("BD_LABORATORY_PLANT");
+    LABORATORY_PLANT("BD_LABORATORY_PLANT"),
+    GEOLOGY_DRILLING("DIAMANTE CORREGIDO"),
+    GEOLOGY_GRADE("BASE DE DATOS"),
+    GEOLOGY_REPORT("BASE DE DATOS");
 
     private final String sheetName;
+
 
     SheetType(String sheetName) {
         this.sheetName = sheetName;
@@ -36,12 +33,14 @@ public enum SheetType {
         if (fileName.contains("rrhh")) return RRHH;
         if (fileName.contains("mtto")) return MTTO;
         if (fileName.contains("produccion")) return PRODUCTION;
-        if (fileName.contains("reporte")) return TEST;
         if (fileName.contains("desarrollo")) return DEVELOPMENT;
         if (fileName.contains("estadisticos")) return SECURITY;
         if (fileName.contains("laboratory")) return LABORATORY;
         if (fileName.contains("geology_drilling")) return GEOLOGY_DRILLING;
         if (fileName.contains("laboratory_plant")) return LABORATORY_PLANT;
+        if (fileName.contains("avance barrenación")) return GEOLOGY_DRILLING;
+        if (fileName.contains("ley")) return GEOLOGY_GRADE;
+        if (fileName.contains("reporte_geologia")) return GEOLOGY_REPORT;
 
         throw new IllegalArgumentException(
                 "No se pudo determinar SheetType desde el path: " + path

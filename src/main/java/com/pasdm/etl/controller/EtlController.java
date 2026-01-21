@@ -29,7 +29,7 @@ public class EtlController {
     @Value("${excel.laboratory.path}")
     private String excelLaboratoryPath;
 
-    @Value("${excel.geologyDrilling.path}")
+    @Value("${excel.geology_drilling.path}")
     private String excelGeologyDrillingPath;
 
     @Value("${excel.laboratoryPlant.path}")
@@ -43,6 +43,12 @@ public class EtlController {
 
     @Value("${excel.security.path}")
     private String excelSecurityPath;
+
+    @Value("${excel.geology_grade.path}")
+    private String excelGeologyGradePath;
+
+    @Value("${excel.geology_report.path}")
+    private String excelGeologyReportPath;
 
     @PostMapping("/run-plant")
     public ResponseEntity<String> runPlantEtl() {
@@ -69,7 +75,7 @@ public class EtlController {
         return ResponseEntity.ok("ETL Laboratory ejecutado");
     }
 
-    @PostMapping("/run-GeologyDrilling")
+    @PostMapping("/run-geology-drilling")
     public ResponseEntity<String> runGeologyDrillingEtl() {
         excelStreamingService.readExcel(excelGeologyDrillingPath);
         return ResponseEntity.ok("ETL Geology Drilling ejecutado");
@@ -105,6 +111,16 @@ public class EtlController {
         return ResponseEntity.ok("ETL excelSecurityPath ejecutado");
     }
 
+    @PostMapping("/run-geology-grade")
+    public ResponseEntity<String> runGeologyGradeEtl() {
+        excelStreamingService.readExcel(excelGeologyGradePath);
+        return ResponseEntity.ok("ETL runGeologyGradeEtl ejecutado");
+    }
 
+    @PostMapping("/run-geology-report")
+    public ResponseEntity<String> runGeologyReportEtl() {
+        excelStreamingService.readExcel(excelGeologyReportPath);
+        return ResponseEntity.ok("ETL runGeologyReportEtl ejecutado");
+    }
 
 }

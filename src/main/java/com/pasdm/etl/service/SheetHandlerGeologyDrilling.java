@@ -15,7 +15,7 @@ import java.util.Map;
 
 @Slf4j
 @Component
-public class SheetHandlerGeologyDrilling implements ExcelSheetHandler{
+public class SheetHandlerGeologyDrilling implements ExcelSheetHandler {
 
     private static final int BATCH_SIZE = 100;
 
@@ -50,6 +50,7 @@ public class SheetHandlerGeologyDrilling implements ExcelSheetHandler{
             GeologyDrilling geologyDrilling = geologyDrillingMapper.mapEntity(currentRow);
             if (geologyDrilling != null) {
                 bufferGeologyDrilling.add(geologyDrilling);
+                totalProcessed++;
             }
         } catch (Exception e) {
             log.error("Fila {} inválida: {}", rowNum, currentRow);
@@ -60,11 +61,6 @@ public class SheetHandlerGeologyDrilling implements ExcelSheetHandler{
         }
     }
 
-
-    @Override
-    public String sheetName() {
-        return "GeologyDrilling";
-    }
 
     @Override
     public void cell(String cellReference, String formattedValue, XSSFComment comment) {
@@ -88,14 +84,20 @@ public class SheetHandlerGeologyDrilling implements ExcelSheetHandler{
 
     @Override
     public void flushRemaining() {
+        if (!bufferGeologyDrilling.isEmpty()) {
+            batchService.upsertBatchGeologyDrilling(bufferGeologyDrilling);
+            bufferGeologyDrilling.clear();
+        }
+    }
 
+    @Override
+    public String sheetName() {
+        return "DIAMANTE CORREGIDO";
     }
 
     @Override
     public void headerFooter(String text, boolean isHeader, String tagName) {
         // no-op
     }
-
-
 
 }

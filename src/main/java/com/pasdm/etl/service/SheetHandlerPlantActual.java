@@ -56,6 +56,7 @@ public class SheetHandlerPlantActual implements ExcelSheetHandler {
             PlantActual entity = mapperPlant.mapEntity(currentRow);
             if (entity != null) {
                 bufferPlantActual.add(entity);
+                totalProcessed++;
             }
         } catch (Exception e) {
             log.error("Fila {} inválida: {}", rowNum, currentRow);
