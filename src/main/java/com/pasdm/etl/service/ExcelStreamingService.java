@@ -50,7 +50,7 @@ public class ExcelStreamingService {
 
                     String sheetName = sheets.getSheetName().trim();
 
-                    if (type == SheetType.PLANT) {
+                    if (type == SheetType.LABORATORY_PLANT) {
 
                         XMLReader parser = XMLHelper.newXMLReader();
                         ExcelSheetHandler sheetHandler;
@@ -139,7 +139,11 @@ public class ExcelStreamingService {
             return "DB";
         }
 
-        if (filename.contains("geologyDrilling")){
+        if (filename.contains("geologydrilling")){
+            return "DB";
+        }
+
+        if (filename.contains("laboratoryplant")){
             return "DB";
         }
 
