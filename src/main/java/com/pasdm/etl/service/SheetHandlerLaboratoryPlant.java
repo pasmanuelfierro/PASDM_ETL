@@ -1,7 +1,6 @@
 package com.pasdm.etl.service;
 
 import com.pasdm.etl.enums.SheetType;
-import com.pasdm.etl.mapper.LaboratoryMapper;
 import com.pasdm.etl.mapper.LaboratoryPlantMapper;
 import com.pasdm.etl.model.LaboratoryPlant;
 import lombok.extern.slf4j.Slf4j;
@@ -16,11 +15,11 @@ import java.util.Map;
 
 @Slf4j
 @Component
-public class SheetHandlerLaboratoryPlant implements ExcelSheetHandler{
+public class SheetHandlerLaboratoryPlant implements ExcelSheetHandler {
     private static final int BATCH_SIZE = 100;
 
-    private final LaboratoryPlantMapper  laboratoryPlantMapper;
-    private final BatchService  batchService;
+    private final LaboratoryPlantMapper laboratoryPlantMapper;
+    private final BatchService batchService;
 
     private final List<LaboratoryPlant> bufferLaboratoryPlant = new ArrayList<>(BATCH_SIZE);
     private final Map<Integer, String> currentRow = new HashMap<>();
@@ -39,7 +38,7 @@ public class SheetHandlerLaboratoryPlant implements ExcelSheetHandler{
 
     @Override
     public String sheetName() {
-        return "";
+        return "LEYES PLANTA";
     }
 
     @Override
@@ -64,12 +63,13 @@ public class SheetHandlerLaboratoryPlant implements ExcelSheetHandler{
 
     @Override
     public void endRow(int rowNum) {
-        if (rowNum == 0) return;
 
+        if (rowNum < 11) return; // salta todos los encabezados, comienza en el renglon 11
         try {
             LaboratoryPlant entity = laboratoryPlantMapper.mapEntity(currentRow);
             if (entity != null) {
                 bufferLaboratoryPlant.add(entity);
+                totalProcessed++;
             }
         } catch (Exception e) {
             log.error("Fila {} inválida: {}", rowNum, currentRow);

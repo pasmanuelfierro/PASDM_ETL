@@ -10,47 +10,49 @@ import java.math.BigDecimal;
 import java.time.LocalDateTime;
 
 @Entity
+@AllArgsConstructor
+@Table(schema = "etl", name = "laboratory_plant", uniqueConstraints = {
+        @UniqueConstraint(name = "uk_laboratory_plant_budget_row_hash", columnNames = "row_hash")
+})
 @Getter
 @Setter
 @NoArgsConstructor
-@AllArgsConstructor
-@Table(schema = "etl", name = "laboratory_plant")
 public class LaboratoryPlant {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @Column(name = "Num_Dia", length = 150)
+    @Column(name = "num_dia", length = 150)
     private String numDia;
 
-    @Column(name = "Turno")
+    @Column(name = "turno")
     private Integer turno;
 
     // BANDA
-    @Column(name = "Ban_Au")
+    @Column(name = "ban_au")
     private Integer banAu;
 
-    @Column(name = "Ban_Ag")
+    @Column(name = "ban_ag")
     private Integer banAg;
 
-    @Column(name = "Ban_Pb")
+    @Column(name = "ban_pb")
     private Integer banPb;
 
-    @Column(name = "Ban_Zn")
+    @Column(name = "ban_zn")
     private Integer banZn;
 
-    @Column(name = "Ban_Humedad", precision = 20, scale = 10)
+    @Column(name = "ban_humedad", precision = 20, scale = 10)
     private BigDecimal banHumedad;
 
     // FINOS
-    @Column(name = "Finos_Ag")
+    @Column(name = "finos_ag")
     private Integer finosAg;
 
-    @Column(name = "Finos_Pb")
+    @Column(name = "finos_pb")
     private Integer finosPb;
 
-    @Column(name = "Finos_Zn")
+    @Column(name = "finos_zn")
     private Integer finosZn;
 
     @Column(name = "row_hash", length = 64, nullable = false, unique = true)

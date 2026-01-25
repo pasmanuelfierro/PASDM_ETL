@@ -22,13 +22,10 @@ public class ETLJobScheduler {
     @Value("${excel.plant.path}")
     private String excelPlantPath;
 
-    @Value("${excel.laboratory.path}")
-    private String excelLaboratoryPath;
-
-    @Value("${excel.geologyDrilling.path}")
+    @Value("${excel.geology.drilling.path}")
     private String excelGeologyDrillingPath;
 
-    @Value("${excel.laboratoryPlant.path}")
+    @Value("${excel.laboratory.plant.path}")
     private String excelLaboratoryPlantPath;
 
     @Value("${excel.dev.path}")
@@ -37,25 +34,25 @@ public class ETLJobScheduler {
     @Value("${excel.prod.path}")
     private String excelProdPath;
 
-    @Value("${excel.test.path}")
-    private String excelTestPath;
-
     @Value("${excel.security.path}")
     private String excelSecurityPath;
 
-    @Scheduled(cron = "0 55 06 * * ?")
+    /*
+        @Scheduled(cron = "0 55 06 * * ?") A LAS 6:55
+    */
+    @Scheduled(cron = "0 55 * * * ?")
     public void processExcel() {
         log.info("Inicio proceso Excel");
-        // excelStreamingService.readExcel(excelRRHHPath);
-        // excelStreamingService.readExcel(excelGeologyPath);
-        // excelStreamingService.readExcel(excelPlantPath);
+        /* excelStreamingService.readExcel(excelRRHHPath);
+         excelStreamingService.readExcel(excelGeologyPath);
+         excelStreamingService.readExcel(excelPlantPath);*/
         excelStreamingService.readExcel(excelDevPath);
         excelStreamingService.readExcel(excelProdPath);
         excelStreamingService.readExcel(excelPlantPath);
-        excelStreamingService.readExcel(excelLaboratoryPath);
+        /*excelStreamingService.readExcel(excelLaboratoryPath);
         excelStreamingService.readExcel(excelGeologyDrillingPath);
         excelStreamingService.readExcel(excelLaboratoryPlantPath);
-        //  excelStreamingService.readExcel(excelSecurityPath);
+        excelStreamingService.readExcel(excelSecurityPath);*/
         log.info("Fin proceso Excel");
     }
 }

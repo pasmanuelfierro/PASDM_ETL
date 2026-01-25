@@ -41,7 +41,7 @@ public interface LaboratoryPlantRepository extends JpaRepository<LaboratoryPlant
         :#{#labPlan.rowHash},
         now()
     )
-    ON CONFLICT (num_dia, turno)
+    ON CONFLICT (row_hash)
     DO UPDATE SET
         ban_au        = EXCLUDED.ban_au,
         ban_ag        = EXCLUDED.ban_ag,
@@ -51,7 +51,6 @@ public interface LaboratoryPlantRepository extends JpaRepository<LaboratoryPlant
         finos_ag      = EXCLUDED.finos_ag,
         finos_pb      = EXCLUDED.finos_pb,
         finos_zn      = EXCLUDED.finos_zn,
-        row_hash      = EXCLUDED.row_hash,
         updated_at    = now()
 """, nativeQuery = true)
     void upsert(@Param("labPlan") LaboratoryPlant labPlan);

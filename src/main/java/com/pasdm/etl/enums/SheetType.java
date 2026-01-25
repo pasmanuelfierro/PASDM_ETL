@@ -12,7 +12,7 @@ public enum SheetType {
     SECURITY("BD"),
     DEVELOPMENT("BD Desarrollo"),
     LABORATORY("BD_LABORATORY"),
-    LABORATORY_PLANT("BD_LABORATORY_PLANT"),
+    LABORATORY_PLANT("LEYES PLANTA"),
     GEOLOGY_DRILLING("DIAMANTE CORREGIDO"),
     GEOLOGY_GRADE("BASE DE DATOS"),
     GEOLOGY_REPORT("BASE DE DATOS");
@@ -37,7 +37,7 @@ public enum SheetType {
         if (fileName.contains("estadisticos")) return SECURITY;
         if (fileName.contains("laboratory")) return LABORATORY;
         if (fileName.contains("geology_drilling")) return GEOLOGY_DRILLING;
-        if (fileName.contains("laboratory_plant")) return LABORATORY_PLANT;
+        if (fileName.contains("01 leyes")) return LABORATORY_PLANT;
         if (fileName.contains("avance barrenación")) return GEOLOGY_DRILLING;
         if (fileName.contains("ley")) return GEOLOGY_GRADE;
         if (fileName.contains("reporte_geologia")) return GEOLOGY_REPORT;

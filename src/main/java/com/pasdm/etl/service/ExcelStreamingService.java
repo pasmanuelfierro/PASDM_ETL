@@ -6,7 +6,6 @@ import com.pasdm.etl.infraestructure.nas.NasSmbClient;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.poi.openxml4j.opc.OPCPackage;
-import org.apache.poi.openxml4j.util.ZipSecureFile;
 import org.apache.poi.ss.usermodel.DataFormatter;
 import org.apache.poi.util.XMLHelper;
 import org.apache.poi.xssf.eventusermodel.XSSFReader;
@@ -36,10 +35,10 @@ public class ExcelStreamingService {
         File file = new File(excelPath);
         SheetType type = SheetType.fromPath(excelPath);
 
-       /* try (InputStream is = nasSmbClient.openFile(excelPath);
-             OPCPackage pkg = OPCPackage.open(is)) {*/
-        try (OPCPackage pkg = OPCPackage.open(file)) {
-            ZipSecureFile.setMinInflateRatio(0);
+        try (InputStream is = nasSmbClient.openFile(excelPath);
+             OPCPackage pkg = OPCPackage.open(is)) {
+         /*  try (OPCPackage pkg = OPCPackage.open(file)) {
+            ZipSecureFile.setMinInflateRatio(0);*/
 
             XSSFReader reader = new XSSFReader(pkg);
             SharedStrings sharedStrings = reader.getSharedStringsTable();
@@ -53,7 +52,7 @@ public class ExcelStreamingService {
 
                     String sheetName = sheets.getSheetName().trim();
 
-                    if (type == SheetType.LABORATORY_PLANT) {
+                    if (type == SheetType.PLANT) {
 
                         XMLReader parser = XMLHelper.newXMLReader();
                         ExcelSheetHandler sheetHandler;
@@ -148,6 +147,10 @@ public class ExcelStreamingService {
             return "DB";
         }
 
+        if (filename.contains("planta")) {
+            return "LEYES PLANTA";
+        }
+
         if (filename.contains("ley")) {
             return "BASE DE DATOS";
         }
@@ -160,9 +163,6 @@ public class ExcelStreamingService {
             return "DIAMANTE CORREGIDO";
         }
 
-        if (filename.contains("laboratoryplant")) {
-            return "DB";
-        }
 
         if (filename.contains("reporte_geologia")) {
             return "BASE DE DATOSS";
