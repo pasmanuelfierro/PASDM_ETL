@@ -49,10 +49,10 @@ public class ETLJobScheduler {
         excelStreamingService.readExcel(excelDevPath);
         excelStreamingService.readExcel(excelProdPath);
         excelStreamingService.readExcel(excelPlantPath);
+        excelStreamingService.readExcel(excelSecurityPath);
         /*excelStreamingService.readExcel(excelLaboratoryPath);
         excelStreamingService.readExcel(excelGeologyDrillingPath);
-        excelStreamingService.readExcel(excelLaboratoryPlantPath);
-        excelStreamingService.readExcel(excelSecurityPath);*/
+        excelStreamingService.readExcel(excelLaboratoryPlantPath);*/
         log.info("Fin proceso Excel");
     }
 }

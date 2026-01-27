@@ -34,7 +34,7 @@ public enum SheetType {
         if (fileName.contains("mtto")) return MTTO;
         if (fileName.contains("produccion")) return PRODUCTION;
         if (fileName.contains("desarrollo")) return DEVELOPMENT;
-        if (fileName.contains("estadisticos")) return SECURITY;
+        if (fileName.contains("estadisticos - sso - mlc -")) return SECURITY;
         if (fileName.contains("laboratory")) return LABORATORY;
         if (fileName.contains("geology_drilling")) return GEOLOGY_DRILLING;
         if (fileName.contains("01 leyes")) return LABORATORY_PLANT;
@@ -43,7 +43,7 @@ public enum SheetType {
         if (fileName.contains("reporte_geologia")) return GEOLOGY_REPORT;
 
         throw new IllegalArgumentException(
-                "No se pudo determinar SheetType desde el path: " + path
+                "No se pudo determinar SheetType desde el path: " + path +" | "+fileName
         );
     }
 

@@ -15,11 +15,13 @@ import java.util.Properties;
 public class NasSmbClient {
 
     private final CIFSContext authContext;
+    private final CIFSContext authSecurityContext;
 
     public NasSmbClient(
             @Value("${nas.domain}") String domain,
             @Value("${nas.user}") String user,
-            @Value("${nas.password}") String password
+            @Value("${nas.password}") String password,
+            @Value("${nas.password.security}") String passwordSecurity
     ) throws Exception {
 
         Properties props = new Properties();
@@ -33,10 +35,20 @@ public class NasSmbClient {
         this.authContext = base.withCredentials(
                 new NtlmPasswordAuthenticator(null, user, password)
         );
+
+        this.authSecurityContext = base.withCredentials(
+                new NtlmPasswordAuthenticator(null, user, passwordSecurity)
+        );
     }
 
     public InputStream openFile(String smbPath) throws Exception {
-        SmbFile file = new SmbFile(smbPath, authContext);
-        return file.getInputStream(); // UNA vez
+
+        if (smbPath.contains("Estadisticos - SSO - MLC")) {
+            SmbFile file = new SmbFile(smbPath, authSecurityContext);
+            return file.getInputStream();
+        } else {
+            SmbFile file = new SmbFile(smbPath, authContext);
+            return file.getInputStream();
+        }
     }
 }
