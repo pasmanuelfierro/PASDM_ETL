@@ -35,9 +35,6 @@ public class EtlController {
     @Value("${excel.prod.path}")
     private String excelProdPath;
 
-    @Value("${excel.test.path}")
-    private String excelTestPath;
-
     @Value("${excel.security.path}")
     private String excelSecurityPath;
 
