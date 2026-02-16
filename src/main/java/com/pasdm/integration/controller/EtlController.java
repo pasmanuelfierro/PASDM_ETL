@@ -45,6 +45,9 @@ public class EtlController {
     @Value("${excel.diesel.report.path}")
     private String excelDieselReport;
 
+    @Value("${excel.topography.path}")
+    private String excelTopographyPath;
+
 /*
    @PostMapping("/run-geology")
     public ResponseEntity<String> runGeologyEtl() {
@@ -123,6 +126,12 @@ public class EtlController {
     public ResponseEntity<String> runDieselReportEtl() {
         excelStreamingService.readExcel(excelDieselReport, SheetType.DIESEL_REPORT);
         return ResponseEntity.ok("ETL run-plant ejecutado");
+    }
+
+    @PostMapping("/run-topography")
+    public ResponseEntity<String> runTopographyEtl() {
+        excelStreamingService.readExcel(excelTopographyPath, SheetType.TOPOGRAPHY);
+        return ResponseEntity.ok("ETL run-topography ejecutado");
     }
 
 }

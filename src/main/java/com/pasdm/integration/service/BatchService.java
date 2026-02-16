@@ -30,6 +30,7 @@ public class BatchService {
     private final GeologyGradeRepository geologyGradeRepository;
     private final GeologyReportRepository geologyReportRepository;
     private final DieselReportRepository dieselReportRepository;
+    private final TopographyRepository topographyRepository;
 
 
 /*    @Transactional
@@ -154,6 +155,14 @@ public class BatchService {
         log.info("Guardando batch de diesel report  {}", batch.size());
         for (DieselReport dieselReport : batch) {
             dieselReportRepository.upsert(dieselReport);
+        }
+    }
+
+    @Transactional
+    public void upsertBatchTopography(List<Topography> batch) {
+        log.info("Guardando batch de topography  {}", batch.size());
+        for (Topography topography : batch) {
+            topographyRepository.upsert(topography);
         }
     }
 }

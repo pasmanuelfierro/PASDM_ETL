@@ -44,6 +44,9 @@ public class ETLJobScheduler {
     @Value("${excel.diesel.report.path}")
     private String excelDieselReport;
 
+    @Value("${excel.topography.path}")
+    private String excelTopographyPath;
+
     /*
         @Scheduled(cron = "0 55 06 * * ?") A LAS 6:55
     */
@@ -60,6 +63,7 @@ public class ETLJobScheduler {
         excelStreamingService.readExcel(excelGeologyGradePath, SheetType.GEOLOGY_GRADE);
         excelStreamingService.readExcel(excelGeologyReportPath, SheetType.GEOLOGY_REPORT);
         excelStreamingService.readExcel(excelDieselReport, SheetType.DIESEL_REPORT);
+        excelStreamingService.readExcel(excelTopographyPath, SheetType.TOPOGRAPHY);
 
         /*excelStreamingService.readExcel(excelLaboratoryPath);
         excelStreamingService.readExcel(excelGeologyDrillingPath);
