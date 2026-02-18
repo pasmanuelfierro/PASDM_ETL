@@ -17,7 +17,10 @@ public enum SheetType {
     GEOLOGY_GRADE("BASE DE DATOS"),
     GEOLOGY_REPORT("BASE DE DATOS"),
     DIESEL_REPORT("BASE DE DATOS"),
-    TOPOGRAPHY("INGRESO DATOS");
+    TOPOGRAPHY("INGRESO DATOS"),
+    EXPLOSIVES("Datos"),
+    ENTRADA_ACERO("ENTRADAS"),
+    SALIDA_ACERO("SALIDAS");
 
     private final String sheetName;
 
@@ -45,7 +48,7 @@ public enum SheetType {
         if (fileName.contains("reporte_geologia")) return GEOLOGY_REPORT;
 
         throw new IllegalArgumentException(
-                "No se pudo determinar SheetType desde el path: " + path +" | "+fileName
+                "No se pudo determinar SheetType desde el path: " + path + " | " + fileName
         );
     }
 

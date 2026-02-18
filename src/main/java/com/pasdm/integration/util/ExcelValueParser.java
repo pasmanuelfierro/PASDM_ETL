@@ -13,6 +13,7 @@ import java.time.temporal.ChronoField;
 import java.time.temporal.TemporalAccessor;
 import java.util.List;
 import java.util.Locale;
+import java.util.Map;
 
 import static org.apache.commons.math3.exception.util.LocalizedFormats.SCALE;
 
@@ -45,6 +46,13 @@ public class ExcelValueParser {
                     .appendPattern("d-MMM-yy")
                     .toFormatter(new Locale("es", "MX"));
 
+    private static final DateTimeFormatter DD_MMM_ES =
+            new DateTimeFormatterBuilder()
+                    .parseCaseInsensitive()
+                    .appendPattern("d-MMM")   // 👈 clave: d en lugar de dd
+                    .parseDefaulting(ChronoField.YEAR, LocalDate.now().getYear())
+                    .toFormatter(new Locale("es", "MX"));
+
     private static final List<DateTimeFormatter> FORMATTERS = List.of(
             DateTimeFormatter.ofPattern("M/d/yy"),
             DateTimeFormatter.ofPattern("M/d/yyyy"),
@@ -54,6 +62,7 @@ public class ExcelValueParser {
             FECHA_ES,
             DD_MMM_EN,
             DD_MM_YYY,
+            DD_MMM_ES,
             D_MMM_EN      // 01-ene
     );
 
@@ -93,6 +102,29 @@ public class ExcelValueParser {
         }
     }
 
+    public static LocalDate dateValidadorDebug(Map<Integer, String> row, String value) {
+
+        if (value == null || value.isBlank()) {
+            return null;
+        }
+
+        String v = value.trim();
+
+        if (v.matches("\\d+(\\.0)?")) {
+            double excelDate = Double.parseDouble(v);
+            return DateUtil.getLocalDateTime(excelDate).toLocalDate();
+        }
+
+        for (DateTimeFormatter formatter : FORMATTERS) {
+            try {
+                return LocalDate.parse(v, formatter);
+            } catch (Exception ignored) {
+            }
+        }
+        log.error("ERROR EN DATE " + value + " " + v + " " + row);
+        return null;
+    }
+
     public static LocalDate dateValidador(String value) {
 
         if (value == null || value.isBlank()) {
@@ -113,7 +145,8 @@ public class ExcelValueParser {
             }
         }
 
-        throw new IllegalArgumentException("Fecha inválida: " + value + " " + v);
+        log.error("ERROR EN DATE " + value + " " + v);
+        return null;
     }
 
     public static String stringValidador(String value) {
@@ -143,7 +176,8 @@ public class ExcelValueParser {
             return Integer.valueOf(normalized);
 
         } catch (Exception e) {
-            throw new IllegalArgumentException("Entero inválido: " + value);
+            log.error("ERROR EN INT " + value, e);
+            return null;
         }
     }
 

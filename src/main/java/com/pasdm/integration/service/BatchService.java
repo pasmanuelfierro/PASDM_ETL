@@ -31,6 +31,9 @@ public class BatchService {
     private final GeologyReportRepository geologyReportRepository;
     private final DieselReportRepository dieselReportRepository;
     private final TopographyRepository topographyRepository;
+    private final ExplosivesRepository explosivesRepository;
+    private final EntradaAceroRepository entradaAceroRepository;
+    private final SalidaAceroRepository salidaAceroRepository;
 
 
 /*    @Transactional
@@ -163,6 +166,30 @@ public class BatchService {
         log.info("Guardando batch de topography  {}", batch.size());
         for (Topography topography : batch) {
             topographyRepository.upsert(topography);
+        }
+    }
+
+    @Transactional
+    public void upsertBatchExplosives(List<Explosives> batch) {
+        log.info("Guardando batch de explosivos  {}", batch.size());
+        for (Explosives explosives : batch) {
+            explosivesRepository.upsert(explosives);
+        }
+    }
+
+    @Transactional
+    public void upsertBatchEntradaAcero(List<EntradaAcero> batch) {
+        log.info("Guardando batch de ENTRADA ACERO  {}", batch.size());
+        for (EntradaAcero in : batch) {
+            entradaAceroRepository.upsert(in);
+        }
+    }
+
+    @Transactional
+    public void upsertBatchSalidaAcero(List<SalidaAcero> batch) {
+        log.info("Guardando batch de SALIDA ACERO  {}", batch.size());
+        for (SalidaAcero out : batch) {
+            salidaAceroRepository.upsert(out);
         }
     }
 }

@@ -1,9 +1,8 @@
 package com.pasdm.integration.service;
 
 import com.pasdm.integration.enums.SheetType;
-import com.pasdm.integration.mapper.TopographyMapper;
-import com.pasdm.integration.model.Topography;
-
+import com.pasdm.integration.mapper.SalidaAceroMapper;
+import com.pasdm.integration.model.SalidaAcero;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.poi.ss.util.CellReference;
 import org.apache.poi.xssf.usermodel.XSSFComment;
@@ -16,18 +15,18 @@ import java.util.Map;
 
 @Slf4j
 @Component
-public class SheetHandlerTopography implements ExcelSheetHandler{
+public class SheetHandlerSalidaAceros implements ExcelSheetHandler {
     private static final int BATCH_SIZE = 1000;
 
-    private final TopographyMapper mapperTopography;
+    private final SalidaAceroMapper mapperSalidaAcero;
     private final BatchService batchService;
 
-    private final List<Topography> bufferTopography = new ArrayList<>(BATCH_SIZE);
+    private final List<SalidaAcero> bufferSalidaAcero = new ArrayList<>(BATCH_SIZE);
     private final Map<Integer, String> currentRow = new HashMap<>();
     private int totalProcessed = 0;
 
-    public SheetHandlerTopography(TopographyMapper mapperTopography, BatchService batchService) {
-        this.mapperTopography = mapperTopography;
+    public SheetHandlerSalidaAceros(SalidaAceroMapper mapperSalidaAcero, BatchService batchService) {
+        this.mapperSalidaAcero = mapperSalidaAcero;
         this.batchService = batchService;
     }
 
@@ -38,7 +37,7 @@ public class SheetHandlerTopography implements ExcelSheetHandler{
 
     @Override
     public SheetType getType() {
-        return SheetType.TOPOGRAPHY;
+        return SheetType.SALIDA_ACERO;
     }
 
     @Override
@@ -47,17 +46,17 @@ public class SheetHandlerTopography implements ExcelSheetHandler{
         if (rowNum == 0) return; // encabezado 1
 
         try {
-            Topography entity = mapperTopography.mapEntity(currentRow);
+            SalidaAcero entity = mapperSalidaAcero.mapEntity(currentRow);
             if (entity != null) {
-                bufferTopography.add(entity);
+                bufferSalidaAcero.add(entity);
             }
         } catch (Exception e) {
             log.error("Fila {} inválida: {}", rowNum, currentRow);
         }
 
-        if (bufferTopography.size() >= BATCH_SIZE) {
-            batchService.upsertBatchTopography(bufferTopography);
-            bufferTopography.clear();
+        if (bufferSalidaAcero.size() >= BATCH_SIZE) {
+            batchService.upsertBatchSalidaAcero(bufferSalidaAcero);
+            bufferSalidaAcero.clear();
         }
     }
 
@@ -78,9 +77,9 @@ public class SheetHandlerTopography implements ExcelSheetHandler{
 
     @Override
     public void flushRemaining() {
-        if (!bufferTopography.isEmpty()) {
-            batchService.upsertBatchTopography(bufferTopography);
-            bufferTopography.clear();
+        if (!bufferSalidaAcero.isEmpty()) {
+            batchService.upsertBatchSalidaAcero(bufferSalidaAcero);
+            bufferSalidaAcero.clear();
         }
     }
 
@@ -96,7 +95,7 @@ public class SheetHandlerTopography implements ExcelSheetHandler{
 
     @Override
     public String sheetName() {
-        return "Ingreso Datos";
+        return "SALIDAS";
     }
 
 }

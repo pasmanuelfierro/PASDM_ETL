@@ -48,6 +48,15 @@ public class EtlController {
     @Value("${excel.topography.path}")
     private String excelTopographyPath;
 
+    @Value("${excel.explosives.path}")
+    private String excelExplosivesPath;
+
+    @Value("${excel.entrada_aceros.path}")
+    private String excelEntradaAceroPath;
+
+    @Value("${excel.salida_aceros.path}")
+    private String excelSalidaAceroPath;
+
 /*
    @PostMapping("/run-geology")
     public ResponseEntity<String> runGeologyEtl() {
@@ -132,6 +141,24 @@ public class EtlController {
     public ResponseEntity<String> runTopographyEtl() {
         excelStreamingService.readExcel(excelTopographyPath, SheetType.TOPOGRAPHY);
         return ResponseEntity.ok("ETL run-topography ejecutado");
+    }
+
+    @PostMapping("/run-explosives")
+    public ResponseEntity<String> runExplosivesEtl() {
+        excelStreamingService.readExcel(excelExplosivesPath, SheetType.EXPLOSIVES);
+        return ResponseEntity.ok("ETL run-texplosives ejecutado");
+    }
+
+    @PostMapping("/run-entrada-acero")
+    public ResponseEntity<String> runEntradaAceroEtl() {
+        excelStreamingService.readExcel(excelEntradaAceroPath, SheetType.ENTRADA_ACERO);
+        return ResponseEntity.ok("ETL run-entrada-acero ejecutado");
+    }
+
+    @PostMapping("/run-salida-acero")
+    public ResponseEntity<String> runSalidaAceroEtl() {
+        excelStreamingService.readExcel(excelSalidaAceroPath, SheetType.SALIDA_ACERO);
+        return ResponseEntity.ok("ETL run-salida-acero ejecutado");
     }
 
 }
