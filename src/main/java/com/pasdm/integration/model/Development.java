@@ -80,6 +80,9 @@ public class Development {
     @Column(name = "metros", precision = 20, scale = 10)
     private BigDecimal metros;
 
+    @Column(name = "conc_prioridad", length = 150)
+    private String concPrioridad;
+
     @Column(name = "row_hash", length = 64, nullable = false, unique = true)
     private String rowHash;
 

@@ -176,7 +176,7 @@ public class ExcelValueParser {
             return Integer.valueOf(normalized);
 
         } catch (Exception e) {
-            log.error("ERROR EN INT " + value, e);
+            log.error("ERROR EN INT " + value );
             return null;
         }
     }

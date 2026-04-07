@@ -15,20 +15,21 @@ public class DevelopmentMapper {
     // =======================
     // ÍNDICES DE COLUMNA (Excel)
     // =======================
-    private static final int COL_FECHA = 2;  // C
-    private static final int COL_GRUPO = 3;  // D
-    private static final int COL_PRIORIDAD = 4;  // E
-    private static final int COL_LOTE = 5;  // F
-    private static final int COL_STATUS = 6;  // G
-    private static final int COL_MINA = 7;  // H
-    private static final int COL_ZONA = 8;  // I
-    private static final int COL_COSTOS = 9;  // J
-    private static final int COL_ELABORADO = 10; // K
-    private static final int COL_MIN_TEP = 11; // L
-    private static final int COL_OBRA = 12; // M
-    private static final int COL_ESTRUCTURA = 13; // N
-    private static final int COL_LUGAR = 14; // O
-    private static final int COL_METROS = 15; // P
+    private static final int COL_FECHA = 1;  // B
+    private static final int COL_GRUPO = 2;  // C
+    private static final int COL_PRIORIDAD = 3;  // D
+    private static final int COL_LOTE = 4;  // E
+    private static final int COL_STATUS = 5;  // F
+    private static final int COL_MINA = 6;  // G
+    private static final int COL_ZONA = 7;  // H
+    private static final int COL_COSTOS = 8;  // I
+    private static final int COL_ELABORADO = 9; // J
+    private static final int COL_MIN_TEP = 10; // K
+    private static final int COL_OBRA = 11; // L
+    private static final int COL_ESTRUCTURA = 12; // M
+    private static final int COL_LUGAR = 13; // N
+    private static final int COL_METROS = 14; // O
+    private static final int COL_CONC_PRIORIDAD = 15; // O
 
     public Development mapEntity(Map<Integer, String> row) {
         try {
@@ -54,7 +55,8 @@ public class DevelopmentMapper {
                 e.setEstructura(row.get(COL_ESTRUCTURA));
                 e.setLugar(row.get(COL_LUGAR));
                 e.setMetros(ExcelValueParser.decimalValidador(row.get(COL_METROS)));
-                e.setRowHash(HashUtil.calculateRowHash(e.getFecha().toString(), e.getStatus(), e.getEstructura(), e.getLugar(), e.getObra(),""));
+                e.setConcPrioridad(row.get(COL_CONC_PRIORIDAD));
+                e.setRowHash(HashUtil.calculateRowHash(e.getFecha().toString(), e.getStatus(), e.getEstructura(), e.getLugar(), e.getObra(), ""));
 
                 return e;
             }

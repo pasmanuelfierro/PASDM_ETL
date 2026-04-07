@@ -45,7 +45,7 @@ public class SheetHandlerDevelopment implements ExcelSheetHandler {
         }
 
         // Ignorar columnas A y B
-        if (cellReference.startsWith("A") || cellReference.startsWith("B")) {
+        if (cellReference.startsWith("A") ) {
             return;
         }
 
