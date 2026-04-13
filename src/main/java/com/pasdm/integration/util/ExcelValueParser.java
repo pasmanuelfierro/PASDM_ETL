@@ -46,6 +46,12 @@ public class ExcelValueParser {
                     .appendPattern("d-MMM-yy")
                     .toFormatter(new Locale("es", "MX"));
 
+    private static final DateTimeFormatter FECHA_EN =
+            new DateTimeFormatterBuilder()
+                    .parseCaseInsensitive()
+                    .appendPattern("d-MMM-yy")
+                    .toFormatter(Locale.ENGLISH);
+
     private static final DateTimeFormatter DD_MMM_ES =
             new DateTimeFormatterBuilder()
                     .parseCaseInsensitive()
@@ -60,6 +66,7 @@ public class ExcelValueParser {
             DateTimeFormatter.ofPattern("dd-MMM", new Locale("es", "MX")),    // 01-ene
             DateTimeFormatter.ofPattern("d-MMM", new Locale("es", "MX")),
             FECHA_ES,
+            FECHA_EN,
             DD_MMM_EN,
             DD_MM_YYY,
             DD_MMM_ES,
@@ -176,7 +183,7 @@ public class ExcelValueParser {
             return Integer.valueOf(normalized);
 
         } catch (Exception e) {
-            log.error("ERROR EN INT " + value );
+            log.error("ERROR EN INT " + value);
             return null;
         }
     }
