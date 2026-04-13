@@ -183,6 +183,10 @@ public class ExcelValueParser {
             return Integer.valueOf(normalized);
 
         } catch (Exception e) {
+
+            if (value.contains("N/A")) {
+                return null;
+            }
             log.error("ERROR EN INT " + value);
             return null;
         }
