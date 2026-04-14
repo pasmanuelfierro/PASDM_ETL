@@ -184,11 +184,12 @@ public class ExcelValueParser {
 
         } catch (Exception e) {
 
-            if (value.contains("N/A")) {
+            if (value.equals("N/A")) {
+                return null;
+            } else {
+                log.error("ERROR EN INT " + value);
                 return null;
             }
-            log.error("ERROR EN INT " + value);
-            return null;
         }
     }
 

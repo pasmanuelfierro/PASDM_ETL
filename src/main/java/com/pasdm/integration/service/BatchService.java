@@ -62,7 +62,7 @@ public class BatchService {
 
     @Transactional
     public void saveBatchProduction(List<Production> batch) {
-        log.info("Guardando batch de Production {}", batch.size());
+       // log.info("Guardando batch de Production {}", batch.size());
         for (Production p : batch) {
             productionRepository.upsert(p);
         }
@@ -71,14 +71,14 @@ public class BatchService {
 
     @Transactional
     public void saveBatchDevelopment(List<Development> batch) {
-        log.info("Guardando batch de {}", batch.size());
+       // log.info("Guardando batch de {}", batch.size());
         developmentRepository.saveAll(batch);
         developmentRepository.flush();
     }
 
     @Transactional
     public void upsertBatchDevelopment(List<Development> batch) {
-        log.info("Guardando batch de Development {}", batch.size());
+        //log.info("Guardando batch de Development {}", batch.size());
         for (Development d : batch) {
             developmentRepository.upsert(d);
         }
@@ -87,7 +87,7 @@ public class BatchService {
 
     @Transactional
     public void upsertBatchSecurity(List<Security> batch) {
-        log.info("Guardando batch de Security {}", batch.size());
+        //log.info("Guardando batch de Security {}", batch.size());
         for (Security s : batch) {
             securityRepository.upsert(s);
         }
@@ -96,7 +96,7 @@ public class BatchService {
 
     @Transactional
     public void upsertBatchPlantActual(List<PlantActual> batch) {
-        log.info("Guardando batch de plant  {}", batch.size());
+       // log.info("Guardando batch de plant  {}", batch.size());
         for (PlantActual planta : batch) {
             plantActualRepository.upsert(planta);
         }
@@ -105,7 +105,7 @@ public class BatchService {
 
     @Transactional
     public void upsertBatchPlantBudget(List<PlantBudget> batch) {
-        log.info("Guardando batch de plant  {}", batch.size());
+        //log.info("Guardando batch de plant  {}", batch.size());
         for (PlantBudget plantaBudget : batch) {
             plantBudgetRepository.upsert(plantaBudget);
         }
@@ -114,7 +114,7 @@ public class BatchService {
 
     @Transactional
     public void upsertBatchLaboratory(List<Laboratory> batch) {
-        log.info("Guardando batch de plant  {}", batch.size());
+       // log.info("Guardando batch de plant  {}", batch.size());
         for (Laboratory lab : batch) {
             //  laboratoryRepository.upsert(lab);
         }
@@ -122,7 +122,7 @@ public class BatchService {
 
     @Transactional
     public void upsertBatchGeologyDrilling(List<GeologyDrilling> batch) {
-        log.info("Guardando batch de GeologyDrilling {}", batch.size());
+       // log.info("Guardando batch de GeologyDrilling {}", batch.size());
         for (GeologyDrilling geologyDrilling : batch) {
             geologyDrillingRepository.upsert(geologyDrilling);
         }
@@ -130,7 +130,7 @@ public class BatchService {
 
     @Transactional
     public void upsertBatchGeologyGrade(List<GeologyGrade> batch) {
-        log.info("Guardando batch de geology grade  {}", batch.size());
+        //log.info("Guardando batch de geology grade  {}", batch.size());
         for (GeologyGrade geologyGrade : batch) {
             geologyGradeRepository.upsert(geologyGrade);
         }
@@ -138,7 +138,7 @@ public class BatchService {
 
     @Transactional
     public void upsertBatchLaboratoryPlant(List<LaboratoryPlant> batch) {
-        log.info("Guardando batch de LaboratoryPlant {}", batch.size());
+        //log.info("Guardando batch de LaboratoryPlant {}", batch.size());
 
         for (LaboratoryPlant labPlan : batch) {
             laboratoryPlantRepository.upsert(labPlan);
@@ -147,7 +147,7 @@ public class BatchService {
 
     @Transactional
     public void upsertBatchGeologyReport(List<GeologyReport> batch) {
-        log.info("Guardando batch de geology report  {}", batch.size());
+        //log.info("Guardando batch de geology report  {}", batch.size());
         for (GeologyReport geologyReport : batch) {
             geologyReportRepository.upsert(geologyReport);
         }
@@ -155,7 +155,7 @@ public class BatchService {
 
     @Transactional
     public void upsertBatchDieselReport(List<DieselReport> batch) {
-        log.info("Guardando batch de diesel report  {}", batch.size());
+        //log.info("Guardando batch de diesel report  {}", batch.size());
         for (DieselReport dieselReport : batch) {
             dieselReportRepository.upsert(dieselReport);
         }
@@ -163,7 +163,7 @@ public class BatchService {
 
     @Transactional
     public void upsertBatchTopography(List<Topography> batch) {
-        log.info("Guardando batch de topography  {}", batch.size());
+       // log.info("Guardando batch de topography  {}", batch.size());
         for (Topography topography : batch) {
             topographyRepository.upsert(topography);
         }
@@ -171,7 +171,7 @@ public class BatchService {
 
     @Transactional
     public void upsertBatchExplosives(List<Explosives> batch) {
-        log.info("Guardando batch de explosivos  {}", batch.size());
+        //log.info("Guardando batch de explosivos  {}", batch.size());
         for (Explosives explosives : batch) {
             explosivesRepository.upsert(explosives);
         }
@@ -179,7 +179,7 @@ public class BatchService {
 
     @Transactional
     public void upsertBatchEntradaAcero(List<EntradaAcero> batch) {
-        log.info("Guardando batch de ENTRADA ACERO  {}", batch.size());
+       // log.info("Guardando batch de ENTRADA ACERO  {}", batch.size());
         for (EntradaAcero in : batch) {
             entradaAceroRepository.upsert(in);
         }
@@ -187,7 +187,7 @@ public class BatchService {
 
     @Transactional
     public void upsertBatchSalidaAcero(List<SalidaAcero> batch) {
-        log.info("Guardando batch de SALIDA ACERO  {}", batch.size());
+        //log.info("Guardando batch de SALIDA ACERO  {}", batch.size());
         for (SalidaAcero out : batch) {
             salidaAceroRepository.upsert(out);
         }
