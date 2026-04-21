@@ -49,10 +49,13 @@ public class LaboratoryPlantMapper {
                 laboratoryPlant.setFinosZn(intValidador(row.get(COL_FINOS_ZN)));
 
                 laboratoryPlant.setRowHash(HashUtil.calculateRowHash(laboratoryPlant.getNumDia(), laboratoryPlant.getTurno().toString(), "", "", "", ""));
+                if (laboratoryPlant.getRowHash() == null) {
+                    log.error("Error procesando Excel LaboratoryPlant laboratoryPlant.getRowHash() == null" );
 
+                }
                 return laboratoryPlant;
             } else {
-                return laboratoryPlant;
+                return null;
             }
         } catch (Exception e) {
             log.error("Error procesando Excel LaboratoryPlant", e);

@@ -62,7 +62,7 @@ public class BatchService {
 
     @Transactional
     public void saveBatchProduction(List<Production> batch) {
-       // log.info("Guardando batch de Production {}", batch.size());
+        // log.info("Guardando batch de Production {}", batch.size());
         for (Production p : batch) {
             productionRepository.upsert(p);
         }
@@ -71,7 +71,7 @@ public class BatchService {
 
     @Transactional
     public void saveBatchDevelopment(List<Development> batch) {
-       // log.info("Guardando batch de {}", batch.size());
+        // log.info("Guardando batch de {}", batch.size());
         developmentRepository.saveAll(batch);
         developmentRepository.flush();
     }
@@ -96,7 +96,7 @@ public class BatchService {
 
     @Transactional
     public void upsertBatchPlantActual(List<PlantActual> batch) {
-       // log.info("Guardando batch de plant  {}", batch.size());
+        // log.info("Guardando batch de plant  {}", batch.size());
         for (PlantActual planta : batch) {
             plantActualRepository.upsert(planta);
         }
@@ -114,7 +114,7 @@ public class BatchService {
 
     @Transactional
     public void upsertBatchLaboratory(List<Laboratory> batch) {
-       // log.info("Guardando batch de plant  {}", batch.size());
+        // log.info("Guardando batch de plant  {}", batch.size());
         for (Laboratory lab : batch) {
             //  laboratoryRepository.upsert(lab);
         }
@@ -122,7 +122,7 @@ public class BatchService {
 
     @Transactional
     public void upsertBatchGeologyDrilling(List<GeologyDrilling> batch) {
-       // log.info("Guardando batch de GeologyDrilling {}", batch.size());
+        // log.info("Guardando batch de GeologyDrilling {}", batch.size());
         for (GeologyDrilling geologyDrilling : batch) {
             geologyDrillingRepository.upsert(geologyDrilling);
         }
@@ -141,7 +141,11 @@ public class BatchService {
         //log.info("Guardando batch de LaboratoryPlant {}", batch.size());
 
         for (LaboratoryPlant labPlan : batch) {
-            laboratoryPlantRepository.upsert(labPlan);
+            try {
+                laboratoryPlantRepository.upsert(labPlan);
+            } catch (Exception e) {
+                log.error("Error al insertar laboratoryPlant: {}", e.getMessage());
+            }
         }
     }
 
@@ -163,7 +167,7 @@ public class BatchService {
 
     @Transactional
     public void upsertBatchTopography(List<Topography> batch) {
-       // log.info("Guardando batch de topography  {}", batch.size());
+        // log.info("Guardando batch de topography  {}", batch.size());
         for (Topography topography : batch) {
             topographyRepository.upsert(topography);
         }
@@ -179,7 +183,7 @@ public class BatchService {
 
     @Transactional
     public void upsertBatchEntradaAcero(List<EntradaAcero> batch) {
-       // log.info("Guardando batch de ENTRADA ACERO  {}", batch.size());
+        // log.info("Guardando batch de ENTRADA ACERO  {}", batch.size());
         for (EntradaAcero in : batch) {
             entradaAceroRepository.upsert(in);
         }

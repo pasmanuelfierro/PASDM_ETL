@@ -6,6 +6,7 @@ import com.pasdm.integration.infraestructure.nas.NasSmbClient;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.poi.openxml4j.opc.OPCPackage;
+import org.apache.poi.openxml4j.util.ZipSecureFile;
 import org.apache.poi.ss.usermodel.DataFormatter;
 import org.apache.poi.util.XMLHelper;
 import org.apache.poi.xssf.eventusermodel.XSSFReader;
@@ -36,9 +37,9 @@ public class ExcelStreamingService {
         // SheetType type = SheetType.fromPath(excelPath);
         //SheetType type = sheetType;
 
-        try (InputStream is = nasSmbClient.openFile(excelPath);
+         try (InputStream is = nasSmbClient.openFile(excelPath);
              OPCPackage pkg = OPCPackage.open(is)) {
-          /* try (OPCPackage pkg = OPCPackage.open(file)) {
+        /* try (OPCPackage pkg = OPCPackage.open(file)) {
             ZipSecureFile.setMinInflateRatio(0);*/
 
             XSSFReader reader = new XSSFReader(pkg);
