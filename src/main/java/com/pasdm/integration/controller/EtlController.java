@@ -127,7 +127,7 @@ public class EtlController {
 
     @PostMapping("/run-plant")
     public ResponseEntity<String> runPlantEtl() {
-        excelStreamingService.readExcel(excelPlantPath, null);
+        excelStreamingService.readExcel(excelPlantPath, SheetType.PLANT);
         return ResponseEntity.ok("ETL run-plant ejecutado");
     }
 
