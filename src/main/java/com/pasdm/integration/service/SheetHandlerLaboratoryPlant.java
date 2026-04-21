@@ -16,7 +16,7 @@ import java.util.Map;
 @Slf4j
 @Component
 public class SheetHandlerLaboratoryPlant implements ExcelSheetHandler {
-    private static final int BATCH_SIZE = 100;
+    private static final int BATCH_SIZE = 10;
 
     private final LaboratoryPlantMapper laboratoryPlantMapper;
     private final BatchService batchService;
@@ -70,6 +70,8 @@ public class SheetHandlerLaboratoryPlant implements ExcelSheetHandler {
             if (entity != null) {
                 bufferLaboratoryPlant.add(entity);
                 totalProcessed++;
+            }else{
+                log.error("Fila {} inválida: {}", rowNum, entity);
             }
         } catch (Exception e) {
             log.error("Fila {} inválida: {}", rowNum, currentRow);

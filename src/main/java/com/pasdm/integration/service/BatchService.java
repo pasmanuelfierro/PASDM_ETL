@@ -138,10 +138,11 @@ public class BatchService {
 
     @Transactional
     public void upsertBatchLaboratoryPlant(List<LaboratoryPlant> batch) {
-        //log.info("Guardando batch de LaboratoryPlant {}", batch.size());
+         log.info("Guardando batch de LaboratoryPlant {}", batch.size());
 
         for (LaboratoryPlant labPlan : batch) {
             try {
+                log.info("Guardando batch de labPlan {}", labPlan.getRowHash());
                 laboratoryPlantRepository.upsert(labPlan);
             } catch (Exception e) {
                 log.error("Error al insertar laboratoryPlant: {}", e.getMessage());

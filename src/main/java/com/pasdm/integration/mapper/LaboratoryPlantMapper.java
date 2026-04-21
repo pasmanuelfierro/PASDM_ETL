@@ -5,6 +5,8 @@ import com.pasdm.integration.util.HashUtil;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Component;
 
+import java.time.ZoneId;
+import java.time.ZonedDateTime;
 import java.util.Map;
 
 import static com.pasdm.integration.util.ExcelValueParser.decimalValidador;
@@ -31,10 +33,13 @@ public class LaboratoryPlantMapper {
 
             if (row.isEmpty()) return null;
             LaboratoryPlant laboratoryPlant = new LaboratoryPlant();
-
+            Integer month = ZonedDateTime.now(ZoneId.of("America/Mexico_City")).getMonthValue();
             if (row.get(COL_NUM_DIA) != null) {
+                log.error("Procesando dia {}  ", row.get(COL_NUM_DIA));
+                log.error("Procesando mes {}  ", month);
 
                 laboratoryPlant.setNumDia(row.get(COL_NUM_DIA));
+                laboratoryPlant.setMonth(month);
                 laboratoryPlant.setTurno(intValidador(row.get(COL_TURNO)));
 
                 // BANDA
@@ -48,11 +53,8 @@ public class LaboratoryPlantMapper {
                 laboratoryPlant.setFinosAg(intValidador(row.get(COL_FINOS_AG)));
                 laboratoryPlant.setFinosZn(intValidador(row.get(COL_FINOS_ZN)));
 
-                laboratoryPlant.setRowHash(HashUtil.calculateRowHash(laboratoryPlant.getNumDia(), laboratoryPlant.getTurno().toString(), "", "", "", ""));
-                if (laboratoryPlant.getRowHash() == null) {
-                    log.error("Error procesando Excel LaboratoryPlant laboratoryPlant.getRowHash() == null" );
+                laboratoryPlant.setRowHash(HashUtil.calculateRowHash(laboratoryPlant.getNumDia(), laboratoryPlant.getMonth().toString(), laboratoryPlant.getTurno().toString(), "", "", ""));
 
-                }
                 return laboratoryPlant;
             } else {
                 return null;

@@ -26,6 +26,9 @@ public class LaboratoryPlant {
     @Column(name = "num_dia", length = 150)
     private String numDia;
 
+    @Column(name = "month", length = 150)
+    private Integer month;
+
     @Column(name = "turno")
     private Integer turno;
 
