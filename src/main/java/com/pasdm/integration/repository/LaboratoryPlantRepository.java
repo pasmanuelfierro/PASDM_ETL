@@ -13,46 +13,48 @@ public interface LaboratoryPlantRepository extends JpaRepository<LaboratoryPlant
     @Modifying
     @Transactional
     @Query(value = """
-    INSERT INTO etl.laboratory_plant (
-        num_dia,
-        turno,
-        ban_au,
-        ban_ag,
-        ban_pb,
-        ban_zn,
-        ban_humedad,
-        finos_ag,
-        finos_pb,
-        finos_zn,
-        row_hash,
-        created_at
-    )
-    VALUES (
-        :#{#labPlan.numDia},
-        :#{#labPlan.turno},
-        :#{#labPlan.banAu},
-        :#{#labPlan.banAg},
-        :#{#labPlan.banPb},
-        :#{#labPlan.banZn},
-        :#{#labPlan.banHumedad},
-        :#{#labPlan.finosAg},
-        :#{#labPlan.finosPb},
-        :#{#labPlan.finosZn},
-        :#{#labPlan.rowHash},
-        now()
-    )
-    ON CONFLICT (row_hash)
-    DO UPDATE SET
-        ban_au        = EXCLUDED.ban_au,
-        ban_ag        = EXCLUDED.ban_ag,
-        ban_pb        = EXCLUDED.ban_pb,
-        ban_zn        = EXCLUDED.ban_zn,
-        ban_humedad   = EXCLUDED.ban_humedad,
-        finos_ag      = EXCLUDED.finos_ag,
-        finos_pb      = EXCLUDED.finos_pb,
-        finos_zn      = EXCLUDED.finos_zn,
-        updated_at    = now()
-""", nativeQuery = true)
+                INSERT INTO etl.laboratory_plant (
+                    num_dia,
+                    month,
+                    turno,
+                    ban_au,
+                    ban_ag,
+                    ban_pb,
+                    ban_zn,
+                    ban_humedad,
+                    finos_ag,
+                    finos_pb,
+                    finos_zn,
+                    row_hash,
+                    created_at
+                )
+                VALUES (
+                    :#{#labPlan.numDia},
+                    :#{#labPlan.month},
+                    :#{#labPlan.turno},
+                    :#{#labPlan.banAu},
+                    :#{#labPlan.banAg},
+                    :#{#labPlan.banPb},
+                    :#{#labPlan.banZn},
+                    :#{#labPlan.banHumedad},
+                    :#{#labPlan.finosAg},
+                    :#{#labPlan.finosPb},
+                    :#{#labPlan.finosZn},
+                    :#{#labPlan.rowHash},
+                    now()
+                )
+                ON CONFLICT (row_hash)
+                DO UPDATE SET
+                    ban_au        = EXCLUDED.ban_au,
+                    ban_ag        = EXCLUDED.ban_ag,
+                    ban_pb        = EXCLUDED.ban_pb,
+                    ban_zn        = EXCLUDED.ban_zn,
+                    ban_humedad   = EXCLUDED.ban_humedad,
+                    finos_ag      = EXCLUDED.finos_ag,
+                    finos_pb      = EXCLUDED.finos_pb,
+                    finos_zn      = EXCLUDED.finos_zn,
+                    updated_at    = now()
+            """, nativeQuery = true)
     void upsert(@Param("labPlan") LaboratoryPlant labPlan);
 
 }
