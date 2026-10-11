@@ -6,6 +6,7 @@ import com.pasdm.integration.util.HashUtil;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Component;
 
+import java.math.BigDecimal;
 import java.util.Map;
 
 @Slf4j
@@ -54,6 +55,7 @@ public class PlantBudgetMapper {
     private static final int COL_LEY_CONC_AG = 29;
     private static final int COL_LEY_CONC_PB = 30;
     private static final int COL_LEY_CONC_ZN = 31;
+    private static final int COL_SEQ = 32;
 
     /* =========================
        MAPEO
@@ -104,15 +106,16 @@ public class PlantBudgetMapper {
                 e.setLeyConcAg(ExcelValueParser.decimalValidador(row.get(COL_LEY_CONC_AG)));
                 e.setLeyConcPb(ExcelValueParser.decimalValidador(row.get(COL_LEY_CONC_PB)));
                 e.setLeyConcZn(ExcelValueParser.decimalValidador(row.get(COL_LEY_CONC_ZN)));
+                BigDecimal seq = ExcelValueParser.decimalValidador(row.get(COL_SEQ));
 
-                e.setRowHash(HashUtil.calculateRowHash(e.getFecha().toString(), e.getOreTotalT().toString(), e.getTonnesMilled().toString(), e.getProdKgAg().toString(),e.getTonnesMilled().toString(),""));
+                e.setRowHash(HashUtil.calculateRowHash("", "", "", "", seq.toString(), "", "", ""));
 
                 return e;
             } else {
                 return null;
             }
         } catch (Exception e) {
-          log.error("Error procesando Excel PlantBudget", e);
+            log.error("Error procesando Excel PlantBudget", e);
             return null;
         }
 

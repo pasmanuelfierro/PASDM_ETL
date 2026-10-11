@@ -44,7 +44,7 @@ public class GeologyDrillingMapper {
                 gd.setJvHoles(row.get(COL_JV_HOLES));
                 gd.setTarget(row.get(COL_TARGET));
                 gd.setTarget2(row.get(COL_TARGET_2));
-                gd.setRowHash(HashUtil.calculateRowHash(gd.getFecha().toString(),gd.getBno(),gd.getStatus(),gd.getTarget(),gd.getTarget2(),gd.getMaquina()));
+                gd.setRowHash(HashUtil.calculateRowHash(gd.getFecha().toString(),gd.getBno(),gd.getStatus(),gd.getTarget(),gd.getTarget2(),gd.getMaquina(), "", ""));
                 return gd;
             } else {
                 return null;

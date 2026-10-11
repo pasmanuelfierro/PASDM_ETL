@@ -11,8 +11,9 @@ public enum SheetType {
     TEST("Hoja1"),
     SECURITY("BD"),
     DEVELOPMENT("BD Desarrollo"),
-    LABORATORY("BD_LABORATORY"),
-    LABORATORY_PLANT("LEYES PLANTA"),
+    LABORATORY("RECEPCION"),
+    LABORATORY_GRADES("LEYES PLANTA"),
+    LABORATORY_QC("LC SRM"),
     GEOLOGY_DRILLING("DIAMANTE CORREGIDO"),
     GEOLOGY_GRADE("BASE DE DATOS"),
     GEOLOGY_REPORT("BASE DE DATOS"),
@@ -20,10 +21,13 @@ public enum SheetType {
     TOPOGRAPHY("INGRESO DATOS"),
     EXPLOSIVES("Datos"),
     ENTRADA_ACERO("ENTRADAS"),
-    SALIDA_ACERO("SALIDAS");
+    SALIDA_ACERO("SALIDAS"),
+    TCD_CMD_ACTUAL("AP D"),
+    PLAN_PROD("Hoja1"),
+    PLAN_DEV("Hoja1"),
+    TCD_CMD_BUDGET("BP D");
 
     private final String sheetName;
-
 
     SheetType(String sheetName) {
         this.sheetName = sheetName;

@@ -70,7 +70,9 @@ public class SalidaAceroMapper {
                     row.get(COL_EQUIPO_COD),
                     row.get(COL_NOMINA_OPERADOR),
                     row.get(COL_CANTIDAD),
-                    row.get(COL_ZONA)
+                    row.get(COL_ZONA),
+                    "",
+                    ""
             ));
 
             return e;

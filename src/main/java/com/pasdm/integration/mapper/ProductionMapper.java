@@ -6,6 +6,7 @@ import com.pasdm.integration.util.HashUtil;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Component;
 
+import java.math.BigDecimal;
 import java.time.LocalDate;
 import java.util.Map;
 
@@ -31,15 +32,16 @@ public class ProductionMapper {
     private static final int COL_LEY_ZN = 12;
 
     private static final int COL_VPT = 13;
-    private static final int COL_TIPO = 14;
-    private static final int COL_TONS = 15;
+    private static final int COL_DILUCION_PORC = 14;
+    private static final int COL_TIPO = 15;
+    private static final int COL_TONS = 16;
 
-    private static final int COL_SUM_AG = 16;
-    private static final int COL_SUM_AU = 17;
-    private static final int COL_SUM_PB = 18;
-    private static final int COL_SUM_ZN = 19;
-    private static final int COL_SUM_VPT = 20;
-
+    private static final int COL_SUM_AG = 17;
+    private static final int COL_SUM_AU = 18;
+    private static final int COL_SUM_PB = 19;
+    private static final int COL_SUM_ZN = 20;
+    private static final int COL_SUM_VPT = 21;
+    private static final int COL_SEQ = 25;
 
     public Production mapEntity(Map<Integer, String> row) {
         try {
@@ -67,6 +69,7 @@ public class ProductionMapper {
                 e.setLeyZn(ExcelValueParser.decimalValidador(row.get(COL_LEY_ZN)));
 
                 e.setVpt(ExcelValueParser.decimalValidador(row.get(COL_VPT)));
+                e.setDilucionPorc(ExcelValueParser.decimalValidador(row.get(COL_DILUCION_PORC)));
                 e.setTipo(row.get(COL_TIPO));
                 e.setTons(ExcelValueParser.decimalValidador(row.get(COL_TONS)));
 
@@ -75,7 +78,8 @@ public class ProductionMapper {
                 e.setSumPb(ExcelValueParser.decimalValidador(row.get(COL_SUM_PB)));
                 e.setSumZn(ExcelValueParser.decimalValidador(row.get(COL_SUM_ZN)));
                 e.setSumVpt(ExcelValueParser.decimalValidador(row.get(COL_SUM_VPT)));
-                e.setRowHash(HashUtil.calculateRowHash(e.getFecha().toString(), e.getEstatus(), e.getEstructura(), e.getLabor(),e.getTipo(),""));
+                BigDecimal seq = ExcelValueParser.decimalValidador(row.get(COL_SEQ));
+                e.setRowHash(HashUtil.calculateRowHash("", "", "", "", seq.toString(), "", "", ""));
 
                 return e;
             }

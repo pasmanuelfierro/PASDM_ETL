@@ -14,12 +14,12 @@ public interface ProductionRepository extends JpaRepository<Production, Long> {
     @Query(value = """
             INSERT INTO etl.production (
                 fecha, lote, mina, zona, empresa, obra, estatus, estructura, labor,
-                ley_ag, ley_au, ley_pb, ley_zn, vpt, tipo, tons,
+                ley_ag, ley_au, ley_pb, ley_zn, vpt, dilucion_porc , tipo, tons,
                 sum_ag, sum_au, sum_pb, sum_zn, sum_vpt, row_hash, created_at
             )
             VALUES (
                 :#{#p.fecha}, :#{#p.lote}, :#{#p.mina}, :#{#p.zona}, :#{#p.empresa}, :#{#p.obra}, :#{#p.estatus}, :#{#p.estructura}, :#{#p.labor},
-                :#{#p.leyAg}, :#{#p.leyAu}, :#{#p.leyPb}, :#{#p.leyZn}, :#{#p.vpt}, :#{#p.tipo}, :#{#p.tons},
+                :#{#p.leyAg}, :#{#p.leyAu}, :#{#p.leyPb}, :#{#p.leyZn}, :#{#p.vpt}, :#{#p.dilucionPorc}, :#{#p.tipo}, :#{#p.tons},
                 :#{#p.sumAg}, :#{#p.sumAu}, :#{#p.sumPb}, :#{#p.sumZn}, :#{#p.sumVpt}, :#{#p.rowHash}, now()
             )
             ON CONFLICT (row_hash)
@@ -38,6 +38,7 @@ public interface ProductionRepository extends JpaRepository<Production, Long> {
                 ley_pb = EXCLUDED.ley_pb,
                 ley_zn = EXCLUDED.ley_zn,
                 vpt = EXCLUDED.vpt,
+                dilucion_porc = EXCLUDED.dilucion_porc,
                 tipo = EXCLUDED.tipo,
                 tons = EXCLUDED.tons,
                 sum_ag = EXCLUDED.sum_ag,

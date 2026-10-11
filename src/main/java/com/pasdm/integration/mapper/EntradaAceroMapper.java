@@ -46,6 +46,8 @@ public class EntradaAceroMapper {
                     row.get(COL_NOMBRE_ACERO),
                     row.get(COL_CANTIDAD),
                     "",
+                    "",
+                    "",
                     ""
             ));
 

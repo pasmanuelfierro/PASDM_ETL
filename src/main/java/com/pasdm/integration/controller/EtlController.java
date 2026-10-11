@@ -1,19 +1,27 @@
 package com.pasdm.integration.controller;
 
 import com.pasdm.integration.enums.SheetType;
+import com.pasdm.integration.model.PlannedLabors;
 import com.pasdm.integration.service.ExcelStreamingService;
+import com.pasdm.integration.service.ExportPlannedLaborsService;
 import lombok.RequiredArgsConstructor;
+import org.apache.poi.ss.usermodel.*;
+import org.apache.poi.xssf.usermodel.XSSFWorkbook;
 import org.springframework.beans.factory.annotation.Value;
-import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.http.*;
+import org.springframework.web.bind.annotation.*;
+
+import java.io.ByteArrayOutputStream;
+import java.io.IOException;
+import java.io.InputStream;
+import java.util.List;
 
 @RestController
 @RequestMapping("/etl")
 @RequiredArgsConstructor
 public class EtlController {
     private final ExcelStreamingService excelStreamingService;
+    private final ExportPlannedLaborsService exportPlannedLaborsService;
 
     @Value("${excel.rrhh.path}")
     private String excelRRHHPath;
@@ -27,8 +35,8 @@ public class EtlController {
     @Value("${excel.geology.drilling.path}")
     private String excelGeologyDrillingPath;
 
-    @Value("${excel.laboratory.plant.path}")
-    private String excelLaboratoryPlantPath;
+    @Value("${excel.laboratory.path}")
+    private String excelLaboratoryPath;
 
     @Value("${excel.prod.path}")
     private String excelProdPath;
@@ -36,8 +44,8 @@ public class EtlController {
     @Value("${excel.security.path}")
     private String excelSecurityPath;
 
-    @Value("${excel.geology.grade.path}")
-    private String excelGeologyGradePath;
+    @Value("${excel.geology.path}")
+    private String excelGeologyPath;
 
     @Value("${excel.geology.report.path}")
     private String excelGeologyReportPath;
@@ -57,6 +65,17 @@ public class EtlController {
     @Value("${excel.salida_aceros.path}")
     private String excelSalidaAceroPath;
 
+    @Value("${excel.daily.cmd.actual.path}")
+    private String excelDailytCMDActualPath;
+
+    @Value("${excel.daily.cmd.budget.path}")
+    private String excelDailytCMDBudgetPath;
+
+    @Value("${excel.plan.prod.path}")
+    private String excelPlanProdPath;
+
+    @Value("${excel.plan.dev.path}")
+    private String excelPlanDevPath;
 /*
    @PostMapping("/run-geology")
     public ResponseEntity<String> runGeologyEtl() {
@@ -86,10 +105,10 @@ public class EtlController {
         return ResponseEntity.ok("ETL run-geology-drilling ejecutado");
     }
 
-    @PostMapping("/run-geology-grade")
-    public ResponseEntity<String> runGeologyGradeEtl() {
-        excelStreamingService.readExcel(excelGeologyGradePath, SheetType.GEOLOGY_GRADE);
-        return ResponseEntity.ok("ETL run-geology-grade ejecutado");
+    @PostMapping("/run-geology")
+    public ResponseEntity<String> runGeologyEtl() {
+        excelStreamingService.readExcel(excelGeologyPath, SheetType.GEOLOGY);
+        return ResponseEntity.ok("ETL run-geology ejecutado");
     }
 
     @PostMapping("/run-geology-report")
@@ -100,10 +119,16 @@ public class EtlController {
     //Geologia
 
     //Laboratorio
-    @PostMapping("/run-laboratory-plant")
+    @PostMapping("/run-laboratory")
     public ResponseEntity<String> runLaboratoryPlantEtl() {
-        excelStreamingService.readExcel(excelLaboratoryPlantPath, SheetType.LABORATORY_PLANT);
+        excelStreamingService.readExcel(excelLaboratoryPath, SheetType.LABORATORY);
         return ResponseEntity.ok("ETL run-laboratory-plant ejecutado");
+    }
+
+    @PostMapping("/run-laboratory-qc")
+    public ResponseEntity<String> runLaboratoryQCtEtl() {
+        excelStreamingService.readExcel(excelLaboratoryPath, SheetType.LABORATORY_QC);
+        return ResponseEntity.ok("ETL run-laboratory-qc ejecutado");
     }
     //Laboratorio
 
@@ -159,6 +184,32 @@ public class EtlController {
     public ResponseEntity<String> runSalidaAceroEtl() {
         excelStreamingService.readExcel(excelSalidaAceroPath, SheetType.SALIDA_ACERO);
         return ResponseEntity.ok("ETL run-salida-acero ejecutado");
+    }
+
+    @PostMapping("/run-daily-cmd-actual")
+    public ResponseEntity<String> runDailyCMDActualEtl() {
+        excelStreamingService.readExcel(excelDailytCMDActualPath, SheetType.TCD_CMD_ACTUAL);
+        return ResponseEntity.ok("ETL run-daily-cmd-actual ejecutado");
+    }
+
+    @PostMapping("/run-daily-cmd-budget")
+    public ResponseEntity<String> runDailyCMDBudgetEtl() {
+        excelStreamingService.readExcel(excelDailytCMDBudgetPath, SheetType.TCD_CMD_BUDGET);
+        return ResponseEntity.ok("ETL run-daily-cmd-budget ejecutado");
+    }
+
+    @PostMapping("/run-load-plan")
+    public ResponseEntity<byte[]> runLoadPlan() {
+        excelStreamingService.readExcel(excelPlanProdPath, SheetType.PLAN_PROD);
+        excelStreamingService.readExcel(excelPlanDevPath, SheetType.PLAN_DEV);
+        byte[] contenido = exportPlannedLaborsService.loadXControlExcel();
+        String fileName = "obras.xlsx";
+        HttpHeaders headers = new HttpHeaders();
+        headers.setContentType(MediaType.parseMediaType(
+                "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet"));
+        headers.setContentDisposition(ContentDisposition.attachment().filename(fileName).build());
+
+        return new ResponseEntity<>(contenido, headers, HttpStatus.OK);
     }
 
 }

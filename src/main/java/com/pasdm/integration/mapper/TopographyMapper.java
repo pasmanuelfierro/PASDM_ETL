@@ -78,7 +78,15 @@ public class TopographyMapper {
                 t.setAlto(ExcelValueParser.decimalValidador(row.get(COL_ALTO)));
                 t.setTon(ExcelValueParser.decimalValidador(row.get(COL_TON)));
 
-                t.setRowHash(HashUtil.calculateRowHash(t.getFecha().toString(), t.getLugarD(), t.getObra(), t.getTipoMinado(), t.getZona(), t.getVeta()));
+                t.setRowHash(HashUtil.calculateRowHash(
+                        t.getFecha().toString(),
+                        t.getLugarD(),
+                        t.getObra(),
+                        t.getTipoMinado(),
+                        t.getZona(),
+                        t.getVeta(),
+                        "",
+                        ""));
                 return t;
             }
             // }

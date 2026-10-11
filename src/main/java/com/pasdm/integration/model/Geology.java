@@ -7,6 +7,8 @@ import lombok.Setter;
 
 import java.math.BigDecimal;
 import java.time.LocalDate;
+import java.time.LocalDateTime;
+import java.time.OffsetDateTime;
 
 @Entity
 @Table(schema = "etl", name = "geology", uniqueConstraints = {
@@ -110,24 +112,6 @@ public class Geology {
     @Column(name = "ley_zn", precision = 20, scale = 10)
     private BigDecimal leyZn;
 
-    @Column(name = "mineral_oxidos", precision = 20, scale = 10)
-    private BigDecimal mineralOxidos;
-
-    @Column(name = "ley_ag_2", precision = 20, scale = 10)
-    private BigDecimal leyAg2;
-
-    @Column(name = "ley_au_3", precision = 20, scale = 10)
-    private BigDecimal leyAu3;
-
-    @Column(name = "ley_pb_4", precision = 20, scale = 10)
-    private BigDecimal leyPb4;
-
-    @Column(name = "ley_zn_5", precision = 20, scale = 10)
-    private BigDecimal leyZn5;
-
-    @Column(name = "ley_zn_6", precision = 20, scale = 10)
-    private BigDecimal leyZn6;
-
     /* =======================
        BLOQUE MINERAL SULFURO PARTE 3
        ======================= */
@@ -165,21 +149,6 @@ public class Geology {
     @Column(name = "ley_zn_pct_5", precision = 20, scale = 10)
     private BigDecimal leyZnPct5;
 
-    @Column(name = "mineral_extraido_corte_vertical_tm", precision = 20, scale = 10)
-    private BigDecimal mineralExtraidoCorteVerticalTm;
-
-    @Column(name = "ley_ag_gpt_3", precision = 20, scale = 10)
-    private BigDecimal leyAgGpt3;
-
-    @Column(name = "ley_au_gpt_4", precision = 20, scale = 10)
-    private BigDecimal leyAuGpt4;
-
-    @Column(name = "ley_pb_pct_5", precision = 20, scale = 10)
-    private BigDecimal leyPbPct5;
-
-    @Column(name = "ley_zn_pct_6", precision = 20, scale = 10)
-    private BigDecimal leyZnPct6;
-
     @Column(name = "mineral_silles_tm", precision = 20, scale = 10)
     private BigDecimal mineralSillesTm;
 
@@ -195,9 +164,15 @@ public class Geology {
     @Column(name = "ley_zn_pct_10", precision = 20, scale = 10)
     private BigDecimal leyZnPct10;
 
-    @Column(name = "ley_zn_pct_11", precision = 20, scale = 10)
-    private BigDecimal leyZnPct11;
-
     @Column(name = "mineral_rebajes", precision = 20, scale = 10)
     private BigDecimal mineralRebajes;
+
+    @Column(name = "row_hash", length = 64, nullable = false, unique = true)
+    private String rowHash;
+
+    @Column(name = "created_at", updatable = false)
+    private OffsetDateTime createdAt;
+
+    @Column(name = "updated_at", updatable = true)
+    private OffsetDateTime updatedAt;
 }

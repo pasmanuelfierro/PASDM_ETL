@@ -20,11 +20,17 @@ public class ETLJobScheduler {
     @Value("${excel.plant.path}")
     private String excelPlantPath;
 
-    @Value("${excel.geology.drilling.path}")
-    private String excelGeologyDrillingPath;
+    @Value("${excel.geology.path}")
+    private String excelGeologyPath;
 
-    @Value("${excel.laboratory.plant.path}")
-    private String excelLaboratoryPlantPath;
+    @Value("${excel.laboratory.path}")
+    private String excelLaboratoryPath;
+
+    @Value("${excel.laboratory.grades.path}")
+    private String excelLaboratoryGradesPath;
+
+    @Value("${excel.laboratory.qc.path}")
+    private String excelLaboratoryQcPath;
 
     @Value("${excel.dev.path}")
     private String excelDevPath;
@@ -47,27 +53,57 @@ public class ETLJobScheduler {
     @Value("${excel.topography.path}")
     private String excelTopographyPath;
 
+    @Value("${excel.daily.cmd.actual.path}")
+    private String excelDailytCMDActualPath;
+
+    @Value("${excel.daily.cmd.budget.path}")
+    private String excelDailytCMDBudgetPath;
+
+    @Value("${excel.plan.prod.path}")
+    private String excelPlanProdPath;
+
     /*
         @Scheduled(cron = "0 55 06 * * ?") A LAS 6:55
     */
-    @Scheduled(cron = "0 55 * * * ?")
+    //  @Scheduled(cron = "0 */5 * * * ?") Cada 5 minutos
+
+    /*
+        @Scheduled(cron = "0 55 * * * ?")*/
+
+    @Scheduled(cron = "0 */15 * * * ?")
+    //@Scheduled(cron = "0 */2 * * * ?")
     public void processExcel() {
         log.info("Inicio proceso Excel");
-        /* excelStreamingService.readExcel(excelRRHHPath);
-         excelStreamingService.readExcel(excelGeologyPath);
-         excelStreamingService.readExcel(excelPlantPath);*/
-        excelStreamingService.readExcel(excelDevPath, SheetType.DEVELOPMENT);
+        // LOS BUENOS
+     /*   excelStreamingService.readExcel(excelDevPath, SheetType.DEVELOPMENT);
         excelStreamingService.readExcel(excelProdPath, SheetType.PRODUCTION);
         excelStreamingService.readExcel(excelPlantPath, SheetType.PLANT);
         excelStreamingService.readExcel(excelSecurityPath, SheetType.SECURITY);
-        excelStreamingService.readExcel(excelGeologyDrillingPath, SheetType.GEOLOGY_DRILLING);
-        excelStreamingService.readExcel(excelLaboratoryPlantPath, SheetType.LABORATORY_PLANT);
+        excelStreamingService.readExcel(excelLaboratoryPath, SheetType.LABORATORY);
+        excelStreamingService.readExcel(excelLaboratoryGradesPath, SheetType.LABORATORY_GRADES);
+        excelStreamingService.readExcel(excelGeologyPath, SheetType.GEOLOGY);
+        excelStreamingService.readExcel(excelLaboratoryQcPath, SheetType.LABORATORY_QC);
+*/
+        // LOS BUENOS
+
+        /* Falta acceso desde CMD
+         *
+         * excelStreamingService.readExcel(excelDailytCMDActualPath, SheetType.TCD_CMD_ACTUAL);
+         * excelStreamingService.readExcel(excelDailytCMDBudgetPath, SheetType.TCD_CMD_BUDGET);
+         *
+         */
+
         /*
+
+        excelStreamingService.readExcel(excelRRHHPath);
+        excelStreamingService.readExcel(excelGeologyPath);
+        excelStreamingService.readExcel(excelPlantPath);
         excelStreamingService.readExcel(excelDieselReport, SheetType.DIESEL_REPORT);
         excelStreamingService.readExcel(excelGeologyGradePath, SheetType.GEOLOGY_GRADE);
         excelStreamingService.readExcel(excelGeologyReportPath, SheetType.GEOLOGY_REPORT);
         excelStreamingService.readExcel(excelTopographyPath, SheetType.TOPOGRAPHY);
-      ;*/
+        */
+
         log.info("Fin proceso Excel");
     }
 }

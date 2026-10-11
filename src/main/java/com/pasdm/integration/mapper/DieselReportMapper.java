@@ -42,7 +42,7 @@ public class DieselReportMapper {
             e.setFamilia(row.get(COL_FAMILIA));
             e.setColoradaContratista(row.get(COL_COLORADA_CONTRATISTA));
             e.setMes(row.get(COL_MES));
-            e.setRowHash(HashUtil.calculateRowHash(e.getFecha().toString(), e.getEstacion(), e.getDispositivo(), e.getProducto(), e.getModelo(), e.getArea()));
+            e.setRowHash(HashUtil.calculateRowHash(e.getFecha().toString(), e.getEstacion(), e.getDispositivo(), e.getProducto(), e.getModelo(), e.getArea(), "", ""));
 
             return e;
 

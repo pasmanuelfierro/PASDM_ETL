@@ -39,7 +39,7 @@ public class ExcelStreamingService {
 
         try (InputStream is = nasSmbClient.openFile(excelPath);
              OPCPackage pkg = OPCPackage.open(is)) {
-       /*   try (OPCPackage pkg = OPCPackage.open(file)) {
+       /* try (OPCPackage pkg = OPCPackage.open(file)) {
             ZipSecureFile.setMinInflateRatio(0);*/
 
             XSSFReader reader = new XSSFReader(pkg);

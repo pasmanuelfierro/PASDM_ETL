@@ -6,6 +6,7 @@ import com.pasdm.integration.util.HashUtil;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Component;
 
+import java.math.BigDecimal;
 import java.util.Map;
 
 @Slf4j
@@ -13,22 +14,22 @@ import java.util.Map;
 public class PlantActualMapper {
 
     // =======================
-// IDENTIFICACIÓN
-// =======================
+    // IDENTIFICACIÓN
+    // =======================
     private static final int COL_FECHA = 0;
     private static final int COL_TURNO = 1;
     private static final int COL_PESO_SECO_TON = 2;
 
     // =======================
-// CABEZA
-// =======================
+    // CABEZA
+    // =======================
     private static final int COL_CABEZA_AG_KGT = 3;
     private static final int COL_CABEZA_ZN_PCT = 4;
     private static final int COL_CABEZA_CU_PCT = 5;
 
     // =======================
-// CONC Pb
-// =======================
+    // CONC Pb
+    // =======================
     private static final int COL_CONC_PB_AU_GT = 6;
     private static final int COL_CONC_PB_AG_KGT = 7;
     private static final int COL_CONC_PB_PB_PCT = 8;
@@ -36,8 +37,8 @@ public class PlantActualMapper {
     private static final int COL_CONC_PB_CU_PCT = 10;
 
     // =======================
-// CONC Zn
-// =======================
+    // CONC Zn
+    // =======================
     private static final int COL_CONC_ZN_AU_GT = 11;
     private static final int COL_CONC_ZN_AG_KGT = 12;
     private static final int COL_CONC_ZN_PB_PCT = 13;
@@ -45,8 +46,8 @@ public class PlantActualMapper {
     private static final int COL_CONC_ZN_CU_PCT = 15;
 
     // =======================
-// COLA
-// =======================
+    // COLA
+    // =======================
     private static final int COL_COLA_AU_GT = 16;
     private static final int COL_COLA_AG_KGT = 17;
     private static final int COL_COLA_PB_PCT = 18;
@@ -54,47 +55,48 @@ public class PlantActualMapper {
     private static final int COL_COLA_CU_PCT = 20;
 
     // =======================
-// TONELAJES
-// =======================
-    private static final int COL_CONC_PB_TON = 21;
-    private static final int COL_CONC_ZN_TON = 22;
-    private static final int COL_COLA_TON = 23;
+    // TONELAJES
+    // =======================
+    private static final int COL_CONC_PB_TON = 22;
+    private static final int COL_CONC_ZN_TON = 23;
+    private static final int COL_COLA_TON = 24;
 
     // =======================
-// LEYES CALCULADAS - CABEZA
-// =======================
-    private static final int COL_CAB_AU = 24;
-    private static final int COL_CAB_AG = 25;
-    private static final int COL_CAB_PB = 26;
-    private static final int COL_CAB_ZN = 27;
-    private static final int COL_CAB_CU = 28;
+    // LEYES CALCULADAS - CABEZA
+    // =======================
+    private static final int COL_CAB_AU = 25;
+    private static final int COL_CAB_AG = 26;
+    private static final int COL_CAB_PB = 27;
+    private static final int COL_CAB_ZN = 28;
+    private static final int COL_CAB_CU = 29;
 
     // =======================
-// LEYES CALCULADAS - CONC Pb
-// =======================
-    private static final int COL_CONC_PB_AU = 29;
-    private static final int COL_CONC_PB_AG = 30;
-    private static final int COL_CONC_PB_PB = 31;
-    private static final int COL_CONC_PB_ZN = 32;
-    private static final int COL_CONC_PB_CU = 33;
+    // LEYES CALCULADAS - CONC Pb
+    // =======================
+    private static final int COL_CONC_PB_AU = 30;
+    private static final int COL_CONC_PB_AG = 31;
+    private static final int COL_CONC_PB_PB = 32;
+    private static final int COL_CONC_PB_ZN = 33;
+    private static final int COL_CONC_PB_CU = 34;
 
     // =======================
-// LEYES CALCULADAS - CONC Zn
-// =======================
-    private static final int COL_CONC_ZN_AU = 34;
-    private static final int COL_CONC_ZN_AG = 35;
-    private static final int COL_CONC_ZN_PB = 36;
-    private static final int COL_CONC_ZN_ZN = 37;
-    private static final int COL_CONC_ZN_CU = 38;
+    // LEYES CALCULADAS - CONC Zn
+    // =======================
+    private static final int COL_CONC_ZN_AU = 35;
+    private static final int COL_CONC_ZN_AG = 36;
+    private static final int COL_CONC_ZN_PB = 37;
+    private static final int COL_CONC_ZN_ZN = 38;
+    private static final int COL_CONC_ZN_CU = 39;
 
     // =======================
-// LEYES CALCULADAS - COLA
-// =======================
-    private static final int COL_COLA_AU = 39;
-    private static final int COL_COLA_AG = 40;
-    private static final int COL_COLA_PB = 41;
-    private static final int COL_COLA_ZN = 42;
-    private static final int COL_COLA_CU = 43;
+    // LEYES CALCULADAS - COLA
+    // =======================
+    private static final int COL_COLA_AU = 40;
+    private static final int COL_COLA_AG = 41;
+    private static final int COL_COLA_PB = 42;
+    private static final int COL_COLA_ZN = 43;
+    private static final int COL_COLA_CU = 44;
+    private static final int COL_SEQ = 45;
 
     /* =========================
        MAPEO
@@ -161,9 +163,19 @@ public class PlantActualMapper {
                 p.setColaPb(ExcelValueParser.decimalValidador(row.get(COL_COLA_PB)));
                 p.setColaZn(ExcelValueParser.decimalValidador(row.get(COL_COLA_ZN)));
                 p.setColaCu(ExcelValueParser.decimalValidador(row.get(COL_COLA_CU)));
-
-                p.setRowHash(HashUtil.calculateRowHash(p.getFecha().toString(), p.getTurno(), p.getCabezaAgKgT().toString(), p.getColaAgKgT().toString(),p.getConcPbAgKgT().toString(),""));
-
+                p.setColaCu(ExcelValueParser.decimalValidador(row.get(COL_COLA_CU)));
+                BigDecimal seq = ExcelValueParser.decimalValidador(row.get(COL_SEQ));
+              //  log.info("seq: {}", seq);
+                p.setRowHash(HashUtil.calculateRowHash("", "", "", "", seq.toString(), "", "", ""));
+               /* p.setRowHash(HashUtil.calculateRowHash(
+                        p.getFecha().toString(),
+                        p.getTurno(),
+                        "",
+                        "",
+                        "",
+                        "",
+                        "",
+                        ""));*/
                 return p;
             } else {
                 return null;

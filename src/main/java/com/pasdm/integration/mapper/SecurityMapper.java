@@ -39,7 +39,15 @@ public class SecurityMapper {
                 .comentario(comentario)
                 .build();
 
-        s.setRowHash(HashUtil.calculateRowHash(s.getFecha().toString(), s.getTipo(), "", "", "", ""));
+        s.setRowHash(HashUtil.calculateRowHash(
+                s.getFecha().toString(),
+                s.getTipo(),
+                "",
+                "",
+                "",
+                "",
+                "",
+                ""));
 
         return s;
     }

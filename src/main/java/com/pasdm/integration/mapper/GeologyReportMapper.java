@@ -78,7 +78,7 @@ public class GeologyReportMapper {
                 e.setDilPiso(ExcelValueParser.decimalValidador(row.get(COL_DIL_PISO)));
                 e.setDilPiso2(ExcelValueParser.decimalValidador(row.get(COL_DIL_PISO_2)));
 
-                e.setRowHash(HashUtil.calculateRowHash(e.getFecha().toString(), e.getTurno(), e.getLugar(), e.getVeta(),e.getTipo(),e.getEstatus()));
+                e.setRowHash(HashUtil.calculateRowHash(e.getFecha().toString(), e.getTurno(), e.getLugar(), e.getVeta(),e.getTipo(),e.getEstatus(), "", ""));
                 return e;
             } else {
                 return null;

@@ -75,6 +75,9 @@ public class Production {
     @Column(name = "vpt", precision = 20, scale = 10)
     private BigDecimal vpt;
 
+    @Column(name = "dilucion_porc", precision = 20, scale = 10)
+    private BigDecimal dilucionPorc;
+
     @Column(name = "tipo", length = 50)
     private String tipo;
 
@@ -99,6 +102,9 @@ public class Production {
 
     @Column(name = "sum_vpt", precision = 20, scale = 10)
     private BigDecimal sumVpt;
+
+    @Column(name = "sum_dil", precision = 20, scale = 10)
+    private BigDecimal sumDil;
 
     @Column(name = "row_hash", length = 64, nullable = false, unique = true)
     private String rowHash;

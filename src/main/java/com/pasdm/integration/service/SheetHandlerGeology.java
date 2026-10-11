@@ -61,7 +61,8 @@ public class SheetHandlerGeology implements ExcelSheetHandler {
             Geology entity = mapperGeology.mapEntity(currentRow);
 
             if (entity != null) {
-                bufferGeology.add(entity);
+                 bufferGeology.add(entity);
+                totalProcessed++;
             }
 
         } catch (Exception e) {

@@ -174,7 +174,7 @@ public class GeologyGradeMapper {
                 e.setObraVeta(row.get(COL_OBRA_VETA));
                 e.setMReal(ExcelValueParser.decimalValidador(row.get(COL_M_REAL)));
 
-                e.setRowHash(HashUtil.calculateRowHash(e.getFecha().toString(), e.getPlan(), e.getLugar(), e.getVeta(),e.getObraVeta(),""));
+                e.setRowHash(HashUtil.calculateRowHash(e.getFecha().toString(), e.getPlan(), e.getLugar(), e.getVeta(),e.getObraVeta(),"", "", ""));
                 return e;
             } else {
                 return null;

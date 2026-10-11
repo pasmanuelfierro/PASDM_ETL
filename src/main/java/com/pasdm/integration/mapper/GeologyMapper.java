@@ -2,113 +2,140 @@ package com.pasdm.integration.mapper;
 
 import com.pasdm.integration.model.Geology;
 import com.pasdm.integration.util.ExcelValueParser;
+import com.pasdm.integration.util.HashUtil;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Component;
 
 import java.time.LocalDate;
+import java.time.OffsetDateTime;
 import java.util.Map;
 
 @Slf4j
 @Component
 public class GeologyMapper {
+    // =======================
+    // BLOQUE MINERAL SULFURO PARTE 1
+    // =======================
 
+    private static final int COL_FECHA_1 = 1;
+    private static final int COL_SOBREDILUCION_REBAJES_PCT = 2;
+    private static final int COL_SOBREDILUCION_BL_PCT = 3;
+    private static final int COL_SOBREDILUCION_BREASTING_PCT = 4;
+    private static final int COL_SOBREDILUCION_CORTE_VERTICAL_PCT = 5;
+    private static final int COL_SOBREDILUCION_SILLES_PCT = 6;
+    private static final int COL_NUMERO_SILLES_MINERAL = 7;
+    private static final int COL_NUMERO_SILLES_TEPETATE = 8;
+    private static final int COL_NUMERO_REBAJES_BL = 9;
+    private static final int COL_NUMERO_REBAJES_BRT = 10;
+    private static final int COL_AVANCE_SILLES_MINERAL = 11;
+    private static final int COL_AVANCE_SILLES_TEPETATE = 12;
+    private static final int COL_PERFORACION_ORE_CONTROL_MTS = 13;
+    private static final int COL_PERFORACION_INFILL_MTS = 14;
+    private static final int COL_PERFORACION_BROWNFIELD_MTS = 15;
+    private static final int COL_LC_DIAMEC_ORE_CONTROL = 16;
+    private static final int COL_LC_EXPLORER_PLUS_ORE_CONTROL = 17;
+    private static final int COL_LC_D130_BROWNFIELD_INFILL = 18;
+    private static final int COL_LC_1500_BROWNFIELD_INFILL = 19;
+    private static final int COL_CONTRATISTA_BROWNFIELD_SUBTERRANEA = 20;
+    private static final int COL_CONTRATISTA_BROWNFIELD_SUPERFICIE = 21;
+
+
+    // =======================
+    // BLOQUE MINERAL SULFURO PARTE 2
+    // =======================
+
+    private static final int COL_FECHA_2 = 23;
+    private static final int COL_MINERAL_SULFUROS = 24;
+    private static final int COL_LEY_AG = 25;
+    private static final int COL_LEY_AU = 26;
+    private static final int COL_LEY_PB = 27;
+    private static final int COL_LEY_ZN = 28;
+
+
+    // =======================
+    // BLOQUE MINERAL SULFURO PARTE 3
+    // =======================
+
+    private static final int COL_FECHA_3 = 30;
+    private static final int COL_MINERAL_EXTRAIDO_BL_TM = 31;
+    private static final int COL_LEY_AG_GPT = 32;
+    private static final int COL_LEY_AU_GPT = 33;
+    private static final int COL_LEY_PB_PCT = 34;
+    private static final int COL_LEY_ZN_PCT = 35;
+    private static final int COL_MINERAL_EXTRAIDO_BREASTING_TM = 36;
+    private static final int COL_LEY_AG_GPT_2 = 37;
+    private static final int COL_LEY_AU_GPT_3 = 38;
+    private static final int COL_LEY_PB_PCT_4 = 39;
+    private static final int COL_LEY_ZN_PCT_5 = 40;
+    private static final int COL_MINERAL_SILLES_TM = 41;
+    private static final int COL_LEY_AG_GPT_7 = 42;
+    private static final int COL_LEY_AU_GPT_8 = 43;
+    private static final int COL_LEY_PB_PCT_9 = 44;
+    private static final int COL_LEY_ZN_PCT_10 = 45;
+    private static final int COL_MINERAL_REBAJES = 46;
 
     public Geology mapEntity(Map<Integer, String> row) {
         try {
 
-            LocalDate localDate = LocalDate.now();
-            Geology e = new Geology();
+            if (ExcelValueParser.dateValidador(row.get(COL_FECHA_1)) != null) {
+                Geology geology = new Geology();
 
-            /* =======================
-               PRIMER BLOQUE
-               ======================= */
+                geology.setFecha1(ExcelValueParser.dateValidador(row.get(COL_FECHA_1)));
+                geology.setSobredilucionRebajesPct(ExcelValueParser.decimalValidador(row.get(COL_SOBREDILUCION_REBAJES_PCT)));
+                geology.setSobredilucionBlPct(ExcelValueParser.decimalValidador(row.get(COL_SOBREDILUCION_BL_PCT)));
+                geology.setSobredilucionBreastingPct(ExcelValueParser.decimalValidador(row.get(COL_SOBREDILUCION_BREASTING_PCT)));
+                geology.setSobredilucionCorteVerticalPct(ExcelValueParser.decimalValidador(row.get(COL_SOBREDILUCION_CORTE_VERTICAL_PCT)));
+                geology.setSobredilucionSillesPct(ExcelValueParser.decimalValidador(row.get(COL_SOBREDILUCION_SILLES_PCT)));
+                geology.setNumeroSillesMineral(ExcelValueParser.decimalValidador(row.get(COL_NUMERO_SILLES_MINERAL)));
+                geology.setNumeroSillesTepetate(ExcelValueParser.decimalValidador(row.get(COL_NUMERO_SILLES_TEPETATE)));
+                geology.setNumeroRebajesBl(ExcelValueParser.decimalValidador(row.get(COL_NUMERO_REBAJES_BL)));
+                geology.setNumeroRebajesBrt(ExcelValueParser.decimalValidador(row.get(COL_NUMERO_REBAJES_BRT)));
+                geology.setAvanceSillesMineral(ExcelValueParser.decimalValidador(row.get(COL_AVANCE_SILLES_MINERAL)));
+                geology.setAvanceSillesTepetate(ExcelValueParser.decimalValidador(row.get(COL_AVANCE_SILLES_TEPETATE)));
+                geology.setPerforacionOreControlMts(ExcelValueParser.decimalValidador(row.get(COL_PERFORACION_ORE_CONTROL_MTS)));
+                geology.setPerforacionInfillMts(ExcelValueParser.decimalValidador(row.get(COL_PERFORACION_INFILL_MTS)));
+                geology.setPerforacionBrownfieldMts(ExcelValueParser.decimalValidador(row.get(COL_PERFORACION_BROWNFIELD_MTS)));
+                geology.setLcMaquinaDiamecOreControl(ExcelValueParser.decimalValidador(row.get(COL_LC_DIAMEC_ORE_CONTROL)));
+                geology.setLcMaquinaExplorerPlusOreControl(ExcelValueParser.decimalValidador(row.get(COL_LC_EXPLORER_PLUS_ORE_CONTROL)));
+                geology.setLcMaquinaD130BrownfieldInfill(ExcelValueParser.decimalValidador(row.get(COL_LC_D130_BROWNFIELD_INFILL)));
+                geology.setLcMaquina1500BrownfieldInfill(ExcelValueParser.decimalValidador(row.get(COL_LC_1500_BROWNFIELD_INFILL)));
+                geology.setContratistaBrownfieldSubterranea(ExcelValueParser.decimalValidador(row.get(COL_CONTRATISTA_BROWNFIELD_SUBTERRANEA)));
+                geology.setContratistaBrownfieldSuperficie(ExcelValueParser.decimalValidador(row.get(COL_CONTRATISTA_BROWNFIELD_SUPERFICIE)));
 
-            if (ExcelValueParser.dateValidador(row.get(1)) != null) {
+                geology.setMineralSulfuros(ExcelValueParser.decimalValidador(row.get(COL_MINERAL_SULFUROS)));
+                geology.setLeyAg(ExcelValueParser.decimalValidador(row.get(COL_LEY_AG)));
+                geology.setLeyAu(ExcelValueParser.decimalValidador(row.get(COL_LEY_AU)));
+                geology.setLeyPb(ExcelValueParser.decimalValidador(row.get(COL_LEY_PB)));
+                geology.setLeyZn(ExcelValueParser.decimalValidador(row.get(COL_LEY_ZN)));
 
-                if (ExcelValueParser.dateValidador(row.get(1)).isBefore(localDate) || ExcelValueParser.dateValidador(row.get(1)).isEqual(localDate)) {
+                geology.setMineralExtraidoBlTm(ExcelValueParser.decimalValidador(row.get(COL_MINERAL_EXTRAIDO_BL_TM)));
+                geology.setLeyAgGpt(ExcelValueParser.decimalValidador(row.get(COL_LEY_AG_GPT)));
+                geology.setLeyAuGpt(ExcelValueParser.decimalValidador(row.get(COL_LEY_AU_GPT)));
+                geology.setLeyPbPct(ExcelValueParser.decimalValidador(row.get(COL_LEY_PB_PCT)));
+                geology.setLeyZnPct(ExcelValueParser.decimalValidador(row.get(COL_LEY_ZN_PCT)));
+                geology.setMineralExtraidoBreastingTm(ExcelValueParser.decimalValidador(row.get(COL_MINERAL_EXTRAIDO_BREASTING_TM)));
+                geology.setLeyAgGpt2(ExcelValueParser.decimalValidador(row.get(COL_LEY_AG_GPT_2)));
+                geology.setLeyAuGpt3(ExcelValueParser.decimalValidador(row.get(COL_LEY_AU_GPT_3)));
+                geology.setLeyPbPct4(ExcelValueParser.decimalValidador(row.get(COL_LEY_PB_PCT_4)));
+                geology.setLeyZnPct5(ExcelValueParser.decimalValidador(row.get(COL_LEY_ZN_PCT_5)));
+                geology.setMineralSillesTm(ExcelValueParser.decimalValidador(row.get(COL_MINERAL_SILLES_TM)));
+                geology.setLeyAgGpt7(ExcelValueParser.decimalValidador(row.get(COL_LEY_AG_GPT_7)));
+                geology.setLeyAuGpt8(ExcelValueParser.decimalValidador(row.get(COL_LEY_AU_GPT_8)));
+                geology.setLeyPbPct9(ExcelValueParser.decimalValidador(row.get(COL_LEY_PB_PCT_9)));
+                geology.setLeyZnPct10(ExcelValueParser.decimalValidador(row.get(COL_LEY_ZN_PCT_10)));
+                geology.setMineralRebajes(ExcelValueParser.decimalValidador(row.get(COL_MINERAL_REBAJES)));
 
-                    e.setFecha1(ExcelValueParser.dateValidador(row.get(1)));
-                    e.setSobredilucionRebajesPct(ExcelValueParser.decimalValidador(row.get(2)));
-                    e.setSobredilucionBlPct(ExcelValueParser.decimalValidador(row.get(3)));
-                    e.setSobredilucionBreastingPct(ExcelValueParser.decimalValidador(row.get(4)));
-                    e.setSobredilucionCorteVerticalPct(ExcelValueParser.decimalValidador(row.get(5)));
-                    e.setSobredilucionSillesPct(ExcelValueParser.decimalValidador(row.get(6)));
-
-                    e.setNumeroSillesMineral(ExcelValueParser.decimalValidador(row.get(7)));
-                    e.setNumeroSillesTepetate(ExcelValueParser.decimalValidador(row.get(8)));
-                    e.setNumeroRebajesBl(ExcelValueParser.decimalValidador(row.get(9)));
-                    e.setNumeroRebajesBrt(ExcelValueParser.decimalValidador(row.get(10)));
-
-                    e.setAvanceSillesMineral(ExcelValueParser.decimalValidador(row.get(11)));
-                    e.setAvanceSillesTepetate(ExcelValueParser.decimalValidador(row.get(12)));
-
-                    e.setPerforacionOreControlMts(ExcelValueParser.decimalValidador(row.get(13)));
-                    e.setPerforacionInfillMts(ExcelValueParser.decimalValidador(row.get(14)));
-                    e.setPerforacionBrownfieldMts(ExcelValueParser.decimalValidador(row.get(15)));
-
-                    e.setLcMaquinaDiamecOreControl(ExcelValueParser.decimalValidador(row.get(16)));
-                    e.setLcMaquinaExplorerPlusOreControl(ExcelValueParser.decimalValidador(row.get(17)));
-                    e.setLcMaquinaD130BrownfieldInfill(ExcelValueParser.decimalValidador(row.get(18)));
-                    e.setLcMaquina1500BrownfieldInfill(ExcelValueParser.decimalValidador(row.get(19)));
-
-                    e.setContratistaBrownfieldSubterranea(ExcelValueParser.decimalValidador(row.get(20)));
-                    e.setContratistaBrownfieldSuperficie(ExcelValueParser.decimalValidador(row.get(21)));
-
-        /* =======================
-           SEGUNDO BLOQUE
-           ======================= */
-
-                    e.setFecha2(ExcelValueParser.dateValidador(row.get(23)));
-                    e.setMineralSulfuros(ExcelValueParser.decimalValidador(row.get(24)));
-                    e.setLeyAg(ExcelValueParser.decimalValidador(row.get(25)));
-                    e.setLeyAu(ExcelValueParser.decimalValidador(row.get(26)));
-                    e.setLeyPb(ExcelValueParser.decimalValidador(row.get(27)));
-                    e.setLeyZn(ExcelValueParser.decimalValidador(row.get(28)));
-
-                    e.setMineralOxidos(ExcelValueParser.decimalValidador(row.get(29)));
-                    e.setLeyAg2(ExcelValueParser.decimalValidador(row.get(30)));
-                    e.setLeyAu3(ExcelValueParser.decimalValidador(row.get(31)));
-                    e.setLeyPb4(ExcelValueParser.decimalValidador(row.get(32)));
-                    e.setLeyZn5(ExcelValueParser.decimalValidador(row.get(33)));
-                    e.setLeyZn6(ExcelValueParser.decimalValidador(row.get(34)));
-
-        /* =======================
-           TERCER BLOQUE
-           ======================= */
-
-                    e.setFecha3(ExcelValueParser.dateValidador(row.get(35)));
-                    e.setMineralExtraidoBlTm(ExcelValueParser.decimalValidador(row.get(36)));
-                    e.setLeyAgGpt(ExcelValueParser.decimalValidador(row.get(37)));
-                    e.setLeyAuGpt(ExcelValueParser.decimalValidador(row.get(38)));
-                    e.setLeyPbPct(ExcelValueParser.decimalValidador(row.get(39)));
-                    e.setLeyZnPct(ExcelValueParser.decimalValidador(row.get(40)));
-
-                    e.setMineralExtraidoBreastingTm(ExcelValueParser.decimalValidador(row.get(41)));
-                    e.setLeyAgGpt2(ExcelValueParser.decimalValidador(row.get(42)));
-                    e.setLeyAuGpt3(ExcelValueParser.decimalValidador(row.get(43)));
-                    e.setLeyPbPct4(ExcelValueParser.decimalValidador(row.get(44)));
-                    e.setLeyZnPct5(ExcelValueParser.decimalValidador(row.get(45)));
-
-                    e.setMineralExtraidoCorteVerticalTm(ExcelValueParser.decimalValidador(row.get(46)));
-                    e.setLeyAgGpt3(ExcelValueParser.decimalValidador(row.get(47)));
-                    e.setLeyAuGpt4(ExcelValueParser.decimalValidador(row.get(48)));
-                    e.setLeyPbPct5(ExcelValueParser.decimalValidador(row.get(49)));
-                    e.setLeyZnPct6(ExcelValueParser.decimalValidador(row.get(50)));
-
-                    e.setMineralSillesTm(ExcelValueParser.decimalValidador(row.get(51)));
-                    e.setLeyAgGpt7(ExcelValueParser.decimalValidador(row.get(52)));
-                    e.setLeyAuGpt8(ExcelValueParser.decimalValidador(row.get(53)));
-                    e.setLeyPbPct9(ExcelValueParser.decimalValidador(row.get(54)));
-                    e.setLeyZnPct10(ExcelValueParser.decimalValidador(row.get(55)));
-                    e.setLeyZnPct11(ExcelValueParser.decimalValidador(row.get(56)));
-
-                    e.setMineralRebajes(ExcelValueParser.decimalValidador(row.get(57)));
-
-                    return e;
-                }
+                geology.setRowHash(HashUtil.calculateRowHash(
+                        geology.getFecha1().toString(),
+                        "", "", "", "", "", "", ""
+                ));
+                geology.setCreatedAt(OffsetDateTime.now());
+                geology.setUpdatedAt(OffsetDateTime.now());
+                return geology;
             }
         } catch (Exception e) {
             log.error("Error procesando Excel geologia", e);
+            return null;
         }
         return null;
     }

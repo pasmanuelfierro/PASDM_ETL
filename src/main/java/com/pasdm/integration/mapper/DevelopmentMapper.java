@@ -29,7 +29,7 @@ public class DevelopmentMapper {
     private static final int COL_ESTRUCTURA = 12; // M
     private static final int COL_LUGAR = 13; // N
     private static final int COL_METROS = 14; // O
-    private static final int COL_CONC_PRIORIDAD = 15; // O
+    private static final int COL_CONC_PRIORIDAD = 15; // P
 
     public Development mapEntity(Map<Integer, String> row) {
         try {
@@ -56,7 +56,7 @@ public class DevelopmentMapper {
                 e.setLugar(row.get(COL_LUGAR));
                 e.setMetros(ExcelValueParser.decimalValidador(row.get(COL_METROS)));
                 e.setConcPrioridad(row.get(COL_CONC_PRIORIDAD));
-                e.setRowHash(HashUtil.calculateRowHash(e.getFecha().toString(), e.getStatus(), e.getEstructura(), e.getLugar(), e.getObra(), ""));
+                e.setRowHash(HashUtil.calculateRowHash(e.getFecha().toString(), e.getStatus(), e.getEstructura(), e.getLugar(), e.getObra(), "", "", ""));
 
                 return e;
             }

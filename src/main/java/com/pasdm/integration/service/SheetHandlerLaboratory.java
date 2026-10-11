@@ -49,6 +49,7 @@ public class SheetHandlerLaboratory implements ExcelSheetHandler{
             Laboratory entity = mapperLaboratory.mapEntity(currentRow);
             if (entity != null) {
                 bufferLaboratory.add(entity);
+                totalProcessed++;
             }
         } catch (Exception e) {
             log.error("Fila {} inválida: {}", rowNum, currentRow);
@@ -93,7 +94,7 @@ public class SheetHandlerLaboratory implements ExcelSheetHandler{
 
     @Override
     public String sheetName() {
-        return "Lab";
+        return "RECEPCION";
     }
 
 }

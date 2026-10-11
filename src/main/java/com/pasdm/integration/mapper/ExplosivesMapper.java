@@ -256,7 +256,7 @@ public class ExplosivesMapper {
                    ========================= */
                 e.setFechaOperacion(ExcelValueParser.dateValidadorDebug(row,row.get(COL_FECHA_OPERACION)));
 
-                e.setRowHash(HashUtil.calculateRowHash(e.getFecha().toString(), e.getMina(), e.getObra(), e.getMdoMinado(), e.getLugar(), e.getSupervisor()));
+                e.setRowHash(HashUtil.calculateRowHash(e.getFecha().toString(), e.getMina(), e.getObra(), e.getMdoMinado(), e.getLugar(), e.getSupervisor(), "", ""));
 
                 return e;
             } else {
