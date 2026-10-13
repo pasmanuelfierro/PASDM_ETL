@@ -75,14 +75,14 @@ public class ETLJobScheduler {
     public void processExcel() {
         log.info("Inicio proceso Excel");
         // LOS BUENOS
-        excelStreamingService.readExcel(excelDevPath, SheetType.DEVELOPMENT);
+       /* excelStreamingService.readExcel(excelDevPath, SheetType.DEVELOPMENT);
         excelStreamingService.readExcel(excelProdPath, SheetType.PRODUCTION);
         excelStreamingService.readExcel(excelPlantPath, SheetType.PLANT);
         excelStreamingService.readExcel(excelSecurityPath, SheetType.SECURITY);
         excelStreamingService.readExcel(excelLaboratoryPath, SheetType.LABORATORY);
         excelStreamingService.readExcel(excelLaboratoryGradesPath, SheetType.LABORATORY_GRADES);
         excelStreamingService.readExcel(excelGeologyPath, SheetType.GEOLOGY);
-        excelStreamingService.readExcel(excelLaboratoryQcPath, SheetType.LABORATORY_QC);
+        excelStreamingService.readExcel(excelLaboratoryQcPath, SheetType.LABORATORY_QC);*/
         // LOS BUENOS
 
         /* Falta acceso desde CMD

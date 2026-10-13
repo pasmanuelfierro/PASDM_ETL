@@ -17,7 +17,7 @@ public class NasSmbClient {
     private final CIFSContext authContext;
     private final CIFSContext authSecurityContext;
     private final CIFSContext authGeologyContext;
-    private final CIFSContext authDailyCmdContext;
+   // private final CIFSContext authDailyCmdContext;
 
     @Value("${excel.geology.grade.path}")
     private String excelGeologyGradePath;
@@ -34,9 +34,9 @@ public class NasSmbClient {
             @Value("${nas.password}") String password,
             @Value("${nas.password.security}") String passwordSecurity,
             @Value("${nas.password.geology}") String passwordGeology,
-            @Value("${nas.user.geology}") String userGeology,
-            @Value("${nas.domain.user}") String domainUser,
-            @Value("${nas.domain.password}") String domainPassword
+            @Value("${nas.user.geology}") String userGeology
+           /* @Value("${nas.domain.user}") String domainUser,
+            @Value("${nas.domain.password}") String domainPassword*/
 
     ) throws Exception {
 
@@ -60,9 +60,9 @@ public class NasSmbClient {
                 new NtlmPasswordAuthenticator(null, userGeology, passwordGeology)
         );
         
-        this.authDailyCmdContext = base.withCredentials(
+      /*  this.authDailyCmdContext = base.withCredentials(
                 new NtlmPasswordAuthenticator(null, domainUser, domainPassword)
-        );
+        );*/
     }
 
     public InputStream openFile(String smbPath) throws Exception {
@@ -73,10 +73,12 @@ public class NasSmbClient {
         } else if (smbPath.equals(excelGeologyPath) || smbPath.equals(excelGeologyGradePath)) {
             SmbFile file = new SmbFile(smbPath, authGeologyContext);
             return file.getInputStream();
-        } else if (smbPath.equals(excelDailytCMDActualPath)) {
+        }
+       /* else if (smbPath.equals(excelDailytCMDActualPath)) {
             SmbFile file = new SmbFile(smbPath, authDailyCmdContext);
             return file.getInputStream();
-        } else {
+        } */
+        else {
             SmbFile file = new SmbFile(smbPath, authContext);
             return file.getInputStream();
         }
