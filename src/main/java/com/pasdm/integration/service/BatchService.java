@@ -38,6 +38,7 @@ public class BatchService {
     private final LaboratoryRepository laboratoryRepository;
     private final LaboratoryQCRepository laboratoryQCRepository;
     private final PlannedLaborsRepository plannedLaborsRepository;
+    private final PlantConsumiblesRepository plantConsumiblesRepository;
 
 
 /*    @Transactional
@@ -237,6 +238,14 @@ public class BatchService {
         log.info("Guardando batch de PLANNED LABORS  {}", batch.size());
         for (PlannedLabors lab : batch) {
             plannedLaborsRepository.upsert(lab);
+        }
+    }
+
+    @Transactional
+    public void upsertBatchPlantConsumible(List<PlantConsumibles> batch) {
+        log.info("Guardando batch de upsertBatchPlantConsumible  {}", batch.size());
+        for (PlantConsumibles consumible : batch) {
+            plantConsumiblesRepository.upsert(consumible);
         }
     }
 }

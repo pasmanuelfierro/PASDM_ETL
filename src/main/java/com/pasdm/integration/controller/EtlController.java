@@ -17,7 +17,7 @@ import java.io.InputStream;
 import java.util.List;
 
 @RestController
-@RequestMapping("/etl")
+@RequestMapping("/api/etl")
 @RequiredArgsConstructor
 public class EtlController {
     private final ExcelStreamingService excelStreamingService;

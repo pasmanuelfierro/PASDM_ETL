@@ -16,7 +16,7 @@ import java.util.Map;
 @Slf4j
 @Component
 public class SheetHandlerLaboratoryQC implements ExcelSheetHandler {
-    private static final int BATCH_SIZE = 100;
+    private static final int BATCH_SIZE = 1000;
 
     private final LaboratoryQCMapper mapperLaboratoryQC;
     private final BatchService batchService;
@@ -64,9 +64,7 @@ public class SheetHandlerLaboratoryQC implements ExcelSheetHandler {
     @Override
     public void cell(String cellReference, String formattedValue, XSSFComment comment) {
 
-        int colIndex = CellReference.convertColStringToIndex(
-                cellReference.replaceAll("\\d", "")
-        );
+        int colIndex = CellReference.convertColStringToIndex(cellReference.replaceAll("\\d", ""));
 
         currentRow.put(colIndex, formattedValue);
     }
@@ -81,6 +79,7 @@ public class SheetHandlerLaboratoryQC implements ExcelSheetHandler {
         if (!bufferLaboratoryQC.isEmpty()) {
             batchService.upsertBatchLaboratoryQC(bufferLaboratoryQC);
             bufferLaboratoryQC.clear();
+            log.info("flushRemaining laboratory QC");
         }
     }
 

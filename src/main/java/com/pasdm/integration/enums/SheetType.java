@@ -4,6 +4,7 @@ public enum SheetType {
 
     GEOLOGY("BD_GEOLOGIA"),
     PLANT("Actual"),
+    PLANT_CONSUMIBLES("Consumibles"),
     PLANT_BUDGET("Budget"),
     RRHH("BD_RR.HH"),
     MTTO("DB MTTO"),

@@ -58,13 +58,14 @@ public class ExcelStreamingService {
 
                         XMLReader parser = XMLHelper.newXMLReader();
                         ExcelSheetHandler sheetHandler;
-                        if ("Budget".equals(sheetName)) {
-                            sheetHandler = sheetHandlerFactory.get(SheetType.PLANT_BUDGET);
-                        } else if ("Actual".equals(sheetName)) {
-                            sheetHandler = sheetHandlerFactory.get(SheetType.PLANT);
-                        } else {
-                            log.error("Hoja no soportada: {}", sheetName);
-                            continue;
+                        switch (sheetName) {
+                            case "Budget" -> sheetHandler = sheetHandlerFactory.get(SheetType.PLANT_BUDGET);
+                            case "Actual" -> sheetHandler = sheetHandlerFactory.get(SheetType.PLANT);
+                            case "Consumibles" -> sheetHandler = sheetHandlerFactory.get(SheetType.PLANT_CONSUMIBLES);
+                            default -> {
+                                log.error("Hoja no soportada: {}", sheetName);
+                                continue;
+                            }
                         }
 
                         //PROCESADOR DE CELDAS
