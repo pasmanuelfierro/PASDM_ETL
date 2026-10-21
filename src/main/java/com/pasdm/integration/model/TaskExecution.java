@@ -46,4 +46,8 @@ public class TaskExecution {
 
     @Column(name = "error_message")
     private String errorMessage;
+
+    @ManyToOne(fetch = FetchType.EAGER)
+    @JoinColumn(name = "source_configuration_id")
+    private SourceConfiguration sourceConfiguration;
 }

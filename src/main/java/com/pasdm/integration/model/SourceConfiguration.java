@@ -32,4 +32,8 @@ public class SourceConfiguration {
     @Column(name = "updated_at", nullable = false)
     private OffsetDateTime updatedAt;
 
+    @ManyToOne(fetch = FetchType.EAGER)
+    @JoinColumn(name = "task_execution_id")
+    private TaskExecution taskExecutionId;
+
 }
