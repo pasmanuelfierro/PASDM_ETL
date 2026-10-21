@@ -1,5 +1,6 @@
 package com.pasdm.integration.controller;
 
+import com.pasdm.integration.dto.SourceConfigurationDTO;
 import com.pasdm.integration.dto.SourceConfigurationRequestDTO;
 import com.pasdm.integration.dto.SourceConfigurationResponseDTO;
 import com.pasdm.integration.dto.TaskExecutionRequestDTO;
@@ -24,8 +25,8 @@ public class SourceConfigurationController {
     private SourceConfigurationService sourceConfigurationService;
 
     @GetMapping
-    public List<SourceConfiguration> getSourceConfigurations() {
-        return sourceConfigurationRepository.findAll();
+    public List<SourceConfigurationDTO> getSourceConfigurations() {
+        return sourceConfigurationService.getSourceConfigurations();
     }
 
     @GetMapping("/{id}")
