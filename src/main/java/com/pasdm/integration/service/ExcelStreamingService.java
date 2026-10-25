@@ -31,11 +31,10 @@ public class ExcelStreamingService {
     private final NasSmbClient nasSmbClient;
 
     public void readExcel(String excelPath, SheetType type) {
+        // EXCELPATH DEBE SALIR DEL SOURCE_CONFIGURATION
         log.info("Comenzando procesando Excel {}", excelPath);
 
-        File file = new File(excelPath);
-        // SheetType type = SheetType.fromPath(excelPath);
-        //SheetType type = sheetType;
+        // File file = new File(excelPath);
 
         try (InputStream is = nasSmbClient.openFile(excelPath);
              OPCPackage pkg = OPCPackage.open(is)) {
@@ -81,9 +80,10 @@ public class ExcelStreamingService {
                         parser.parse(new InputSource(sheetStream));
                         sheetHandler.flushRemaining();
                         log.info("Se procesaron {} filas", sheetHandler.getCount());
+                        //GET COUNT TIENE LA CANTIDAD DE RECORDS
                         sheetHandler.resetCount();
                         log.info("Termino procesando Excel {}", excelPath);
-
+                        //Aquí se debería editar el task final.
 
                     } else {
                         String SHEET_NAME = type.getSheetName();
@@ -109,15 +109,17 @@ public class ExcelStreamingService {
                         parser.parse(new InputSource(sheetStream));
                         sheetHandler.flushRemaining();
                         log.info("Se procesaron {} filas", sheetHandler.getCount());
+                        //GET COUNT TIENE LA CANTIDAD DE RECORDS
                         sheetHandler.resetCount();
                         log.info("Termino procesando Excel {}", excelPath);
-
+                        //Aquí se debería editar el task final.
                     }
                 }
             }
 
         } catch (Exception e) {
             log.error("Error procesando Excel", e);
+            //Aquí se debería editar el task final si falló.
         }
     }
 

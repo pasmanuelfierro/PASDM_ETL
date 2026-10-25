@@ -6,7 +6,7 @@ import lombok.Data;
 import java.time.OffsetDateTime;
 
 @Entity
-@Table(schema = "etl", name = "task_execution")
+@Table(schema = "manager", name = "task_execution")
 @Data
 public class TaskExecution {
 

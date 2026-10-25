@@ -1,4 +1,4 @@
-package com.pasdm.integration.security.security;
+package com.pasdm.integration.security.jwt;
 
 import jakarta.servlet.FilterChain;
 import jakarta.servlet.ServletException;

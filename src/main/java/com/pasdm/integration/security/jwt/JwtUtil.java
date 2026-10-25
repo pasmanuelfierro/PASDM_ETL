@@ -1,4 +1,4 @@
-package com.pasdm.integration.security.security;
+package com.pasdm.integration.security.jwt;
 
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jwts;

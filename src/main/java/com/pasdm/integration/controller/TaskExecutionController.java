@@ -25,7 +25,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 
 
 @RestController
-@RequestMapping("/api/etl/task_execution")
+@RequestMapping("/api/etl/task-execution")
 public class TaskExecutionController {
 
     @Autowired
@@ -35,7 +35,7 @@ public class TaskExecutionController {
     private TaskExecutionService taskExecutionService;
 
     @GetMapping
-        public List<TaskExecutionDTO> getTaskExecution() {
+    public List<TaskExecutionDTO> getTaskExecution() {
         return taskExecutionService.getTaskExecution();
     }
 
@@ -44,28 +44,10 @@ public class TaskExecutionController {
         return taskExecutionRepository.findById(id).orElseThrow(() -> new ResourceNotFoundException("TaskExecution not found with id " + id));
     }
 
-    /*
-    @GetMapping("/by-filter")
-    public ResponseEntity<Page<TaskExecutionDTO>> getTaskExecutionByFinishAt(
-            @RequestParam OffsetDateTime finishedAt,
-            @RequestParam(defaultValue = "0") int page,
-            @RequestParam(defaultValue = "10") int size,
-            @RequestParam(defaultValue = "finishedAt") String sortField,
-            @RequestParam(defaultValue = "asc") String sortOrder) {
-
-        Sort sort = Sort.by(Sort.Direction.fromString(sortOrder), sortField);
-
-        Pageable pageable = PageRequest.of(page, size, sort);
-
-        return ResponseEntity.ok(taskExecutionService.getTaskExecutionByFinishAt(finishedAt, pageable));
-    }
-     */
-
     @GetMapping("/origin/{triggerType}")
     public ResponseEntity<List<TaskExecutionDTO>> getTaskExecutionOrigin(@PathVariable String triggerType) {
         return ResponseEntity.ok(taskExecutionService.getTaskExecutionOrigin(triggerType));
     }
-
 
     @PostMapping
     public ResponseEntity<TaskExecutionResponseDTO> createTaskExecution(@RequestBody TaskExecutionRequestDTO request) {

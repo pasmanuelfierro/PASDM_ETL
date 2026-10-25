@@ -13,7 +13,7 @@ import java.util.*;
 
 @Slf4j
 @Component
-public class SheetHandlerPlannedLabors implements ExcelSheetHandler {
+public class SheetHandlerPlannedProdLabors implements ExcelSheetHandler {
     private static final int BATCH_SIZE = 100;
 
     private final PlannedLaborsMapper mapperPlannedLabors;
@@ -25,7 +25,7 @@ public class SheetHandlerPlannedLabors implements ExcelSheetHandler {
     private int MONTH = LocalDate.now().getMonthValue();
     private final Set<String> processedHashes = new HashSet<>();
 
-    public SheetHandlerPlannedLabors(PlannedLaborsMapper mapperPlannedLabors, BatchService batchService) {
+    public SheetHandlerPlannedProdLabors(PlannedLaborsMapper mapperPlannedLabors, BatchService batchService) {
         this.mapperPlannedLabors = mapperPlannedLabors;
         this.batchService = batchService;
     }

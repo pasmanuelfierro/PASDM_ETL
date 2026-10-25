@@ -1,6 +1,6 @@
 package com.pasdm.integration.security;
 
-import com.pasdm.integration.security.security.JwtAuthFilter;
+import com.pasdm.integration.security.jwt.JwtAuthFilter;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.config.Customizer;
@@ -25,10 +25,10 @@ public class SecurityConfig {
                 .cors(Customizer.withDefaults())
                 .sessionManagement(sm -> sm.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
                 .authorizeHttpRequests(auth -> auth
-                        // .requestMatchers("/api/**").permitAll()
+                        //.requestMatchers("/api/**").permitAll()
                         //.requestMatchers("/ws/**").permitAll()
                         //.requestMatchers("/version/**").permitAll()
-                        .requestMatchers("/actuator/**").permitAll()
+                        //.requestMatchers("/actuator/**").permitAll()
                         .anyRequest().authenticated())
                 .addFilterBefore(jwtAuthFilter, UsernamePasswordAuthenticationFilter.class)
                 .build();

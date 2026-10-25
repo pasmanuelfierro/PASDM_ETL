@@ -6,7 +6,7 @@ import lombok.Data;
 import java.time.OffsetDateTime;
 
 @Entity
-@Table(schema = "etl", name = "source_configuration")
+@Table(schema = "manager", name = "source_configuration")
 @Data
 public class SourceConfiguration {
 
