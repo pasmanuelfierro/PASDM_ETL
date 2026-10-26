@@ -79,6 +79,9 @@ public class PlantConsumibles {
     @Column(name = "granulometria_pct", precision = 10, scale = 2)
     private BigDecimal granulometriaPct;
 
+    @Column(name = "stock", precision = 10, scale = 2)
+    private BigDecimal stock;
+
     /* =========================
        AUDITORÍA
        ========================= */

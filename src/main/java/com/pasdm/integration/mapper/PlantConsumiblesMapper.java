@@ -34,6 +34,7 @@ public class PlantConsumiblesMapper {
     private static final int COL_HORAS_DISPONIBLES = 17;   // S
     private static final int COL_HORAS_TRITURADAS = 18;    // T
     private static final int COL_GRANULOMETRIA_PCT = 19;   // U
+    private static final int COL_STOCK = 20;   // U
 
     /* =========================
        MAPEO
@@ -66,6 +67,7 @@ public class PlantConsumiblesMapper {
                 entity.setHorasDisponibles(ExcelValueParser.decimalValidador(row.get(COL_HORAS_DISPONIBLES)));
                 entity.setHorasTrituradas(ExcelValueParser.decimalValidador(row.get(COL_HORAS_TRITURADAS)));
                 entity.setGranulometriaPct(ExcelValueParser.decimalValidador(row.get(COL_GRANULOMETRIA_PCT)));
+                entity.setStock(ExcelValueParser.decimalValidador(row.get(COL_STOCK)));
 
                 // Clave única lógica por fecha y turno
                 entity.setRowHash(HashUtil.calculateRowHash(entity.getFecha().toString(), entity.getTurno(), "", "", "", "", "", ""));
