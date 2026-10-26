@@ -15,6 +15,7 @@ public class DevelopmentMapper {
     // =======================
     // ÍNDICES DE COLUMNA (Excel)
     // =======================
+    private static final int COL_SEC = 0;  // B
     private static final int COL_FECHA = 1;  // B
     private static final int COL_GRUPO = 2;  // C
     private static final int COL_PRIORIDAD = 3;  // D
@@ -56,7 +57,7 @@ public class DevelopmentMapper {
                 e.setLugar(row.get(COL_LUGAR));
                 e.setMetros(ExcelValueParser.decimalValidador(row.get(COL_METROS)));
                 e.setConcPrioridad(row.get(COL_CONC_PRIORIDAD));
-                e.setRowHash(HashUtil.calculateRowHash(e.getFecha().toString(), e.getStatus(), e.getEstructura(), e.getLugar(), e.getObra(), "", "", ""));
+                e.setRowHash(HashUtil.calculateRowHash(row.get(COL_SEC), "", "", "", "", "", "", ""));
 
                 return e;
             }
