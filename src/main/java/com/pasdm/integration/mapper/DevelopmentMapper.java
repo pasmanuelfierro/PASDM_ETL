@@ -15,7 +15,7 @@ public class DevelopmentMapper {
     // =======================
     // ÍNDICES DE COLUMNA (Excel)
     // =======================
-    private static final int COL_SEC = 0;  // B
+    private static final int COL_SEC = 0;  // A
     private static final int COL_FECHA = 1;  // B
     private static final int COL_GRUPO = 2;  // C
     private static final int COL_PRIORIDAD = 3;  // D
@@ -35,7 +35,6 @@ public class DevelopmentMapper {
     public Development mapEntity(Map<Integer, String> row) {
         try {
 
-            LocalDate localDate = LocalDate.now().minusYears(1);
             Development e = new Development();
             LocalDate date = ExcelValueParser.dateValidador(row.get(COL_FECHA));
             if (date != null) {
@@ -57,7 +56,16 @@ public class DevelopmentMapper {
                 e.setLugar(row.get(COL_LUGAR));
                 e.setMetros(ExcelValueParser.decimalValidador(row.get(COL_METROS)));
                 e.setConcPrioridad(row.get(COL_CONC_PRIORIDAD));
-                e.setRowHash(HashUtil.calculateRowHash(row.get(COL_SEC), "", "", "", "", "", "", ""));
+
+                e.setRowHash(HashUtil.calculateRowHash(
+                        ExcelValueParser.decimalValidador(row.get(COL_SEC)).toString(),
+                        e.getStatus(),
+                        e.getMina() != null ? e.getMina().toLowerCase() : e.getMina(),
+                        e.getZona() != null ? e.getZona().toLowerCase() : e.getZona(),
+                        e.getObra(),
+                        e.getEstructura(),
+                        "",
+                        ""));
 
                 return e;
             }
