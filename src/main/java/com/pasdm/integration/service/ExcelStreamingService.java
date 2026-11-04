@@ -6,7 +6,6 @@ import com.pasdm.integration.infraestructure.nas.NasSmbClient;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.poi.openxml4j.opc.OPCPackage;
-import org.apache.poi.openxml4j.util.ZipSecureFile;
 import org.apache.poi.ss.usermodel.DataFormatter;
 import org.apache.poi.util.XMLHelper;
 import org.apache.poi.xssf.eventusermodel.XSSFReader;
@@ -30,11 +29,13 @@ public class ExcelStreamingService {
     private final SheetHandlerFactory sheetHandlerFactory;
     private final NasSmbClient nasSmbClient;
 
-    public void readExcel(String excelPath, SheetType type) {
-        // EXCELPATH DEBE SALIR DEL SOURCE_CONFIGURATION
+    public long readExcel(String excelPath, SheetType type) {
+        long totalRecordsRead = 0;
         log.info("Comenzando procesando Excel {}", excelPath);
 
-        // File file = new File(excelPath);
+        File file = new File(excelPath);
+        // SheetType type = SheetType.fromPath(excelPath);
+        //SheetType type = sheetType;
 
         try (InputStream is = nasSmbClient.openFile(excelPath);
              OPCPackage pkg = OPCPackage.open(is)) {
@@ -80,10 +81,8 @@ public class ExcelStreamingService {
                         parser.parse(new InputSource(sheetStream));
                         sheetHandler.flushRemaining();
                         log.info("Se procesaron {} filas", sheetHandler.getCount());
-                        //GET COUNT TIENE LA CANTIDAD DE RECORDS
                         sheetHandler.resetCount();
                         log.info("Termino procesando Excel {}", excelPath);
-                        //Aquí se debería editar el task final.
 
                     } else {
                         String SHEET_NAME = type.getSheetName();
@@ -108,19 +107,19 @@ public class ExcelStreamingService {
                         parser.setContentHandler(handler);
                         parser.parse(new InputSource(sheetStream));
                         sheetHandler.flushRemaining();
+                        totalRecordsRead += sheetHandler.getCount();
                         log.info("Se procesaron {} filas", sheetHandler.getCount());
-                        //GET COUNT TIENE LA CANTIDAD DE RECORDS
                         sheetHandler.resetCount();
                         log.info("Termino procesando Excel {}", excelPath);
-                        //Aquí se debería editar el task final.
+
                     }
                 }
             }
 
         } catch (Exception e) {
             log.error("Error procesando Excel", e);
-            //Aquí se debería editar el task final si falló.
         }
+        return 0;
     }
 
     public String resolve(String path) {

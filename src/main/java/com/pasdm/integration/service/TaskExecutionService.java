@@ -1,17 +1,16 @@
 package com.pasdm.integration.service;
 
-import com.pasdm.integration.dto.SourceConfigurationDTO;
-import com.pasdm.integration.dto.TaskExecutionDTO;
-import com.pasdm.integration.dto.TaskExecutionRequestDTO;
+import com.pasdm.integration.dto.*;
+import com.pasdm.integration.enums.SheetType;
 import com.pasdm.integration.model.SourceConfiguration;
 import com.pasdm.integration.model.TaskExecution;
 import com.pasdm.integration.repository.SourceConfigurationRepository;
 import com.pasdm.integration.repository.TaskExecutionRepository;
-import org.springframework.boot.autoconfigure.data.web.SpringDataWebProperties;
-import org.springframework.data.domain.Page;
-import org.springframework.data.domain.Pageable;
+import jakarta.persistence.EntityNotFoundException;
+import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.web.server.ResponseStatusException;
 
 import java.time.OffsetDateTime;
 import java.util.List;
@@ -21,10 +20,13 @@ public class TaskExecutionService {
 
     private final TaskExecutionRepository taskExecutionRepository;
     private final SourceConfigurationRepository sourceConfigurationRepository;
+    private final ETLAsyncProcessorService asyncProcessorService;
 
-    public TaskExecutionService(TaskExecutionRepository taskExecutionRepository, SourceConfigurationRepository sourceConfigurationRepository) {
+    public TaskExecutionService(TaskExecutionRepository taskExecutionRepository, SourceConfigurationRepository sourceConfigurationRepository, ExcelStreamingService excelStreamingService, ETLAsyncProcessorService asyncProcessorService) {
         this.taskExecutionRepository = taskExecutionRepository;
         this.sourceConfigurationRepository = sourceConfigurationRepository;
+        this.asyncProcessorService = asyncProcessorService;
+
     }
 
     public List<TaskExecutionDTO> getTaskExecution() {
@@ -179,5 +181,72 @@ public class TaskExecutionService {
         );
     }
 
+    @Transactional
+    public ExecutionResponseDTO executeTask(ExecuteRequestDTO request) {
+
+        SourceConfiguration configuration =
+                sourceConfigurationRepository
+                        .findById(request.getSourceConfigurationId())
+                        .orElseThrow(() ->
+                                new EntityNotFoundException(
+                                        "No existe la configuración de la tarea"
+                                )
+                        );
+
+        if (!"true".equalsIgnoreCase(configuration.getEnabled())) {
+            throw new ResponseStatusException(
+                    HttpStatus.FORBIDDEN,
+                    "La configuración está deshabilitada"
+            );
+        }
+
+        SheetType sheetType = resolveSheetType(configuration.getName());
+        TaskExecution execution = new TaskExecution();
+
+        execution.setSourceConfiguration(configuration);
+        execution.setTaskName(sheetType.name());
+        execution.setStatus("RUNNING");
+        execution.setStartedAt(OffsetDateTime.now());
+        execution.setTriggerType(
+                String.valueOf(request.getTriggerType())
+        );
+
+        //  contadores
+        execution.setRecordsRead(String.valueOf(0L));
+        execution.setRecordsInserted(String.valueOf(0L));
+
+        TaskExecution savedExecution = taskExecutionRepository.save(execution);
+
+        asyncProcessorService.processTask(
+                savedExecution.getId(),
+                configuration.getId(),
+                sheetType.name()
+        );
+
+        return new ExecutionResponseDTO(
+                savedExecution.getId(),
+                "RUNNING",
+                "La ejecución fue aceptada"
+        );
+    }
+
+    private SheetType resolveSheetType(String taskName) {
+
+        if (taskName == null || taskName.isBlank()) {
+            throw new IllegalArgumentException(
+                    "El nombre de la tarea no puede estar vacío"
+            );
+        }
+
+        return switch (taskName.trim().toUpperCase()) {
+            case "GEOLOGIA" -> SheetType.GEOLOGY;
+            case "GRADOS DE LABORATORIO" -> SheetType.LABORATORY;
+            case "PLANTA" -> SheetType.PLANT;
+
+            default -> throw new IllegalArgumentException(
+                    "No existe un tipo de tarea para: " + taskName
+            );
+        };
+    }
 
 }

@@ -23,10 +23,10 @@ public class TaskExecution {
     @Column(name = "status")
     private String status;
 
-    @Column(name = "started_at", nullable = false)
+    @Column(name = "started_at", nullable = true)
     private OffsetDateTime startedAt;
 
-    @Column(name = "finished_at", nullable = false)
+    @Column(name = "finished_at", nullable = true)
     private OffsetDateTime finishedAt;
 
     @Column(name = "records_read")

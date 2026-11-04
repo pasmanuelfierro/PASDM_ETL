@@ -1,27 +1,25 @@
 package com.pasdm.integration.controller;
 
+import com.pasdm.integration.dto.ExecuteRequestDTO;
+import com.pasdm.integration.dto.ExecutionResponseDTO;
 import com.pasdm.integration.enums.SheetType;
-import com.pasdm.integration.model.PlannedLabors;
 import com.pasdm.integration.service.ExcelStreamingService;
 import com.pasdm.integration.service.ExportPlannedLaborsService;
+import com.pasdm.integration.service.TaskExecutionService;
 import lombok.RequiredArgsConstructor;
-import org.apache.poi.ss.usermodel.*;
-import org.apache.poi.xssf.usermodel.XSSFWorkbook;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.*;
 import org.springframework.web.bind.annotation.*;
 
-import java.io.ByteArrayOutputStream;
-import java.io.IOException;
-import java.io.InputStream;
-import java.util.List;
-
 @RestController
 @RequestMapping("/api/etl")
 @RequiredArgsConstructor
+@Slf4j
 public class EtlController {
     private final ExcelStreamingService excelStreamingService;
     private final ExportPlannedLaborsService exportPlannedLaborsService;
+    private final TaskExecutionService taskExecutionService;
 
     @Value("${excel.rrhh.path}")
     private String excelRRHHPath;
@@ -90,6 +88,13 @@ public class EtlController {
 
     }*/
 
+    @PostMapping("/run")
+    public ResponseEntity<ExecutionResponseDTO> runETL(@RequestBody ExecuteRequestDTO request) {
+        ExecutionResponseDTO response = taskExecutionService.executeTask(request);
+        return ResponseEntity.accepted().body(response);
+    }
+
+
     @PostMapping("/run-rrhh")
     public ResponseEntity<String> runRRHHEtl() {
         excelStreamingService.readExcel(excelRRHHPath, SheetType.RRHH);
@@ -150,9 +155,11 @@ public class EtlController {
         return ResponseEntity.ok("ETL run-dev ejecutado");
     }
 
-    @PostMapping("/run-plant")
+   @PostMapping("/run-plant")
     public ResponseEntity<String> runPlantEtl() {
+        log.info("ruta configurada: {}", excelPlantPath);
         excelStreamingService.readExcel(excelPlantPath, SheetType.PLANT);
+        log.info("fin de endpoint run plant");
         return ResponseEntity.ok("ETL run-plant ejecutado");
     }
 
@@ -202,6 +209,7 @@ public class EtlController {
     public ResponseEntity<byte[]> runLoadPlan() {
         excelStreamingService.readExcel(excelPlanProdPath, SheetType.PLAN_PROD);
         excelStreamingService.readExcel(excelPlanDevPath, SheetType.PLAN_DEV);
+      //  excelStreamingService.readExcel(excelPlantPath, SheetType.PLANT);
         byte[] contenido = exportPlannedLaborsService.loadXControlExcel();
         String fileName = "obras.xlsx";
         HttpHeaders headers = new HttpHeaders();
