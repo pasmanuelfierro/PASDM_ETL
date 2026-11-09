@@ -32,6 +32,7 @@ public interface PlantConsumiblesRepository extends JpaRepository<PlantConsumibl
                 horas_disponibles,
                 horas_trituradas,
                 granulometria_pct,
+                stock,
                 row_hash,
                 created_at
             )
@@ -55,6 +56,7 @@ public interface PlantConsumiblesRepository extends JpaRepository<PlantConsumibl
                 :#{#entity.horasDisponibles},
                 :#{#entity.horasTrituradas},
                 :#{#entity.granulometriaPct},
+                :#{#entity.stock},
                 :#{#entity.rowHash},
                 now() 
             )
@@ -79,6 +81,7 @@ public interface PlantConsumiblesRepository extends JpaRepository<PlantConsumibl
                 horas_disponibles = EXCLUDED.horas_disponibles,
                 horas_trituradas = EXCLUDED.horas_trituradas,
                 granulometria_pct = EXCLUDED.granulometria_pct,
+                stock = EXCLUDED.stock,
                 updated_at = now();
             """, nativeQuery = true)
     void upsert(@Param("entity") PlantConsumibles entity);

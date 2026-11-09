@@ -177,21 +177,18 @@ public class TaskExecutionService {
                 task.getRecordsRead(),
                 task.getRecordsInserted(),
                 task.getRecordsUpdated()
-               // configurationDTO
+                // configurationDTO
         );
     }
 
     @Transactional
     public ExecutionResponseDTO executeTask(ExecuteRequestDTO request) {
 
-        SourceConfiguration configuration =
-                sourceConfigurationRepository
-                        .findById(request.getSourceConfigurationId())
-                        .orElseThrow(() ->
-                                new EntityNotFoundException(
-                                        "No existe la configuración de la tarea"
-                                )
-                        );
+        SourceConfiguration configuration = sourceConfigurationRepository.findById(request.getSourceConfigurationId()).orElseThrow(() ->
+                new EntityNotFoundException(
+                        "No existe la configuración de la tarea"
+                )
+        );
 
         if (!"true".equalsIgnoreCase(configuration.getEnabled())) {
             throw new ResponseStatusException(
@@ -207,9 +204,7 @@ public class TaskExecutionService {
         execution.setTaskName(sheetType.name());
         execution.setStatus("RUNNING");
         execution.setStartedAt(OffsetDateTime.now());
-        execution.setTriggerType(
-                String.valueOf(request.getTriggerType())
-        );
+        execution.setTriggerType(String.valueOf(request.getTriggerType()));
 
         //  contadores
         execution.setRecordsRead(String.valueOf(0L));
@@ -218,9 +213,9 @@ public class TaskExecutionService {
         TaskExecution savedExecution = taskExecutionRepository.save(execution);
 
         asyncProcessorService.processTask(
-                savedExecution.getId(),
-                configuration.getId(),
-                sheetType.name()
+                savedExecution,
+                configuration,
+                sheetType
         );
 
         return new ExecutionResponseDTO(
@@ -238,6 +233,9 @@ public class TaskExecutionService {
             );
         }
 
+        /*
+         Faltan los demas types
+         */
         return switch (taskName.trim().toUpperCase()) {
             case "GEOLOGIA" -> SheetType.GEOLOGY;
             case "GRADOS DE LABORATORIO" -> SheetType.LABORATORY;

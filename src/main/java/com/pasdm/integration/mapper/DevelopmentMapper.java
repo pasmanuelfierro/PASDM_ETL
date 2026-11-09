@@ -6,6 +6,7 @@ import com.pasdm.integration.util.HashUtil;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Component;
 
+import java.math.BigDecimal;
 import java.time.LocalDate;
 import java.util.Map;
 
@@ -30,14 +31,14 @@ public class DevelopmentMapper {
     private static final int COL_ESTRUCTURA = 12; // M
     private static final int COL_LUGAR = 13; // N
     private static final int COL_METROS = 14; // O
-    private static final int COL_CONC_PRIORIDAD = 15; // P
+    private static final int COL_CONC_PRIORIDAD = 15; // P 16
+    private static final int COL_SEQ = 17; // P 16
 
     public Development mapEntity(Map<Integer, String> row) {
         try {
 
-            Development e = new Development();
-            LocalDate date = ExcelValueParser.dateValidador(row.get(COL_FECHA));
-            if (date != null) {
+            if (ExcelValueParser.dateValidador(row.get(COL_FECHA)) != null) {
+                Development e = new Development();
 
                 //  if (date.isAfter(localDate) || date.isEqual(localDate)) {
 
@@ -56,14 +57,15 @@ public class DevelopmentMapper {
                 e.setLugar(row.get(COL_LUGAR));
                 e.setMetros(ExcelValueParser.decimalValidador(row.get(COL_METROS)));
                 e.setConcPrioridad(row.get(COL_CONC_PRIORIDAD));
+                BigDecimal col_seq = ExcelValueParser.decimalValidador(row.get(COL_SEQ));
 
                 e.setRowHash(HashUtil.calculateRowHash(
-                        ExcelValueParser.decimalValidador(row.get(COL_SEC)).toString(),
-                        e.getStatus(),
-                        e.getMina() != null ? e.getMina().toLowerCase() : e.getMina(),
-                        e.getZona() != null ? e.getZona().toLowerCase() : e.getZona(),
-                        e.getObra(),
-                        e.getEstructura(),
+                        col_seq.toString(),
+                        "",
+                        "",
+                        "",
+                        "",
+                        "",
                         "",
                         ""));
 

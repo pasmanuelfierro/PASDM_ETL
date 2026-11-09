@@ -21,18 +21,17 @@ public class ETLAsyncProcessorService {
     private final ExcelStreamingService excelStreamingService;
 
     @Async
-    public void processTask(Long executionId, Long configurationId, String taskType) {
-
-        TaskExecution execution = taskExecutionRepository.findById(executionId).orElseThrow();
+    public void processTask(TaskExecution execution, SourceConfiguration configuration, SheetType sheetType) {
 
         try {
-            SourceConfiguration configuration = sourceConfigurationRepository.findById(configurationId).orElseThrow();
-
-            SheetType sheetType = SheetType.valueOf(
-                    taskType.trim().toUpperCase()
-            );
 
             String excelPath = configuration.getDirectoryPath();
+
+            /*
+                Falta armar bien la url
+                excelPath = "smb://172.30.1.22/planeacion/01 BASES DE DATOS/BD DESARROLLO.xlsx"
+                sheetType = SheetType.DEVELOPMENT
+             */
             long recordsRead = excelStreamingService.readExcel(excelPath, sheetType);
 
             execution.setRecordsRead(String.valueOf(recordsRead));
@@ -46,13 +45,6 @@ public class ETLAsyncProcessorService {
         } finally {
             execution.setFinishedAt(OffsetDateTime.now());
             taskExecutionRepository.save(execution);
-        }
-    }
-    private SheetType getSheetType(String taskType) {
-        try {
-            return SheetType.valueOf(taskType.trim().toUpperCase());
-        } catch (IllegalArgumentException e) {
-            throw new IllegalArgumentException("No se un SheetType para la tarea: " + taskType);
         }
     }
 }

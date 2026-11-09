@@ -1,12 +1,12 @@
 package com.pasdm.integration.mapper;
 
- import com.pasdm.integration.model.PlantConsumibles;
+import com.pasdm.integration.model.PlantConsumibles;
 import com.pasdm.integration.util.ExcelValueParser;
 import com.pasdm.integration.util.HashUtil;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Component;
 
- import java.util.Map;
+import java.util.Map;
 
 @Slf4j
 @Component
@@ -70,7 +70,9 @@ public class PlantConsumiblesMapper {
                 entity.setStock(ExcelValueParser.decimalValidador(row.get(COL_STOCK)));
 
                 // Clave única lógica por fecha y turno
-                entity.setRowHash(HashUtil.calculateRowHash(entity.getFecha().toString(), entity.getTurno(), "", "", "", "", "", ""));
+                entity.setRowHash(HashUtil.calculateRowHash(
+                        entity.getFecha().toString(),
+                        entity.getTurno(), "", "", "", "", "", ""));
 
                 return entity;
             } else {

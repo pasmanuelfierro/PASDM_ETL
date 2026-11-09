@@ -119,60 +119,7 @@ public class ExcelStreamingService {
         } catch (Exception e) {
             log.error("Error procesando Excel", e);
         }
-        return 0;
+        return totalRecordsRead;
     }
 
-    public String resolve(String path) {
-
-        String filename = path.toLowerCase();
-
-        if (filename.contains("geology")) {
-            return "BD_GEOLOGIA";
-        }
-
-        if (filename.contains("rrhh")) {
-            return "BD_RR.HH";
-        }
-
-        if (filename.contains("produccion")) {
-            return "database";
-        }
-
-        if (filename.contains("desarrollo")) {
-            return "BD Desarrollo";
-        }
-
-        if (filename.contains("estadisticos - sso - mlc - 2026.xlsx")) {
-            return "BD";
-        }
-
-        if (filename.contains("laboratory")) {
-            return "DB";
-        }
-
-        if (filename.contains("planta")) {
-            return "LEYES PLANTA";
-        }
-
-        if (filename.contains("ley")) {
-            return "BASE DE DATOS";
-        }
-
-        if (filename.contains("geologydrilling")) {
-            return "DB";
-        }
-
-        if (filename.contains("avance barrenación")) {
-            return "DIAMANTE CORREGIDO";
-        }
-
-
-        if (filename.contains("reporte_geologia")) {
-            return "BASE DE DATOSS";
-        }
-
-        throw new IllegalArgumentException(
-                "No se pudo determinar el SheetType para el archivo: " + filename
-        );
-    }
 }
