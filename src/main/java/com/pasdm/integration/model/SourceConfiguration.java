@@ -4,6 +4,8 @@ import jakarta.persistence.*;
 import lombok.Data;
 
 import java.time.OffsetDateTime;
+import java.util.ArrayList;
+import java.util.List;
 
 @Entity
 @Table(schema = "manager", name = "source_configuration")
@@ -27,13 +29,15 @@ public class SourceConfiguration {
     private String filePattern;
 
     @Column(name = "enabled")
-    private String enabled;
+    private Boolean enabled;
 
     @Column(name = "updated_at", nullable = false)
     private OffsetDateTime updatedAt;
 
-    @ManyToOne(fetch = FetchType.EAGER)
-    @JoinColumn(name = "task_execution_id")
-    private TaskExecution taskExecutionId;
+  //  @ManyToOne(fetch = FetchType.LAZY)
+  //  @JoinColumn(name = "task_execution_id")
+  //  private TaskExecution taskExecutionId;
+    @OneToMany(mappedBy = "sourceConfiguration", fetch= FetchType.LAZY)
+    private List<TaskExecution> taskExecutions = new ArrayList<>();
 
 }

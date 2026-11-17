@@ -92,16 +92,16 @@ public class ETLJobScheduler {
          *
          */
 
-        /*
 
-        excelStreamingService.readExcel(excelRRHHPath);
-        excelStreamingService.readExcel(excelGeologyPath);
-        excelStreamingService.readExcel(excelPlantPath);
+
+       // excelStreamingService.readExcel(excelRRHHPath);
+       // excelStreamingService.readExcel(excelGeologyPath);
+       // excelStreamingService.readExcel(excelPlantPath);
         excelStreamingService.readExcel(excelDieselReport, SheetType.DIESEL_REPORT);
         excelStreamingService.readExcel(excelGeologyGradePath, SheetType.GEOLOGY_GRADE);
         excelStreamingService.readExcel(excelGeologyReportPath, SheetType.GEOLOGY_REPORT);
         excelStreamingService.readExcel(excelTopographyPath, SheetType.TOPOGRAPHY);
-        */
+
 
         log.info("Fin proceso Excel");
     }

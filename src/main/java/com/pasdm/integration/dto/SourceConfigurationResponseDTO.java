@@ -21,7 +21,7 @@ public class SourceConfigurationResponseDTO {
         this.host = sourceConfiguration.getHost();
         this.directoryPath = sourceConfiguration.getDirectoryPath();
         this.filePattern = sourceConfiguration.getFilePattern();
-        this.enabled = sourceConfiguration.getEnabled();
+        this.enabled = String.valueOf(sourceConfiguration.getEnabled());
         this.updatedAt = sourceConfiguration.getUpdatedAt();
 
     }

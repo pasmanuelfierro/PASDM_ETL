@@ -1,11 +1,11 @@
 package com.pasdm.integration.controller;
 
-import com.pasdm.integration.dto.TaskExecutionDTO;
-import com.pasdm.integration.dto.TaskExecutionRequestDTO;
-import com.pasdm.integration.dto.TaskExecutionResponseDTO;
+import com.pasdm.integration.dto.*;
 import com.pasdm.integration.model.TaskExecution;
 import com.pasdm.integration.repository.TaskExecutionRepository;
 import com.pasdm.integration.service.TaskExecutionService;
+import jakarta.persistence.EntityNotFoundException;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
@@ -24,6 +24,7 @@ import java.util.List;
 import org.springframework.web.bind.annotation.RequestParam;
 
 
+@Slf4j
 @RestController
 @RequestMapping("/api/etl/task-execution")
 public class TaskExecutionController {
@@ -39,9 +40,45 @@ public class TaskExecutionController {
         return taskExecutionService.getTaskExecution();
     }
 
-    @GetMapping("/{id}")
+  /*  @GetMapping("/{id}")
     public TaskExecution findById(@PathVariable Long id) {
         return taskExecutionRepository.findById(id).orElseThrow(() -> new ResourceNotFoundException("TaskExecution not found with id " + id));
+    }
+
+   */
+
+
+    @GetMapping("/executions/{id}")
+    public ResponseEntity<ExecutionDetailDTO> getExecutionById(@PathVariable Long id) {
+        return ResponseEntity.ok(taskExecutionService.getExecutionById(id));
+    }
+
+
+
+
+    @GetMapping("/configurations/{configurationId}/lastest-execution")
+    public ResponseEntity<LatestExecutionDTO> getLatestExecution(@PathVariable Long configurationId) {
+        log.info("Consultando última ejecución para configuración: {}", configurationId);
+
+        LatestExecutionDTO response = taskExecutionService.getLatestExecution(configurationId);
+        log.info("Resultado de última ejecución: {}", response);
+
+        if (response == null) {
+            log.warn("No se encontró ejecución para configuración: {}", configurationId);
+            return ResponseEntity.notFound().build();
+        }
+
+        return ResponseEntity.ok(response);
+    }
+
+
+
+
+    // CONTADORES
+    @GetMapping("/dashboard/contadores")
+    public ResponseEntity<DashboardContaadoresDTO> getDashboardContadores() {
+        DashboardContaadoresDTO response = taskExecutionService.getDashboardContadores();
+        return ResponseEntity.ok(response);
     }
 
     @GetMapping("/origin/{triggerType}")

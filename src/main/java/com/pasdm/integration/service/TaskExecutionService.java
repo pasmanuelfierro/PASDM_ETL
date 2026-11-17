@@ -7,6 +7,7 @@ import com.pasdm.integration.model.TaskExecution;
 import com.pasdm.integration.repository.SourceConfigurationRepository;
 import com.pasdm.integration.repository.TaskExecutionRepository;
 import jakarta.persistence.EntityNotFoundException;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -14,7 +15,12 @@ import org.springframework.web.server.ResponseStatusException;
 
 import java.time.OffsetDateTime;
 import java.util.List;
+import java.util.Map;
+import java.util.Optional;
 
+import static org.apache.commons.collections4.MapUtils.getLongValue;
+
+@Slf4j
 @Service
 public class TaskExecutionService {
 
@@ -181,16 +187,97 @@ public class TaskExecutionService {
         );
     }
 
-    @Transactional
+
+
+    public ExecutionDetailDTO getExecutionById(Long id) {
+
+        TaskExecution execution = taskExecutionRepository.findById(id)
+                .orElseThrow(() ->
+                        new EntityNotFoundException(
+                                "No existe la ejecución: " + id
+                        )
+                );
+
+        return ExecutionDetailDTO.builder()
+                .id(execution.getId())
+                .taskName(execution.getTaskName())
+                .triggerType(execution.getTriggerType())
+                .status(execution.getStatus())
+                .startedAt(execution.getStartedAt())
+                .finishedAt(execution.getFinishedAt())
+                .recordsRead(Long.valueOf(execution.getRecordsRead()))
+                .recordsInserted(Long.valueOf(execution.getRecordsInserted()))
+                .errorMessage(execution.getErrorMessage())
+                .build();
+    }
+
+
+
+    public LatestExecutionDTO getLatestExecution(Long configurationId) {
+        log.info("Buscando tareasExecution para sourceConfiguration: {}", configurationId);
+        Optional<TaskExecution> result =
+                taskExecutionRepository
+                        .findFirstBySourceConfiguration_IdOrderByStartedAtDescIdDesc(
+                                configurationId
+                        );
+
+        log.info("¿Se encontró ejecución?: {}", result.isPresent());
+
+        if (result.isEmpty()) {
+            return null;
+        }
+
+        TaskExecution execution = result.get();
+
+        log.info("ID ejecución: {}", execution.getId());
+        log.info("ID configuración: {}",
+                execution.getSourceConfiguration().getId());
+        log.info("Estado: {}", execution.getStatus());
+
+        /*return taskExecutionRepository
+                .findFirstBySourceConfiguration_IdOrderByStartedAtDescIdDesc(
+                        configurationId
+                )
+                .map(execution -> LatestExecutionDTO.builder()
+                        .id(execution.getId())
+                        .taskName(execution.getTaskName())
+                        .triggerType(execution.getTriggerType())
+                        .status(execution.getStatus())
+                        .startedAt(execution.getStartedAt())
+                        .finishedAt(execution.getFinishedAt())
+                        .recordsRead(execution.getRecordsRead())
+                        .recordsInserted(execution.getRecordsInserted())
+                        .errorMessage(execution.getErrorMessage())
+                        .build())
+                .orElse(null);*/
+        return LatestExecutionDTO.builder()
+                .id(execution.getId())
+                .taskName(execution.getTaskName())
+                .triggerType(execution.getTriggerType())
+                .status(execution.getStatus())
+                .startedAt(execution.getStartedAt())
+                .finishedAt(execution.getFinishedAt())
+                .recordsRead(execution.getRecordsRead())
+                .recordsInserted(execution.getRecordsInserted())
+                .errorMessage(execution.getErrorMessage())
+                .build();
+    }
+
+
+
+
     public ExecutionResponseDTO executeTask(ExecuteRequestDTO request) {
 
-        SourceConfiguration configuration = sourceConfigurationRepository.findById(request.getSourceConfigurationId()).orElseThrow(() ->
-                new EntityNotFoundException(
-                        "No existe la configuración de la tarea"
-                )
-        );
+        SourceConfiguration configuration =
+                sourceConfigurationRepository
+                        .findById(request.getSourceConfigurationId())
+                        .orElseThrow(() ->
+                                new EntityNotFoundException(
+                                        "No existe la configuración"
+                                )
+                        );
 
-        if (!"true".equalsIgnoreCase(configuration.getEnabled())) {
+        if (!"true".equalsIgnoreCase(String.valueOf(configuration.getEnabled()))) {
             throw new ResponseStatusException(
                     HttpStatus.FORBIDDEN,
                     "La configuración está deshabilitada"
@@ -198,23 +285,25 @@ public class TaskExecutionService {
         }
 
         SheetType sheetType = resolveSheetType(configuration.getName());
+
         TaskExecution execution = new TaskExecution();
 
         execution.setSourceConfiguration(configuration);
-        execution.setTaskName(sheetType.name());
+        execution.setTaskName(configuration.getName());
+        execution.setTriggerType(String.valueOf(request.getTriggerType()));
         execution.setStatus("RUNNING");
         execution.setStartedAt(OffsetDateTime.now());
-        execution.setTriggerType(String.valueOf(request.getTriggerType()));
 
-        //  contadores
-        execution.setRecordsRead(String.valueOf(0L));
-        execution.setRecordsInserted(String.valueOf(0L));
+        execution.setRecordsRead("0");
+        execution.setRecordsInserted("0");
 
         TaskExecution savedExecution = taskExecutionRepository.save(execution);
+        log.info("Info de ejecucion generado:  {}", savedExecution.getId());
+        log.info("Estado de ejecución: {} ", savedExecution.getStatus());
 
         asyncProcessorService.processTask(
-                savedExecution,
-                configuration,
+                savedExecution.getId(),
+                configuration.getId(),
                 sheetType
         );
 
@@ -240,11 +329,53 @@ public class TaskExecutionService {
             case "GEOLOGIA" -> SheetType.GEOLOGY;
             case "GRADOS DE LABORATORIO" -> SheetType.LABORATORY;
             case "PLANTA" -> SheetType.PLANT;
+            case "PRODUCCION" -> SheetType.PRODUCTION;
+            case "PLANT_CONSUMIBLES" -> SheetType.PLANT_CONSUMIBLES;
+            case "PLANT_BUDGET" -> SheetType.PLANT_BUDGET;
+            case "RRHH" -> SheetType.RRHH;
+            case "MTTO" -> SheetType.MTTO;
+            case "PRODUCTION" -> SheetType.PRODUCTION;
+            case "TEST" -> SheetType.TEST;
+            case "SECURITY" -> SheetType.SECURITY;
+           // case "DEVELOPMENT" -> SheetType.DEVELOPMENT;
+            case "DESARROLLO", "DEVELOPMENT" -> SheetType.DEVELOPMENT;
+            case "LABORATORIO", "LABORATORY" -> SheetType.LABORATORY;
+            case "LABORATORY_GRADES" -> SheetType.LABORATORY_GRADES;
+            case "LABORATORY_QC" -> SheetType.LABORATORY_QC;
+            case "GEOLOGY_DRILLING"  -> SheetType.GEOLOGY_DRILLING;
+            case "GEOLOGY_GRADE"   -> SheetType.GEOLOGY_GRADE;
+            case "GEOLOGY_REPORT" -> SheetType.GEOLOGY_REPORT;
+            case "DIESEL_REPORT"   -> SheetType.DIESEL_REPORT;
+            case "TOPOGRAPHY"   -> SheetType.TOPOGRAPHY;
+            case "EXPLOSIVES" -> SheetType.EXPLOSIVES;
+            case "ENTRADA_ACERO"  -> SheetType.ENTRADA_ACERO;
+            case "SALIDA_ACERO"  -> SheetType.SALIDA_ACERO;
+            case "TCD_CMD_ACTUAL"  -> SheetType.TCD_CMD_ACTUAL;
+            case "PLAN_PROD" -> SheetType.PLAN_PROD;
+            case "PLAN_DEV"  -> SheetType.PLAN_DEV;
+            case "TCD_CMD_BUDGET" -> SheetType.TCD_CMD_BUDGET;
 
             default -> throw new IllegalArgumentException(
                     "No existe un tipo de tarea para: " + taskName
             );
         };
     }
+
+
+
+    public DashboardContaadoresDTO getDashboardContadores() {
+        Map<String, Object> contadores = taskExecutionRepository.getDashboardContadores();
+        return DashboardContaadoresDTO.builder()
+                .totalExecutions(getLongValue(contadores, "totalexecutions"))
+                .successfulExecutions(getLongValue(contadores, "successfulexecutions"))
+                .failedExecutions(getLongValue(contadores, "failedexecutions"))
+                .runningExecutions(getLongValue(contadores, "runningexecutions"))
+                .totalRecordsRead(getLongValue(contadores, "totalrecordsread"))
+                .totalRecordsInserted(getLongValue(contadores, "totalrecordsinserted"))
+                .totalRecordsUpdated(getLongValue(contadores, "totalrecordsupdated"))
+                .build();
+    }
+
+
 
 }

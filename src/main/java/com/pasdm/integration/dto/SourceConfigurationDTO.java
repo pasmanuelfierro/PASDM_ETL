@@ -13,7 +13,7 @@ public class SourceConfigurationDTO {
     private String host;
     private String directoryPath;
     private String filePattern;
-    private String enabled;
+    private Boolean enabled;
     private OffsetDateTime updatedAt;
     private TaskExecutionDTO taskExecution;
 
@@ -22,7 +22,7 @@ public class SourceConfigurationDTO {
                                   String name,
                                   String host,
                                   String filePattern,
-                                  String enabled,
+                                  Boolean enabled,
                                   OffsetDateTime updatedAt,
                                   TaskExecutionDTO taskDTO) {
         this.id = id;
@@ -43,4 +43,6 @@ public class SourceConfigurationDTO {
         this.directoryPath = directoryPath;
         this.name = name;
     }
+
+
 }
