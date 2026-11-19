@@ -94,13 +94,13 @@ public class ExcelValueParser {
         }
 
         if (normalized.contains("..")) {
-            return new BigDecimal(normalized.replace("..", ".")).setScale(SCALE.ordinal(), RoundingMode.HALF_UP);
+            return new BigDecimal(normalized.replace("..", "."));
         }
         if (normalized.equals(".")) {
             return new BigDecimal("0.0");
         }
         try {
-            return new BigDecimal(normalized).setScale(SCALE.ordinal(), RoundingMode.HALF_UP);
+            return new BigDecimal(normalized);
         } catch (Exception e) {
             log.error("ERROR EN DECIMAL " + value, e);
 

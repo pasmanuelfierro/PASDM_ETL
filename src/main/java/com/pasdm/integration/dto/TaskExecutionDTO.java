@@ -13,9 +13,9 @@ public class TaskExecutionDTO {
     private String triggerType;
     private OffsetDateTime startedAt;
     private OffsetDateTime finishedAt;
-    private String recordsRead;
-    private String recordsInserted;
-    private String recordsUpdated;
+    private Long recordsRead;
+    private Long recordsInserted;
+    private Long recordsUpdated;
     private SourceConfigurationDTO sourceConfigurationDTO;
 
     public TaskExecutionDTO(
@@ -25,9 +25,9 @@ public class TaskExecutionDTO {
             String triggerType,
             OffsetDateTime startedAt,
             OffsetDateTime finishedAt,
-            String recordsRead,
-            String recordsInserted,
-            String recordsUpdated,
+            Long recordsRead,
+            Long recordsInserted,
+            Long recordsUpdated,
             SourceConfigurationDTO sourceConfigurationDTO) {
         this.id = id;
         this.taskName = taskName;
@@ -48,9 +48,9 @@ public class TaskExecutionDTO {
                             String triggerType,
                             OffsetDateTime startedAt,
                             OffsetDateTime finishedAt,
-                            String recordsRead,
-                            String recordsInserted,
-                            String recordsUpdated) {
+                            Long recordsRead,
+                            Long recordsInserted,
+                            Long recordsUpdated) {
         this.taskName = taskName;
         this.status = status;
         this.triggerType = triggerType;

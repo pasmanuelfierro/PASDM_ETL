@@ -12,10 +12,10 @@ public class TaskExecutionRequestDTO {
     private String triggerType;
     private String status;
     private OffsetDateTime finishedAt;
-    private String recordsRead;
-    private String recordsInserted;
-    private String recordsUpdated;
-    private String recordsSkipped;
-    private String recordsFailed;
+    private Long recordsRead;
+    private Long recordsInserted;
+    private Long recordsUpdated;
+    private Long recordsSkipped;
+    private Long recordsFailed;
     private String errorMessage;
 }

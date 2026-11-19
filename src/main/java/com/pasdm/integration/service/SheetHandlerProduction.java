@@ -25,6 +25,7 @@ public class SheetHandlerProduction implements ExcelSheetHandler {
     private final List<Production> bufferProduction = new ArrayList<>(BATCH_SIZE);
     private final Map<Integer, String> currentRow = new HashMap<>();
     private int totalProcessed = 0;
+    private int totalFailed = 0;
 
     public SheetHandlerProduction(ProductionMapper mapperProduction,
                                   BatchService batchService) {
@@ -56,6 +57,8 @@ public class SheetHandlerProduction implements ExcelSheetHandler {
             if (entity != null) {
                 bufferProduction.add(entity);
                 totalProcessed++;
+            } else {
+                totalFailed++;
             }
         } catch (Exception e) {
             log.error("Fila {} inválida: {}", rowNum, currentRow);
@@ -84,6 +87,11 @@ public class SheetHandlerProduction implements ExcelSheetHandler {
     public int getCount() {
         return totalProcessed;
     }
+
+/*    @Override
+    public int getTotalFailed() {
+        return totalFailed;
+    }*/
 
     @Override
     public void resetCount() {

@@ -30,19 +30,19 @@ public class TaskExecution {
     private OffsetDateTime finishedAt;
 
     @Column(name = "records_read")
-    private String recordsRead;
+    private Long recordsRead;
 
     @Column(name = "records_inserted")
-    private String recordsInserted;
+    private Long recordsInserted;
 
     @Column(name = "records_updated")
-    private String recordsUpdated;
+    private Long recordsUpdated;
 
     @Column(name = "records_skipped")
-    private String recordsSkipped;
+    private Long recordsSkipped;
 
     @Column(name = "records_failed")
-    private String recordsFailed;
+    private Long recordsFailed;
 
     @Column(name = "error_message")
     private String errorMessage;

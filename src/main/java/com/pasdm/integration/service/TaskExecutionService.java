@@ -36,12 +36,10 @@ public class TaskExecutionService {
     }
 
     public List<TaskExecutionDTO> getTaskExecution() {
-        return taskExecutionRepository
-                .findAllByOrderByStartedAtDesc()
+        return taskExecutionRepository.findAllByOrderByStartedAtDesc()
                 .stream()
                 .map(task -> {
-                    SourceConfiguration configuration =
-                            task.getSourceConfiguration();
+                    SourceConfiguration configuration = task.getSourceConfiguration();
 
                     SourceConfigurationDTO configurationDTO = null;
 
@@ -188,7 +186,6 @@ public class TaskExecutionService {
     }
 
 
-
     public ExecutionDetailDTO getExecutionById(Long id) {
 
         TaskExecution execution = taskExecutionRepository.findById(id)
@@ -205,51 +202,20 @@ public class TaskExecutionService {
                 .status(execution.getStatus())
                 .startedAt(execution.getStartedAt())
                 .finishedAt(execution.getFinishedAt())
-                .recordsRead(Long.valueOf(execution.getRecordsRead()))
-                .recordsInserted(Long.valueOf(execution.getRecordsInserted()))
+                .recordsRead(execution.getRecordsRead())
+                .recordsInserted(execution.getRecordsInserted())
                 .errorMessage(execution.getErrorMessage())
                 .build();
     }
 
 
-
     public LatestExecutionDTO getLatestExecution(Long configurationId) {
-        log.info("Buscando tareasExecution para sourceConfiguration: {}", configurationId);
-        Optional<TaskExecution> result =
-                taskExecutionRepository
-                        .findFirstBySourceConfiguration_IdOrderByStartedAtDescIdDesc(
-                                configurationId
-                        );
-
-        log.info("¿Se encontró ejecución?: {}", result.isPresent());
+        Optional<TaskExecution> result = taskExecutionRepository.findFirstBySourceConfiguration_IdOrderByStartedAtDescIdDesc(configurationId);
 
         if (result.isEmpty()) {
             return null;
         }
-
         TaskExecution execution = result.get();
-
-        log.info("ID ejecución: {}", execution.getId());
-        log.info("ID configuración: {}",
-                execution.getSourceConfiguration().getId());
-        log.info("Estado: {}", execution.getStatus());
-
-        /*return taskExecutionRepository
-                .findFirstBySourceConfiguration_IdOrderByStartedAtDescIdDesc(
-                        configurationId
-                )
-                .map(execution -> LatestExecutionDTO.builder()
-                        .id(execution.getId())
-                        .taskName(execution.getTaskName())
-                        .triggerType(execution.getTriggerType())
-                        .status(execution.getStatus())
-                        .startedAt(execution.getStartedAt())
-                        .finishedAt(execution.getFinishedAt())
-                        .recordsRead(execution.getRecordsRead())
-                        .recordsInserted(execution.getRecordsInserted())
-                        .errorMessage(execution.getErrorMessage())
-                        .build())
-                .orElse(null);*/
         return LatestExecutionDTO.builder()
                 .id(execution.getId())
                 .taskName(execution.getTaskName())
@@ -264,18 +230,11 @@ public class TaskExecutionService {
     }
 
 
-
-
     public ExecutionResponseDTO executeTask(ExecuteRequestDTO request) {
 
-        SourceConfiguration configuration =
-                sourceConfigurationRepository
-                        .findById(request.getSourceConfigurationId())
-                        .orElseThrow(() ->
-                                new EntityNotFoundException(
-                                        "No existe la configuración"
-                                )
-                        );
+        SourceConfiguration configuration = sourceConfigurationRepository.findById(request.getSourceConfigurationId())
+                .orElseThrow(() -> new EntityNotFoundException("No existe la configuración")
+                );
 
         if (!"true".equalsIgnoreCase(String.valueOf(configuration.getEnabled()))) {
             throw new ResponseStatusException(
@@ -294,23 +253,18 @@ public class TaskExecutionService {
         execution.setStatus("RUNNING");
         execution.setStartedAt(OffsetDateTime.now());
 
-        execution.setRecordsRead("0");
-        execution.setRecordsInserted("0");
+        execution.setRecordsRead(0L);
+        execution.setRecordsInserted(0L);
 
         TaskExecution savedExecution = taskExecutionRepository.save(execution);
-        log.info("Info de ejecucion generado:  {}", savedExecution.getId());
-        log.info("Estado de ejecución: {} ", savedExecution.getStatus());
 
         asyncProcessorService.processTask(
-                savedExecution.getId(),
-                configuration.getId(),
+                savedExecution,
+                configuration,
                 sheetType
         );
 
-        return new ExecutionResponseDTO(
-                savedExecution.getId(),
-                "RUNNING",
-                "La ejecución fue aceptada"
+        return new ExecutionResponseDTO(savedExecution.getId(), "RUNNING", "La ejecución fue aceptada"
         );
     }
 
@@ -329,30 +283,30 @@ public class TaskExecutionService {
             case "GEOLOGIA" -> SheetType.GEOLOGY;
             case "GRADOS DE LABORATORIO" -> SheetType.LABORATORY;
             case "PLANTA" -> SheetType.PLANT;
-            case "PRODUCCION" -> SheetType.PRODUCTION;
+            case "PRODUCCION", "PRODUCCIÓN" -> SheetType.PRODUCTION;
             case "PLANT_CONSUMIBLES" -> SheetType.PLANT_CONSUMIBLES;
             case "PLANT_BUDGET" -> SheetType.PLANT_BUDGET;
             case "RRHH" -> SheetType.RRHH;
             case "MTTO" -> SheetType.MTTO;
             case "PRODUCTION" -> SheetType.PRODUCTION;
             case "TEST" -> SheetType.TEST;
-            case "SECURITY" -> SheetType.SECURITY;
-           // case "DEVELOPMENT" -> SheetType.DEVELOPMENT;
+            case "SECURITY","SEGURIDAD" -> SheetType.SECURITY;
+            // case "DEVELOPMENT" -> SheetType.DEVELOPMENT;
             case "DESARROLLO", "DEVELOPMENT" -> SheetType.DEVELOPMENT;
             case "LABORATORIO", "LABORATORY" -> SheetType.LABORATORY;
             case "LABORATORY_GRADES" -> SheetType.LABORATORY_GRADES;
             case "LABORATORY_QC" -> SheetType.LABORATORY_QC;
-            case "GEOLOGY_DRILLING"  -> SheetType.GEOLOGY_DRILLING;
-            case "GEOLOGY_GRADE"   -> SheetType.GEOLOGY_GRADE;
+            case "GEOLOGY_DRILLING" -> SheetType.GEOLOGY_DRILLING;
+            case "GEOLOGY_GRADE" -> SheetType.GEOLOGY_GRADE;
             case "GEOLOGY_REPORT" -> SheetType.GEOLOGY_REPORT;
-            case "DIESEL_REPORT"   -> SheetType.DIESEL_REPORT;
-            case "TOPOGRAPHY"   -> SheetType.TOPOGRAPHY;
+            case "DIESEL_REPORT" -> SheetType.DIESEL_REPORT;
+            case "TOPOGRAPHY" -> SheetType.TOPOGRAPHY;
             case "EXPLOSIVES" -> SheetType.EXPLOSIVES;
-            case "ENTRADA_ACERO"  -> SheetType.ENTRADA_ACERO;
-            case "SALIDA_ACERO"  -> SheetType.SALIDA_ACERO;
-            case "TCD_CMD_ACTUAL"  -> SheetType.TCD_CMD_ACTUAL;
+            case "ENTRADA_ACERO" -> SheetType.ENTRADA_ACERO;
+            case "SALIDA_ACERO" -> SheetType.SALIDA_ACERO;
+            case "TCD_CMD_ACTUAL" -> SheetType.TCD_CMD_ACTUAL;
             case "PLAN_PROD" -> SheetType.PLAN_PROD;
-            case "PLAN_DEV"  -> SheetType.PLAN_DEV;
+            case "PLAN_DEV" -> SheetType.PLAN_DEV;
             case "TCD_CMD_BUDGET" -> SheetType.TCD_CMD_BUDGET;
 
             default -> throw new IllegalArgumentException(
@@ -360,7 +314,6 @@ public class TaskExecutionService {
             );
         };
     }
-
 
 
     public DashboardContaadoresDTO getDashboardContadores() {
@@ -375,7 +328,5 @@ public class TaskExecutionService {
                 .totalRecordsUpdated(getLongValue(contadores, "totalrecordsupdated"))
                 .build();
     }
-
-
 
 }

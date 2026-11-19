@@ -20,7 +20,6 @@ import java.time.OffsetDateTime;
 import java.time.ZoneOffset;
 import java.util.List;
 
-
 import org.springframework.web.bind.annotation.RequestParam;
 
 
@@ -53,15 +52,12 @@ public class TaskExecutionController {
         return ResponseEntity.ok(taskExecutionService.getExecutionById(id));
     }
 
-
-
-
     @GetMapping("/configurations/{configurationId}/lastest-execution")
     public ResponseEntity<LatestExecutionDTO> getLatestExecution(@PathVariable Long configurationId) {
-        log.info("Consultando última ejecución para configuración: {}", configurationId);
+        // log.info("Consultando última ejecución para configuración: {}", configurationId);
 
         LatestExecutionDTO response = taskExecutionService.getLatestExecution(configurationId);
-        log.info("Resultado de última ejecución: {}", response);
+        //log.info("Resultado de última ejecución: {}", response);
 
         if (response == null) {
             log.warn("No se encontró ejecución para configuración: {}", configurationId);
@@ -70,9 +66,6 @@ public class TaskExecutionController {
 
         return ResponseEntity.ok(response);
     }
-
-
-
 
     // CONTADORES
     @GetMapping("/dashboard/contadores")

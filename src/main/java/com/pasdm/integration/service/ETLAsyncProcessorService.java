@@ -23,15 +23,11 @@ public class ETLAsyncProcessorService {
 
 
     @Async
-    public void processTask(Long executionId, Long configurationId, SheetType sheetType) {
-        TaskExecution execution = taskExecutionRepository.findById(executionId)
-                .orElseThrow(() -> new EntityNotFoundException(
-                        "Ejecución no encontrada"
-                ));
+    public void processTask(TaskExecution execution, SourceConfiguration configuration, SheetType sheetType) {
 
         try {
 
-           // String excelPath = configuration.getDirectoryPath();
+            // String excelPath = configuration.getDirectoryPath();
 
 
             //log.info("EXCEL PATH (archivo): {}", excelPath)
@@ -44,35 +40,27 @@ public class ETLAsyncProcessorService {
 
              */
 
-              SourceConfiguration configuration =
-                    sourceConfigurationRepository.findById(configurationId)
-                            .orElseThrow(() -> new EntityNotFoundException(
-                                    "Configuración no encontrada"
-                            ));
-
             String excelPath = buildExcelPath(configuration);
 
             long recordsRead = excelStreamingService.readExcel(excelPath, sheetType);
 
-            execution.setRecordsRead(String.valueOf(recordsRead));
+            execution.setRecordsRead(recordsRead);
+            execution.setRecordsInserted(recordsRead);
+            execution.setRecordsUpdated(recordsRead);
             execution.setStatus("SUCCESS");
 
-       } catch (Exception e) {
+        } catch (Exception e) {
 
-            log.error("Error en ejecución ETL {}", executionId, e);
+            log.error("Error en ejecución ETL {}", execution.getId(), e);
 
             execution.setStatus("ERROR");
             execution.setErrorMessage(e.getMessage());
 
         } finally {
-
             execution.setFinishedAt(OffsetDateTime.now());
-
             taskExecutionRepository.save(execution);
         }
     }
-
-
 
 
     private String buildExcelPath(SourceConfiguration configuration) {
@@ -85,7 +73,7 @@ public class ETLAsyncProcessorService {
         directoryPath = directoryPath.replace("\\", "/");
         directoryPath = directoryPath.replaceFirst("^/+", "");
 
-        if(host.isBlank() || directoryPath.isBlank()) {
+        if (host.isBlank() || directoryPath.isBlank()) {
             throw new IllegalArgumentException("Host or directory path is blank");
         }
 

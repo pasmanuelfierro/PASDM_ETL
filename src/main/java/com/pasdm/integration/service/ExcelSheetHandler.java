@@ -10,6 +10,10 @@ public interface ExcelSheetHandler extends XSSFSheetXMLHandler.SheetContentsHand
 
     int getCount();
 
+    /*
+        int getTotalFailed();
+    */
+
     void flushRemaining();
 
     void resetCount();

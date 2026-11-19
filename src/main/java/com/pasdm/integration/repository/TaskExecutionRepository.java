@@ -37,11 +37,11 @@ public interface TaskExecutionRepository extends JpaRepository<TaskExecution,Lon
 
             COUNT(*) FILTER (WHERE status IN ('RUNNING', 'PENDING')) AS runningExecutions,
 
-            COALESCE(SUM(CAST(NULLIF(records_read, '') AS BIGINT)), 0) AS totalRecordsRead,
+            COALESCE(SUM(CAST(NULLIF(records_read, 0) AS BIGINT)), 0) AS totalRecordsRead,
 
-            COALESCE(SUM(CAST(NULLIF(records_inserted, '') AS BIGINT)), 0) AS totalRecordsInserted,
+            COALESCE(SUM(CAST(NULLIF(records_inserted, 0) AS BIGINT)), 0) AS totalRecordsInserted,
 
-            COALESCE(SUM(CAST(NULLIF(records_updated, '') AS BIGINT)), 0) AS totalRecordsUpdated
+            COALESCE(SUM(CAST(NULLIF(records_updated, 0) AS BIGINT)), 0) AS totalRecordsUpdated
 
         FROM manager.task_execution
         """, nativeQuery = true)

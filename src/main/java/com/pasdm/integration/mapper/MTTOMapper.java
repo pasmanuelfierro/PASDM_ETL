@@ -212,7 +212,7 @@ public class MTTOMapper {
                 .replaceAll("[^0-9.-]", "");
 
         try {
-            return new BigDecimal(normalized).setScale(SCALE.ordinal(), RoundingMode.HALF_UP);
+            return new BigDecimal(normalized);
         } catch (Exception e) {
             throw new IllegalArgumentException("Decimal inválido: " + value);
         }

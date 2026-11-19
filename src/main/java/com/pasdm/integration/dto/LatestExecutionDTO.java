@@ -20,8 +20,8 @@ public class LatestExecutionDTO {
     private OffsetDateTime startedAt;
     private OffsetDateTime finishedAt;
 
-    private String recordsRead;
-    private String recordsInserted;
+    private Long recordsRead;
+    private Long recordsInserted;
 
     private String errorMessage;
 
